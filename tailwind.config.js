@@ -7,6 +7,9 @@
 module.exports = {
   theme: {},
   variants: {},
+  future: {
+    removeDeprecatedGapUtilities: true,
+  },
   plugins: [],
   purge: {
     // Learn more on https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css
