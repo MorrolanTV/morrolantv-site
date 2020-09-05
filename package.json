@@ -15,22 +15,21 @@
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "@nuxtjs/axios": "^5.12.0",
-    "eslint-plugin-tailwind": "^0.2.0",
-    "node-sass": "^4.14.1",
-    "nuxt": "^2.14.0",
-    "nuxt-fontawesome": "^0.4.0",
-    "sass-loader": "^10.0.2"
+    "nuxt": "^2.14.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^3.1.0",
     "@nuxtjs/eslint-module": "^2.0.0",
-    "@nuxtjs/tailwindcss": "^2.1.0",
     "@tailwindcss/ui": "^0.5.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "^2.0.5"
+    "eslint-plugin-tailwind": "^0.2.0",
+    "node-sass": "^4.14.1",
+    "nuxt-fontawesome": "^0.4.0",
+    "prettier": "^2.0.5",
+    "sass-loader": "^10.0.2"
   }
 }
