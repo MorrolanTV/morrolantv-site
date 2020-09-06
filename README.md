@@ -1,5 +1,9 @@
 # morrolantv
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/0a1669d7-e778-450e-8610-38885660e802/deploy-status)](https://app.netlify.com/sites/eloquent-keller-9336f4/deploys)
+
+Content and Tools for Black Desert Online provided by [MorrolanTv](https://www.twitch.tv/morrolantv).
+
 ## Build Setup
 
 ```bash
