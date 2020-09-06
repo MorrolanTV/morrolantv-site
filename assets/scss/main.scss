@@ -1,4 +1,9 @@
-@charset "utf-8";
+//Variables to override elements with
+@import 'overrides';
 
-@import './base/base.scss';
-@import './layout/layout.scss';
+@import '~bulma/sass/layout/section.sass';
+@import '~bulma/sass/components/level.sass';
+@import '~bulma/sass/elements/container.sass';
+@import '~bulma/sass/elements/title.sass';
+
+@import './components/page-elements.scss';

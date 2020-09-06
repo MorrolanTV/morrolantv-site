@@ -36,6 +36,9 @@ export default {
    ** Global CSS
    */
   css: ['@/assets/scss/main.scss'],
+  styleResources: {
+    scss: ['~/assets/scss/settings.scss'],
+  },
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
@@ -59,6 +62,7 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/style-resources',
     [
       'nuxt-fontawesome',
       {

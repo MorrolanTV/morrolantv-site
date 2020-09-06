@@ -1,0 +1,14 @@
+.section-title {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 50px 0;
+  &::before {
+    position: absolute;
+    bottom: -15px;
+    content: '';
+    width: 50%;
+    height: 1px;
+    background-color: $grey;
+  }
+}

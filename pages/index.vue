@@ -1,6 +1,6 @@
 <template>
   <main>
-    <section class="hero">
+    <section class="hero w-100">
       <div class="image" :style="{ backgroundImage: `url(${backgroundUrl})` }">
         <video></video>
       </div>
@@ -28,4 +28,29 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.hero {
+  max-width: 100%;
+  flex-direction: row;
+  padding: 10vh 0;
+  max-height: none;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: calc(50vh);
+  min-height: 300px;
+  margin-bottom: 50px;
+
+  .image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    background-position: center 15%;
+    background-size: cover;
+  }
+}
+</style>

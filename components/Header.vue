@@ -49,15 +49,14 @@ export default {
 
 <style lang="scss" scoped>
 nav {
-  padding: 0 50px;
+  width: 100%;
   position: fixed;
-  display: flex;
-  justify-content: space-between;
-  z-index: 1000;
   top: 0;
   left: 0;
-  width: 100%;
-  min-width: 954px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 50px;
+  z-index: 1000;
   height: 78px;
   transition: top 0.25s;
   transition-timing-function: ease;
@@ -102,6 +101,7 @@ nav {
 
 .logo-wrapper {
   position: relative;
+  width: 85px;
 }
 
 .logo-banner {
