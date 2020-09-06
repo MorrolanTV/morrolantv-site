@@ -1,5 +1,6 @@
 {
   "name": "morrolantv",
+  "description": "Sandbox veteran dating back to M59, Ultima Online, and Asheron's Call. Stream features modern sandbox MMOs, RPGs, and some old school throwbacks.",
   "version": "1.0.0",
   "private": true,
   "scripts": {
