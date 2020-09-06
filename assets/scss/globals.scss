@@ -1,0 +1,16 @@
+@import '~bulma/sass/utilities/initial-variables.sass';
+
+$grey-darker: rgb(17, 23, 30);
+$grey-dark: rgb(30, 39, 48);
+$scheme-main: $grey-darker;
+$family-sans-serif: 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+  'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+$text: $white-bis;
+
+$fullhd: 1664px + (2 * $gap);
+$text-strong: $white-bis;
+$border-light: #f3f3f3;
+
+@import '~bulma/sass/utilities/_all.sass';
+@import '~bulma/sass/base/_all.sass';
+@import '~bulma/sass/helpers/_all.sass';

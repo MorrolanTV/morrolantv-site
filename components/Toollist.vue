@@ -13,8 +13,7 @@
           :style="{ backgroundImage: `url(${tool.image})` }"
         >
           <div class="tl-content px-4 py-5">
-            <div class="name">{{ tool.name }}</div>
-            <div class="game">{{ tool.gname }}</div>
+            <h4 class="subtitle is-4 has-underline">{{ tool.name }}</h4>
           </div>
         </nuxt-link>
       </div>

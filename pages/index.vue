@@ -38,7 +38,7 @@ export default {
   position: relative;
   overflow: hidden;
   width: 100%;
-  height: calc(50vh);
+  height: calc(65vh);
   min-height: 300px;
   margin-bottom: 50px;
 

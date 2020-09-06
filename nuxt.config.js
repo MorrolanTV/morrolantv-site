@@ -37,7 +37,7 @@ export default {
    */
   css: ['@/assets/scss/main.scss'],
   styleResources: {
-    scss: ['~/assets/scss/settings.scss'],
+    scss: ['~/assets/scss/globals.scss'],
   },
   /*
    ** Plugins to load before mounting the App
