@@ -34,7 +34,7 @@ export default {
           name: 'Node Calculator',
           gname: 'Black Desert Online',
           image: 'cooking',
-          path: '/',
+          path: '/tools/nodes',
         },
         {
           name: 'Node Calculator',

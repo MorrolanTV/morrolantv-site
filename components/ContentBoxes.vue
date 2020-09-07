@@ -5,10 +5,10 @@
         <h2 class="title is-2">{{ title }}</h2>
       </div>
       <div :class="gridClass">
-        <a
+        <nuxt-link
           v-for="content in entries"
           :key="content.name"
-          :href="content.path"
+          :to="content.path"
           class="content-box"
         >
           <div class="image-wrapper">
@@ -33,7 +33,7 @@
               <p>{{ content.desc }}</p>
             </div>
           </div>
-        </a>
+        </nuxt-link>
       </div>
     </div>
   </section>

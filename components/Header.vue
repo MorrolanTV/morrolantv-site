@@ -6,11 +6,11 @@
       </div>
     </div>
     <div class="nav-items">
-      <a href="#" class="nav-item">Home</a>
-      <a href="#" class="nav-item">Tools</a>
-      <a href="#" class="nav-item">Gear</a>
-      <a href="#" class="nav-item">Twitch</a>
-      <a href="#" class="nav-item">About</a>
+      <nuxt-link to="/" class="nav-item">Home</nuxt-link>
+      <nuxt-link to="/tools" class="nav-item">Tools</nuxt-link>
+      <nuxt-link to="/" class="nav-item">Gear</nuxt-link>
+      <nuxt-link to="/" class="nav-item">Twitch</nuxt-link>
+      <nuxt-link to="/" class="nav-item">About</nuxt-link>
     </div>
   </nav>
 </template>

@@ -15,8 +15,7 @@ export default {
           type: 'VOD',
           desc: '',
           image: 'bloodborne',
-          path:
-            'https://www.twitch.tv/collections/VCa69D8d_hTkzw?filter=collections',
+          path: 'https://www.google.ch',
         },
         {
           name: 'Node Calculator',
