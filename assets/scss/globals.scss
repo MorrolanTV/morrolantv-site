@@ -1,15 +1,18 @@
 @import '~bulma/sass/utilities/initial-variables.sass';
 
+$grey-darkest: rgb(15, 26, 37);
 $grey-darker: rgb(17, 23, 30);
 $grey-dark: rgb(30, 39, 48);
 $blue: rgb(22, 38, 55);
+$purple: #b133ec;
 $scheme-main: $grey-darker;
 $family-sans-serif: 'Questrial', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
   'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-$family-sans-serif-sub: 'Questrial', 'Oxygen', 'Ubuntu', 'Cantarell',
+$family-sans-serif-sub: 'Julius Sans One', 'Oxygen', 'Ubuntu', 'Cantarell',
   'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 $text: $white-bis;
-
+$link: $white-bis;
+$link-hover: #e6b250;
 $fullhd: 1664px + (2 * $gap);
 $text-strong: $white-bis;
 $border-light: #f3f3f3;

@@ -8,6 +8,7 @@
     <div class="nav-items">
       <a href="#" class="nav-item">Home</a>
       <a href="#" class="nav-item">Tools</a>
+      <a href="#" class="nav-item">Gear</a>
       <a href="#" class="nav-item">Twitch</a>
       <a href="#" class="nav-item">About</a>
     </div>
@@ -82,10 +83,6 @@ nav {
   text-transform: uppercase;
   text-decoration: none;
   color: #f5f5f5;
-  transition: 0.2s;
-  &:hover {
-    color: #e6b250;
-  }
 }
 
 .logo-wrapper {

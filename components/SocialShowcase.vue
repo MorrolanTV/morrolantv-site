@@ -1,8 +1,8 @@
 <template>
   <div class="social-wrapper">
-    <div><h3 class="title is-h3 mb-3">Social Media</h3></div>
+    <div><h3 class="title is-3 mb-3">Social Media</h3></div>
     <div>
-      <h5 class="subtitle is-h5 mb-2">
+      <h5 class="subtitle is-5 mb-2">
         Stay connected, check out MorrolanTV on his channels
       </h5>
     </div>
@@ -39,6 +39,7 @@
   background: $blue;
   padding: 20px;
   transition: 1s;
+  box-shadow: purpleBoxShadow(8, true);
 }
 
 @include layoutScrolled {

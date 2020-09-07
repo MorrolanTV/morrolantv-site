@@ -3,3 +3,18 @@
     @content;
   }
 }
+
+@function purpleBoxShadow($amount, $right) {
+  $box-shadow: '';
+  $shadows: '';
+  @for $i from 1 through $amount {
+    @if $right {
+      $shadows: -#{$i}px #{$i}px $purple;
+    } @else {
+      $shadows: #{$i}px #{$i}px $purple;
+    }
+
+    $box-shadow: $box-shadow + $shadows + ' ,';
+  }
+  @return str_slice(unquote($box-shadow), 0, str_length($box-shadow)-1);
+}

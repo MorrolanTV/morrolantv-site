@@ -31,6 +31,8 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "imagemin": "^7.0.1",
+    "imagemin-webp": "^6.0.0",
     "node-sass": "^4.14.1",
     "nuxt-fontawesome": "^0.4.0",
     "prettier": "^2.0.5",

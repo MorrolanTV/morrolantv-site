@@ -1,24 +1,9 @@
 <template>
-  <section class="section">
-    <div class="container">
-      <div class="section-title">
-        <h2 class="title is-2">TOOLS</h2>
-      </div>
-      <div class="tl-container">
-        <nuxt-link
-          v-for="tool in tools"
-          :key="tool.name"
-          to="tool.path"
-          class="tool"
-          :style="{ backgroundImage: `url(${tool.image})` }"
-        >
-          <div class="tl-content px-4 py-5">
-            <h4 class="subtitle is-4 has-underline">{{ tool.name }}</h4>
-          </div>
-        </nuxt-link>
-      </div>
-    </div>
-  </section>
+  <ContentBoxes
+    grid-class="tl-container"
+    title="Content Highlights"
+    :entries="tools"
+  />
 </template>
 <style lang="scss">
 .tl-container {
@@ -31,24 +16,12 @@
     grid-template-rows: 250px 250px;
     gap: 20px;
   }
-}
-
-.tool {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  background-size: cover;
-  background-repeat: no-repeat;
-  transition: 0.3s;
-  @for $i from 1 through 4 {
-    &:nth-child(#{$i}) {
-      grid-area: g#{$i};
+  .content-box {
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        grid-area: g#{$i};
+      }
     }
-  }
-  &:hover {
-    z-index: 2;
-    transform: translateY(-2px);
-    box-shadow: 0 60px 90px -40px rgba(0, 0, 0, 0.6);
   }
 }
 </style>
@@ -60,25 +33,25 @@ export default {
         {
           name: 'Node Calculator',
           gname: 'Black Desert Online',
-          image: require('~/assets/img/tools/worker.png'),
+          image: 'cooking',
           path: '/',
         },
         {
           name: 'Node Calculator',
           gname: 'Black Desert Online',
-          image: require('~/assets/img/tools/cooking.png'),
+          image: 'cooking',
           path: '/',
         },
         {
           name: 'Node Calculator',
           gname: 'Black Desert Online',
-          image: require('~/assets/img/tools/processing.png'),
+          image: 'cooking',
           path: '/',
         },
         {
           name: 'Node Calculator',
           gname: 'Black Desert Online',
-          image: require('~/assets/img/tools/scroll.png'),
+          image: 'cooking',
           path: '/',
         },
       ],

@@ -9,13 +9,31 @@
           <video></video>
         </div>
       </div>
-      <div class="showcase-wrapper">
+      <div class="showcase-wrapper str">
+        <div class="showcase-element">
+          <TwitchPlayer />
+        </div>
+        <div class="stream-title">
+          <h1 class="title is-uppercase has-lineupper">
+            {{ streamMessage }}
+          </h1>
+          <h6 v-if="!isLive" class="subtitle is-6">
+            <a href="#gamecollection"
+              >While the stream is offline, check out the video collection
+              <fa :icon="['fas', 'chevron-right']"
+            /></a>
+          </h6>
+        </div>
+      </div>
+      <div class="showcase-wrapper section soc">
         <div class="showcase-element">
           <SocialShowcase />
         </div>
       </div>
+      <div class="angle-right"></div>
     </section>
     <Toollist />
+    <GameCollection />
   </main>
 </template>
 
@@ -23,7 +41,14 @@
 import backgroundUrl from '~/assets/img/background.png'
 export default {
   data() {
-    return { backgroundUrl }
+    return { backgroundUrl, isLive: false }
+  },
+  computed: {
+    streamMessage() {
+      return this.isLive
+        ? 'MorrolanTV is live on Twitch'
+        : 'Follow MorrolanTV on Twitch'
+    },
   },
 }
 </script>
@@ -59,15 +84,46 @@ export default {
 
 .showcase-wrapper {
   display: flex;
-  justify-content: flex-end;
   width: 100%;
   position: absolute;
-  bottom: 0;
-  transform: translateY(50%);
-  padding: 0 100px;
+  z-index: 200;
+  &.soc {
+    justify-content: flex-end;
+    bottom: 0;
+    transform: translateY(50%);
+    padding: 0 100px;
+    .showcase-element {
+      flex-basis: 350px;
+    }
+  }
+  &.str {
+    flex-direction: column;
+    top: 50%;
+    transform: translateY(-50%);
+    padding-left: 100px;
+    .showcase-element {
+      width: 550px;
+      flex-grow: 0;
+    }
+  }
 }
 
-.showcase-element {
-  flex-basis: 350px;
+.stream-title {
+  margin-top: 30px;
+}
+
+.angle-right {
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  left: 0px;
+  background: linear-gradient(
+      to right bottom,
+      transparent 49%,
+      $grey-darker 50%
+    ),
+    linear-gradient(-50deg, $grey-darker 16px, transparent 0);
+  z-index: 2;
 }
 </style>

@@ -18,6 +18,7 @@ export default {
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll)
   },
+
   methods: {
     handleScroll() {
       // Your scroll handling here
