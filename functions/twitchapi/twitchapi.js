@@ -1,21 +1,15 @@
-// details: https://markus.oberlehner.net/blog/implementing-an-authentication-flow-with-passport-and-netlify-functions/
-const cookieParser = require('cookie-parser')
 const express = require('express')
 const serverless = require('serverless-http')
-
 const { ENDPOINT } = require('./utils/config')
-const hasAuthToken = require('./utils/authToken')
-
-const { helix } = require('./utils/helix')
+const { twitchClient } = require('./utils/twitchClient')
 
 const app = express()
-app.use(cookieParser())
-app.get(`${ENDPOINT}/streams`, hasAuthToken, async (req, res) => {
+
+// Example, not useful
+app.get(`${ENDPOINT}/live`, async (req, res) => {
   try {
-    const streams = await helix
-      .getStreams({ user_id: '77473677' })
-      .then((x) => x)
-    res.json(streams)
+    const isLive = await twitchClient.isStreamLive('morrolantv')
+    res.json({ live: isLive })
   } catch (e) {
     throw new Error(e)
   }
