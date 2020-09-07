@@ -1,6 +1,7 @@
 <template>
   <ContentBoxes
-    anchor="gamecollections"
+    anchor="highlight"
+    section-class="section content lighter last"
     title="Content Highlights"
     :entries="games"
   />

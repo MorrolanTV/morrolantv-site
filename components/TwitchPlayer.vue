@@ -16,8 +16,5 @@
   transition: 1s;
   box-shadow: purpleBoxShadow(8, false);
   height: 300px;
-  iframe {
-    height: 100%;
-  }
 }
 </style>

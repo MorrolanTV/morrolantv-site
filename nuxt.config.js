@@ -29,7 +29,7 @@ export default {
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Julius+Sans+One&family=Questrial&display=swap',
+          'https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Montserrat:wght@400;500&display=swap',
       },
     ],
   },

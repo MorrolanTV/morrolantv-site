@@ -1,5 +1,5 @@
 <template>
-  <section :id="anchor" class="section">
+  <section :id="anchor" class="section content" :class="sectionClass">
     <div class="container">
       <div class="section-title">
         <h2 class="title is-2">{{ title }}</h2>
@@ -56,6 +56,11 @@ export default {
       default: 'equal-container',
       required: false,
     },
+    sectionClass: {
+      type: String,
+      default: '',
+      required: false,
+    },
     entries: {
       type: Array,
       default: null,
@@ -87,12 +92,12 @@ export default {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow-x: hidden;
     z-index: 1;
+    overflow: hidden;
     picture,
     img {
-      height: 100%;
-      width: auto;
+      min-height: 100%;
+      min-width: 100%;
     }
   }
 

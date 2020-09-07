@@ -56,7 +56,6 @@
 footer {
   border-top: 8px solid $purple;
   background: $grey-darkest;
-  margin-top: 150px;
 }
 .footer-content {
   display: flex;

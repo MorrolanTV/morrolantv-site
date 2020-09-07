@@ -1,9 +1,5 @@
 <template>
-  <ContentBoxes
-    grid-class="tl-container"
-    title="Content Highlights"
-    :entries="tools"
-  />
+  <ContentBoxes grid-class="tl-container" title="BDO Tools" :entries="tools" />
 </template>
 <style lang="scss">
 .tl-container {

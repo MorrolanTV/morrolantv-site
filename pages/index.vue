@@ -18,7 +18,7 @@
             {{ streamMessage }}
           </h1>
           <h6 v-if="!isLive" class="subtitle is-6">
-            <a href="#gamecollection"
+            <a href="#highlight"
               >While the stream is offline, check out the video collection
               <fa :icon="['fas', 'chevron-right']"
             /></a>
@@ -98,6 +98,7 @@ export default {
   }
   &.str {
     flex-direction: column;
+    align-items: center;
     top: 50%;
     transform: translateY(-50%);
     padding-left: 100px;

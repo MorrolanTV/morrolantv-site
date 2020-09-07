@@ -6,6 +6,13 @@ h6 {
   text-transform: uppercase;
 }
 
+h2,
+h3 {
+  &.title {
+    font-weight: 400;
+  }
+}
+
 a {
   transition: color 0.2s;
 }
