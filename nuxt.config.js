@@ -28,7 +28,8 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Roboto&display=swap',
+        href:
+          'https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&family=Julius+Sans+One&family=Questrial&display=swap',
       },
     ],
   },
@@ -72,6 +73,10 @@ export default {
           {
             set: '@fortawesome/free-solid-svg-icons',
             icons: ['fas'],
+          },
+          {
+            set: '@fortawesome/free-brands-svg-icons',
+            icons: ['faTwitter', 'faTwitch', 'faYoutube', 'faDiscord'],
           },
         ],
       },

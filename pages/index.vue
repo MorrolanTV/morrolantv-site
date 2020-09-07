@@ -11,7 +11,7 @@
       </div>
       <div class="showcase-wrapper">
         <div class="showcase-element">
-          <TwitchPlayer />
+          <SocialShowcase />
         </div>
       </div>
     </section>

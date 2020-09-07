@@ -1,5 +1,5 @@
 <template>
-  <nav :class="{ solid: isScrolled }">
+  <nav>
     <div class="logo-wrapper">
       <div class="logo-banner">
         <img src="~/assets/img/desktopLogo.png" />
@@ -21,7 +21,6 @@ export default {
   data() {
     return {
       isOpen: false,
-      isScrolled: false,
     }
   },
   computed: {
@@ -29,19 +28,9 @@ export default {
       return fas
     },
   },
-  beforeMount() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.handleScroll)
-  },
   methods: {
     toggle() {
       this.isOpen = !this.isOpen
-    },
-    handleScroll() {
-      // Your scroll handling here
-      this.isScrolled = window.scrollY > 20
     },
   },
 }
@@ -111,12 +100,14 @@ nav {
   transition-timing-function: ease;
 }
 
-nav.solid {
-  &::before {
-    opacity: 1;
-  }
-  .logo-banner {
-    transform: translateY(-40px);
+@include layoutScrolled {
+  nav {
+    &::before {
+      opacity: 1;
+    }
+    .logo-banner {
+      transform: translateY(-40px);
+    }
   }
 }
 </style>

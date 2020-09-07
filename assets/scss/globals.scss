@@ -2,9 +2,12 @@
 
 $grey-darker: rgb(17, 23, 30);
 $grey-dark: rgb(30, 39, 48);
+$blue: rgb(22, 38, 55);
 $scheme-main: $grey-darker;
-$family-sans-serif: 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+$family-sans-serif: 'Questrial', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
   'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+$family-sans-serif-sub: 'Questrial', 'Oxygen', 'Ubuntu', 'Cantarell',
+  'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 $text: $white-bis;
 
 $fullhd: 1664px + (2 * $gap);
@@ -14,3 +17,4 @@ $border-light: #f3f3f3;
 @import '~bulma/sass/utilities/_all.sass';
 @import '~bulma/sass/base/_all.sass';
 @import '~bulma/sass/helpers/_all.sass';
+@import './mixins.scss';
