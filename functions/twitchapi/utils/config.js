@@ -6,7 +6,9 @@ exports.BASE_URL =
 exports.COOKIE_SECURE = process.env.NODE_ENV !== 'development'
 
 exports.ENDPOINT =
-  process.env.NODE_ENV === 'development' ? '/.netlify/functions' : '/api'
+  process.env.NODE_ENV === 'development'
+    ? '/.netlify/functions/twitchapi'
+    : '/api/twitchapi'
 
 exports.TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID
 exports.TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET
