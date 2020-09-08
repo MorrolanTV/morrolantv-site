@@ -54,34 +54,6 @@ export default {
 </script>
 
 <style lang="scss">
-.hero {
-  max-width: 100%;
-  flex-direction: row;
-  max-height: none;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  height: calc(65vh);
-  min-height: 300px;
-  margin-bottom: 100px;
-
-  .image-wrapper {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  .image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 1;
-    background-position: center 15%;
-    background-size: cover;
-  }
-}
-
 .showcase-wrapper {
   display: flex;
   width: 100%;
