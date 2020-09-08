@@ -73,7 +73,6 @@ export default {
     align-items: center;
     top: 50%;
     transform: translateY(-50%);
-    padding-left: 100px;
     .showcase-element {
       width: 550px;
       flex-grow: 0;
