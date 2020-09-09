@@ -19,6 +19,9 @@
         </div>
         <div class="node-calculator">
           <div class="nodecalc-header">Sort WIP, Filter WIP</div>
+          <h5 class="title is-h5">
+            {{ timeUpdated }}
+          </h5>
           <div class="nodecalc-list columns">
             <div
               v-for="(node, index) in nodes"
@@ -57,7 +60,16 @@ export default {
         error({ statusCode: 500, message: e })
       })
   },
-  computed: {},
+  computed: {
+    timeUpdated() {
+      if (this.nodes[0].materials[0]) {
+        const [date, time] = this.nodes[0].materials[0].updated.split('T')
+        return `Last Upated at ${date} ${time}`
+      } else {
+        return ''
+      }
+    },
+  },
 }
 </script>
 <style lang="scss">

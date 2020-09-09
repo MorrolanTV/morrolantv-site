@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrapper" :class="{ scrolled: isScrolled }">
     <Header />
-    <Nuxt />
+    <Nuxt keep-alive />
     <Footer />
   </div>
 </template>
