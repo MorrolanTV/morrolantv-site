@@ -1,7 +1,7 @@
 <template>
   <div class="tw-wrapper">
     <iframe
-      src="https://player.twitch.tv/?channel=morrolantv&parent=morrolantv-dev.herokuapp.com&parent=localhost"
+      src="https://player.twitch.tv/?channel=morrolantv&parent=eloquent-keller-9336f4.netlify.app&parent=localhost"
       frameborder="0"
       allowfullscreen="false"
       scrolling="no"

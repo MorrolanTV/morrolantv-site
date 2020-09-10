@@ -45,8 +45,11 @@ export default {
   },
   // eslint-disable-next-line vue/order-in-components
   asyncData({ $axios }) {
+    let base = 'http://localhost:8888'
+    if (process.env.NODE_ENV === 'production')
+      base = 'https://eloquent-keller-9336f4.netlify.app'
     return $axios
-      .$get('http://localhost:8888/api/twitchapi/live')
+      .$get(base + '/api/twitchapi/live')
       .then((res) => {
         return { twitchState: res }
       })
