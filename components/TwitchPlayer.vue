@@ -5,8 +5,8 @@
       frameborder="0"
       allowfullscreen="false"
       scrolling="no"
-      height="100%"
-      width="100%"
+      height="500"
+      width="888"
     ></iframe>
   </div>
 </template>
@@ -15,6 +15,7 @@
   background: $blue;
   transition: 1s;
   box-shadow: purpleBoxShadow(8, false);
-  height: 300px;
+  height: 500px;
+  width: 888px;
 }
 </style>

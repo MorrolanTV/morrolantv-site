@@ -13,11 +13,22 @@
     gap: 20px;
   }
   .content-box {
+    img {
+      transition: 0.3s;
+    }
+    &:hover {
+      img {
+        filter: blur(3px);
+      }
+    }
     @for $i from 1 through 4 {
       &:nth-child(#{$i}) {
         grid-area: g#{$i};
       }
     }
+  }
+  .content {
+    background-color: rgba(0, 0, 0, 0.4);
   }
 }
 </style>
@@ -27,27 +38,31 @@ export default {
     return {
       tools: [
         {
-          name: 'Node Calculator',
+          name: 'Cooking Calculator',
           gname: 'Black Desert Online',
+          desc: 'Learn what recepies are best to cook',
           image: 'cooking',
           path: '/tools/nodes',
         },
         {
-          name: 'Node Calculator',
+          name: 'Crate Calculator',
           gname: 'Black Desert Online',
-          image: 'cooking',
+          desc: 'Coming soon',
+          image: 'crate',
           path: '/',
         },
         {
-          name: 'Node Calculator',
+          name: 'Horse Breeding',
           gname: 'Black Desert Online',
-          image: 'cooking',
+          desc: 'Coming soon',
+          image: 'horse',
           path: '/',
         },
         {
-          name: 'Node Calculator',
+          name: 'Workers Guide',
           gname: 'Black Desert Online',
-          image: 'cooking',
+          desc: 'Check out the most profitable nodes, simulate outcomes',
+          image: 'nodes',
           path: '/',
         },
       ],

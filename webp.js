@@ -18,7 +18,7 @@ async function png() {
 async function jpg() {
   const files = await imagemin(['./assets/img/webp/*.jpg'], {
     destination: outputFolder,
-    plugins: [webp({ quality: 65 })],
+    plugins: [webp({ quality: 75 })],
   })
 }
 

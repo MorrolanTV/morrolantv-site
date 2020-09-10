@@ -19,8 +19,8 @@
         </div>
         <div class="node-calculator">
           <div class="nodecalc-header">Sort WIP, Filter WIP</div>
-          <h5 class="title is-h5">
-            {{ timeUpdated }}
+          <h5 class="mb-3">
+            WIP UNTIL API CAN UPDATE ITESELF {{ timeUpdated }}
           </h5>
           <div class="nodecalc-list columns">
             <div
@@ -35,6 +35,9 @@
                 :image="node.image"
                 :materials="node.materials"
                 :region="node.region"
+                :workload="node.workload"
+                :distance="node.distance"
+                :average-yield="node.averageYield"
               />
             </div>
           </div>

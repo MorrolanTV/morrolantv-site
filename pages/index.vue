@@ -17,9 +17,9 @@
           <h1 class="title is-uppercase has-lineupper">
             {{ streamMessage }}
           </h1>
-          <h6 v-if="!isLive" class="subtitle is-6">
+          <h6 v-if="!twitchState.live" class="subtitle is-6">
             <a href="#highlight"
-              >While the stream is offline, check out the video collection
+              >While you wait, check out the video collection
               <fa :icon="['fas', 'chevron-right']"
             /></a>
           </h6>
@@ -38,16 +38,28 @@
 </template>
 
 <script>
-import backgroundUrl from '~/assets/img/background.png'
+import backgroundUrl from '~/assets/img/background.jpg'
 export default {
   data() {
-    return { backgroundUrl, isLive: false }
+    return { backgroundUrl, twitchState: {} }
+  },
+  // eslint-disable-next-line vue/order-in-components
+  asyncData({ $axios }) {
+    return $axios
+      .$get('http://localhost:8888/api/twitchapi/live')
+      .then((res) => {
+        return { twitchState: res }
+      })
+      .catch((e) => {
+        const data = { live: false }
+        return { twitchState: data }
+      })
   },
   computed: {
     streamMessage() {
-      return this.isLive
+      return this.twitchState.live
         ? 'MorrolanTV is live on Twitch'
-        : 'Follow MorrolanTV on Twitch'
+        : 'MorrolanTV is currently not streaming'
     },
   },
 }
@@ -74,7 +86,7 @@ export default {
     top: 50%;
     transform: translateY(-50%);
     .showcase-element {
-      width: 550px;
+      width: 888px;
       flex-grow: 0;
     }
   }

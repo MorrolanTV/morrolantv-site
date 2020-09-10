@@ -12,7 +12,7 @@
     <div class="node-form">
       <div class="select">
         <select v-model="worker">
-          <option v-for="w in workers" :key="w.anme">
+          <option v-for="w in workers" :key="w.name" :value="w">
             {{ w.name }}
           </option>
         </select>
@@ -60,6 +60,21 @@ export default {
       default: null,
       required: true,
     },
+    workload: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    distance: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    averageYield: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
     region: {
       type: String,
       default: '',
@@ -72,8 +87,6 @@ export default {
       minutesPerTask: 0,
       workSpeed: 0,
       moveSpeed: 0,
-      distance: 0,
-      averageYield: 0,
       worker: null,
       workers: [
         { name: 'Artisan Goblin', work: 150, movement: 7, stamina: 15 },
@@ -90,9 +103,12 @@ export default {
       (stats) =>
         this.detailedReport(stats.work, stats.movement, stats.stamina).profit
     )
+
     const index = profits.indexOf(Math.max(...profits))
 
     this.worker = this.workers[index]
+    this.workSpeed = this.worker.work
+    this.moveSpeed = this.worker.movement
     this.calculate()
   },
   methods: {
@@ -103,17 +119,11 @@ export default {
       return profit
     },
     detailedReport(workSpeed, moveSpeed, stamina) {
-      if (!this.workSpeed) this.workSpeed = 0
-      if (!this.moveSpeed) this.moveSpeed = 0
+      if (!workSpeed) workSpeed = 0
+      if (!moveSpeed) moveSpeed = 0
 
-      const timeWorking = this.calculateTimeWorking(
-        this.workload,
-        this.workSpeed
-      )
-      const timeTravelling = this.calculateTravelTime(
-        this.moveSpeed,
-        this.distance
-      )
+      const timeWorking = this.calculateTimeWorking(this.workload, workSpeed)
+      const timeTravelling = this.calculateTravelTime(moveSpeed, this.distance)
       const total = timeWorking + timeTravelling
       const minutesPerTask = total / 60
       const cyclesPerDay = this.calculateCycles(
@@ -129,7 +139,6 @@ export default {
           this.averageYield -
           (1030 / 3) * cyclesPerDay
       )
-
       return {
         timeWorking,
         timeTravelling,

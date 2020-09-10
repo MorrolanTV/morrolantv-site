@@ -28,7 +28,7 @@
             </picture>
           </div>
           <div class="content px-4 py-5">
-            <h4 class="subtitle is-4 has-lineupper">{{ content.name }}</h4>
+            <h4 class="is-4 subtitle has-lineupper">{{ content.name }}</h4>
             <div v-if="content.desc" class="desc-wrapper">
               <p>{{ content.desc }}</p>
             </div>
@@ -103,15 +103,25 @@ export default {
 
   &:hover {
     z-index: 2;
-    transform: translateY(-2px);
     box-shadow: 0 60px 90px -40px rgba(0, 0, 0, 0.6);
   }
 
   .content {
     z-index: 2;
+    .subtitle,
+    p {
+      margin-bottom: 0;
+    }
   }
-
   .desc-wrapper {
+    max-height: 0;
+    transition: 0.3s;
+    overflow: hidden;
+  }
+  &:hover {
+    .desc-wrapper {
+      max-height: 50px;
+    }
   }
 }
 </style>
