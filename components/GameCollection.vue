@@ -16,28 +16,36 @@ export default {
           type: 'VOD',
           desc: '',
           image: 'bloodborne',
-          path: 'https://www.google.ch',
+          external: true,
+          path:
+            'https://www.twitch.tv/collections/VCa69D8d_hTkzw?filter=collections',
         },
         {
           name: 'Sekiro: Shadows Die Twice',
           type: 'YouTube',
           desc: '',
           image: 'sekiro',
-          path: '/',
+          external: true,
+          path:
+            'https://www.twitch.tv/collections/7zke3Si9kRU6Lg?filter=collections',
         },
         {
           name: 'Final Fantasy VII Remake',
           type: 'VOD',
           desc: '',
           image: 'finalfantasy',
-          path: '/',
+          external: true,
+          path:
+            'https://www.twitch.tv/collections/3W_kgujrBRb3Ww?filter=collections',
         },
         {
           name: 'Dark Souls',
           type: 'VOD',
           desc: '',
           image: 'darksouls',
-          path: '/',
+          external: true,
+          path:
+            'https://www.twitch.tv/collections/kIvUH9k7NBWslw?filter=collections',
         },
       ],
     }

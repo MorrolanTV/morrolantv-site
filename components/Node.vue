@@ -6,27 +6,75 @@
         'background-image': `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(${image})`,
       }"
     >
-      <h5>{{ name }}</h5>
-      <img class="region-image" :src="generateRegionImage()" alt="Alt Text!" />
-    </div>
-    <div class="node-form">
-      <div class="select">
-        <select v-model="worker">
-          <option v-for="w in workers" :key="w.name" :value="w">
-            {{ w.name }}
-          </option>
-        </select>
-      </div>
-      <div class="field">
-        <label class="label">Workspeed</label>
-        <div class="control">
-          <input v-model="workSpeed" class="input" placeholder="Workspeed" />
+      <div class="is-flex align-center">
+        <h5 class="mr-2">{{ name }}</h5>
+        <div
+          v-for="material in materials"
+          :key="material.id"
+          class="resimg-wrapper"
+        >
+          <img class="resimg" :src="getCodexImage(material.codex.icon)" />
         </div>
       </div>
+      <div class="is-flex align-center">
+        <h5 class="mr-2">{{ parseValue(profitCP) }}</h5>
+        <img
+          class="region-image"
+          :src="generateRegionImage()"
+          alt="Alt Text!"
+        />
+      </div>
+    </div>
+    <div class="node-form">
       <div class="field">
-        <label class="label">Movespeed</label>
-        <div class="control">
-          <input v-model="moveSpeed" class="input" placeholder="Movespeed" />
+        <div class="field-body">
+          <div class="field">
+            <label class="label">Worker</label>
+            <div class="control is-expanded">
+              <div class="select is-fullwidth">
+                <select v-model="worker">
+                  <option v-for="w in workers" :key="w.name" :value="w">
+                    {{ w.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="field field-cp is-narrow">
+            <label class="label">CP</label>
+            <div class="control">
+              <input
+                v-model.number="cp"
+                type="number"
+                class="input"
+                placeholder="Contribution"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <label class="label">Workspeed</label>
+          <div class="control">
+            <input
+              v-model.number="workSpeed"
+              class="input"
+              type="number"
+              placeholder="Workspeed"
+            />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Movespeed</label>
+          <div class="control">
+            <input
+              v-model.number="moveSpeed"
+              class="input"
+              type="number"
+              placeholder="Movespeed"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -88,6 +136,7 @@ export default {
       workSpeed: 0,
       moveSpeed: 0,
       worker: null,
+      cp: 0,
       workers: [
         { name: 'Artisan Goblin', work: 150, movement: 7, stamina: 15 },
         { name: 'Artisan Human', work: 100, movement: 4.5, stamina: 23 },
@@ -98,12 +147,33 @@ export default {
       ],
     }
   },
+  computed: {
+    profitCP() {
+      return this.profit / this.cp
+    },
+  },
+  watch: {
+    cp() {
+      this.calculate()
+    },
+    worker() {
+      this.workSpeed = this.worker.work
+      this.moveSpeed = this.worker.movement
+      this.calculate()
+    },
+    workSpeed() {
+      this.calculate()
+    },
+    moveSpeed() {
+      this.calculate()
+    },
+  },
   mounted() {
+    this.cp = this.contribution
     const profits = this.workers.map(
       (stats) =>
         this.detailedReport(stats.work, stats.movement, stats.stamina).profit
     )
-
     const index = profits.indexOf(Math.max(...profits))
 
     this.worker = this.workers[index]
@@ -112,25 +182,22 @@ export default {
     this.calculate()
   },
   methods: {
-    calculate(node) {
-      const { profit, minutesPerTask } = this.detailedReport()
+    calculate() {
+      const { profit, minutesPerTask } = this.detailedReport(
+        this.workSpeed,
+        this.moveSpeed,
+        this.worker.stamina
+      )
       this.profit = profit
       this.minutesPerTask = minutesPerTask
-      return profit
     },
     detailedReport(workSpeed, moveSpeed, stamina) {
-      if (!workSpeed) workSpeed = 0
-      if (!moveSpeed) moveSpeed = 0
-
       const timeWorking = this.calculateTimeWorking(this.workload, workSpeed)
       const timeTravelling = this.calculateTravelTime(moveSpeed, this.distance)
       const total = timeWorking + timeTravelling
       const minutesPerTask = total / 60
-      const cyclesPerDay = this.calculateCycles(
-        15,
-        minutesPerTask,
-        this.worker ? this.worker.stamina : stamina
-      ).total
+      const cyclesPerDay = this.calculateCycles(15, minutesPerTask, stamina)
+        .total
       const profit = Math.floor(
         this.materials
           .map((x) => this.getItemPrice(x))
@@ -237,5 +304,8 @@ export default {
 .node-form {
   background: $grey;
   padding: 20px;
+  .field-cp {
+    flex-basis: 60px;
+  }
 }
 </style>

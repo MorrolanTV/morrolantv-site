@@ -2,12 +2,21 @@
   <main>
     <section class="hero w-100">
       <div class="image-wrapper">
-        <div
-          class="image"
-          :style="{ backgroundImage: `url(${backgroundUrl})` }"
-        >
-          <video></video>
-        </div>
+        <picture>
+          <source
+            :srcset="require(`~/assets/img/webp/${heroimg}.webp`)"
+            type="image/webp"
+          />
+          <source
+            :srcset="require(`~/assets/img/webp/${heroimg}.jpg`)"
+            type="image/jpeg"
+          />
+          <img
+            class="image"
+            :src="require(`~/assets/img/webp/${heroimg}.jpg`)"
+            alt="Alt Text!"
+          />
+        </picture>
       </div>
       <div class="showcase-wrapper str">
         <div class="showcase-element">
@@ -38,10 +47,9 @@
 </template>
 
 <script>
-import backgroundUrl from '~/assets/img/background.jpg'
 export default {
   data() {
-    return { backgroundUrl, twitchState: {} }
+    return { heroimg: 'background', twitchState: {} }
   },
   // eslint-disable-next-line vue/order-in-components
   asyncData({ $axios }) {

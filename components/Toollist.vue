@@ -33,41 +33,9 @@
 }
 </style>
 <script>
+import { mapState } from 'vuex'
 export default {
-  data() {
-    return {
-      tools: [
-        {
-          name: 'Cooking Calculator',
-          gname: 'Black Desert Online',
-          desc: 'Learn what recepies are best to cook',
-          image: 'cooking',
-          path: '/tools/nodes',
-        },
-        {
-          name: 'Crate Calculator',
-          gname: 'Black Desert Online',
-          desc: 'Coming soon',
-          image: 'crate',
-          path: '/',
-        },
-        {
-          name: 'Horse Breeding',
-          gname: 'Black Desert Online',
-          desc: 'Coming soon',
-          image: 'horse',
-          path: '/',
-        },
-        {
-          name: 'Workers Guide',
-          gname: 'Black Desert Online',
-          desc: 'Check out the most profitable nodes, simulate outcomes',
-          image: 'nodes',
-          path: '/',
-        },
-      ],
-    }
-  },
+  computed: mapState(['tools']),
 }
 </script>
 

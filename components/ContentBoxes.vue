@@ -5,35 +5,56 @@
         <h2 class="title is-2">{{ title }}</h2>
       </div>
       <div :class="gridClass">
-        <nuxt-link
-          v-for="content in entries"
-          :key="content.name"
-          :to="content.path"
-          class="content-box"
-        >
-          <div class="image-wrapper">
-            <picture>
-              <source
-                :srcset="require(`~/assets/img/webp/${content.image}.webp`)"
-                type="image/webp"
-              />
-              <source
-                :srcset="require(`~/assets/img/webp/${content.image}.jpg`)"
-                type="image/jpeg"
-              />
-              <img
-                :src="require(`~/assets/img/webp/${content.image}.jpg`)"
-                alt="Alt Text!"
-              />
-            </picture>
-          </div>
-          <div class="content px-4 py-5">
-            <h4 class="is-4 subtitle has-lineupper">{{ content.name }}</h4>
-            <div v-if="content.desc" class="desc-wrapper">
-              <p>{{ content.desc }}</p>
+        <div v-for="content in entries" :key="content.name" class="content-box">
+          <nuxt-link v-if="!content.external" :to="content.path">
+            <div class="image-wrapper">
+              <picture>
+                <source
+                  :srcset="require(`~/assets/img/webp/${content.image}.webp`)"
+                  type="image/webp"
+                />
+                <source
+                  :srcset="require(`~/assets/img/webp/${content.image}.jpg`)"
+                  type="image/jpeg"
+                />
+                <img
+                  :src="require(`~/assets/img/webp/${content.image}.jpg`)"
+                  alt="Alt Text!"
+                />
+              </picture>
             </div>
-          </div>
-        </nuxt-link>
+            <div class="content px-4 py-5">
+              <h4 class="is-4 subtitle has-lineupper">{{ content.name }}</h4>
+              <div v-if="content.desc" class="desc-wrapper">
+                <p>{{ content.desc }}</p>
+              </div>
+            </div>
+          </nuxt-link>
+          <a v-else :href="content.path" target="_blank">
+            <div class="image-wrapper">
+              <picture>
+                <source
+                  :srcset="require(`~/assets/img/webp/${content.image}.webp`)"
+                  type="image/webp"
+                />
+                <source
+                  :srcset="require(`~/assets/img/webp/${content.image}.jpg`)"
+                  type="image/jpeg"
+                />
+                <img
+                  :src="require(`~/assets/img/webp/${content.image}.jpg`)"
+                  alt="Alt Text!"
+                />
+              </picture>
+            </div>
+            <div class="content px-4 py-5">
+              <h4 class="is-4 subtitle has-lineupper">{{ content.name }}</h4>
+              <div v-if="content.desc" class="desc-wrapper">
+                <p>{{ content.desc }}</p>
+              </div>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -79,13 +100,19 @@ export default {
   }
 }
 .content-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  background-size: cover;
-  background-repeat: no-repeat;
   transition: 0.3s;
   position: relative;
+
+  a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
 
   .image-wrapper {
     position: absolute;

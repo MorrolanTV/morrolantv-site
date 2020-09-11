@@ -7,6 +7,7 @@ $grey: rgb(28, 35, 43);
 $blue: rgb(22, 38, 55);
 $bluegrey: #323d48;
 $purple: #b133ec;
+$yellow: #e6b250;
 $scheme-main: $grey-darker;
 $family-sans-serif: 'Montserrat', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
   'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
@@ -14,7 +15,7 @@ $family-sans-serif-sub: 'Julius Sans One', 'Oxygen', 'Ubuntu', 'Cantarell',
   'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 $text: $white-bis;
 $link: $white-bis;
-$link-hover: #e6b250;
+$link-hover: $yellow;
 $fullhd: 1664px + (2 * $gap);
 $text-strong: $white-bis;
 $border-light: #f3f3f3;
