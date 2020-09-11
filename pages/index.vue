@@ -20,7 +20,16 @@
       </div>
       <div class="showcase-wrapper str">
         <div class="showcase-element">
-          <TwitchPlayer />
+          <div class="tw-wrapper">
+            <iframe
+              src="https://player.twitch.tv/?channel=morrolantv&parent=eloquent-keller-9336f4.netlify.app&parent=localhost"
+              frameborder="0"
+              allowfullscreen="false"
+              scrolling="no"
+              height="500"
+              width="888"
+            ></iframe>
+          </div>
         </div>
         <div class="stream-title">
           <h1 class="title is-uppercase has-lineupper">
@@ -36,7 +45,40 @@
       </div>
       <div class="showcase-wrapper section soc">
         <div class="showcase-element">
-          <SocialShowcase />
+          <div class="social-wrapper">
+            <div><h3 class="title is-3 mb-3">Social Media</h3></div>
+            <div>
+              <h5 class="subtitle is-5 mb-2">
+                Stay connected, check out MorrolanTV on his channels
+              </h5>
+            </div>
+            <div class="social">
+              <a
+                id="youtube"
+                href="https://youtube.com/morrolantv"
+                target="_blank"
+                class="social"
+              >
+                <fa :icon="['fab', 'youtube']" />
+              </a>
+              <a
+                id="discord"
+                href="https://discord.gg/morrolantv"
+                target="_blank"
+                class="social"
+              >
+                <fa :icon="['fab', 'discord']" />
+              </a>
+              <a
+                id="twitter"
+                href="https://twitter.com/Morrolantv"
+                target="_blank"
+                class="social"
+              >
+                <fa :icon="['fab', 'twitter']" />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
       <div class="angle-right"></div>
@@ -103,8 +145,55 @@ export default {
   }
 }
 
+.tw-wrapper {
+  background: $blue;
+  transition: 1s;
+  box-shadow: purpleBoxShadow(8, false);
+  height: 500px;
+  width: 888px;
+}
+
 .stream-title {
   margin-top: 30px;
+}
+
+.social-wrapper {
+  background: $blue;
+  padding: 20px;
+  transition: 1s;
+  box-shadow: purpleBoxShadow(8, true);
+}
+
+@include layoutScrolled {
+  .social-wrapper {
+    transform: translateY(-50px);
+  }
+}
+
+.social {
+  display: flex;
+  a {
+    margin-top: 10px;
+    margin-right: 20px;
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    font-size: 20px;
+    color: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &#youtube {
+      background: linear-gradient(90deg, #e71414, #ff3232);
+    }
+    &#discord {
+      background: linear-gradient(90deg, #7289da, #86a1ff);
+    }
+    &#twitter {
+      background: linear-gradient(90deg, #1dcaff, #6cddff);
+    }
+  }
 }
 
 .angle-right {

@@ -16,19 +16,13 @@
 </template>
 
 <script>
-import { fas } from '@fortawesome/free-solid-svg-icons'
-
 export default {
   data() {
     return {
       isOpen: false,
     }
   },
-  computed: {
-    fas() {
-      return fas
-    },
-  },
+  computed: {},
   methods: {
     toggle() {
       this.isOpen = !this.isOpen
