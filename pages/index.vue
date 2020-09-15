@@ -22,7 +22,7 @@
         <div class="showcase-element">
           <div class="tw-wrapper">
             <iframe
-              src="https://player.twitch.tv/?channel=morrolantv&parent=eloquent-keller-9336f4.netlify.app&parent=localhost"
+              src="https://player.twitch.tv/?channel=morrolantv&parent=eloquent-keller-9336f4.netlify.app&parent=localhost&parent=sirfilior-dev.com"
               frameborder="0"
               allowfullscreen="false"
               scrolling="no"
