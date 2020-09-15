@@ -96,7 +96,7 @@ export default {
     baseURL:
       process.env.NODE_ENV !== 'production'
         ? 'http://localhost:5100'
-        : process.env.API_BASEURL,
+        : 'https://api.sirfilior-dev.com',
   },
   /*
    ** Build configuration
