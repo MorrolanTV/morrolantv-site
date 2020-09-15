@@ -64,8 +64,23 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/auth',
     '@nuxtjs/style-resources',
   ],
+  auth: {
+    redirect: {
+      login: '/',
+      callback: '/auth/signed-in',
+    },
+    strategies: {
+      local: false,
+      auth0: {
+        domain: process.env.AUTH0_DOMAIN,
+        client_id: process.env.AUTH0_CLIENT_ID,
+        audience: process.env.AUTH0_AUDIENCE,
+      },
+    },
+  },
   fontawesome: {
     component: 'fa',
     icons: {

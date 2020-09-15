@@ -104,6 +104,11 @@ export default {
     const nodes = await this.$axios
       .$get('https://morrolantv-dev-api.herokuapp.com/nodes')
       .then((res) => res)
+    // To get from users
+    // this.$auth.strategy.token.get()
+    // headers: {
+    //      Authorization: `Bearer ${accessToken}`
+    // }
     this.$store.commit('SET_NODES', nodes)
   },
   fetchOnServer: false,

@@ -11,18 +11,35 @@
       <nuxt-link to="/" class="nav-item">Gear</nuxt-link>
       <nuxt-link to="/" class="nav-item">Twitch</nuxt-link>
       <nuxt-link to="/" class="nav-item">About</nuxt-link>
+      <client-only
+        ><nuxt-link v-if="$auth.loggedIn" to="/profile"
+          >Profile</nuxt-link
+        ></client-only
+      >
+      <client-only
+        ><a v-if="$auth.loggedIn" @click="$auth.logout()"
+          >LOGOUT</a
+        ></client-only
+      >
+      <client-only
+        ><a v-if="!$auth.loggedIn" @click="$auth.loginWith('auth0')"
+          >LOGIN</a
+        ></client-only
+      >
     </div>
   </nav>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data() {
     return {
       isOpen: false,
     }
   },
-  computed: {},
+  computed: mapGetters(['isAuthenticated']),
   methods: {
     toggle() {
       this.isOpen = !this.isOpen
