@@ -81,13 +81,9 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
-    sortIndex: {
-      type: Number,
-      required: false,
-      default: null,
-    },
     name: {
       type: String,
       required: true,
@@ -137,20 +133,13 @@ export default {
       moveSpeed: 0,
       worker: null,
       cp: 0,
-      workers: [
-        { name: 'Artisan Goblin', work: 150, movement: 7, stamina: 15 },
-        { name: 'Artisan Human', work: 100, movement: 4.5, stamina: 23 },
-        { name: 'Artisan Giant', work: 85, movement: 3.5, stamina: 35 },
-        { name: 'Professional Goblin', work: 135, movement: 6, stamina: 10 },
-        { name: 'Professional Human', work: 85, movement: 3.5, stamina: 13 },
-        { name: 'Professional Giant', work: 60, movement: 2.5, stamina: 25 },
-      ],
     }
   },
   computed: {
     profitCP() {
       return this.profit / this.cp
     },
+    ...mapState(['workers']),
   },
   watch: {
     cp() {

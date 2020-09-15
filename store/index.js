@@ -2,6 +2,14 @@ export const state = () => ({
   isStreamLive: false,
   nodes: [],
   profitOrder: [],
+  workers: [
+    { id: 0, name: 'Artisan Goblin', work: 150, movement: 7, stamina: 15 },
+    { id: 1, name: 'Artisan Human', work: 100, movement: 4.5, stamina: 23 },
+    { id: 2, name: 'Artisan Giant', work: 85, movement: 3.5, stamina: 35 },
+    { id: 3, name: 'Professional Goblin', work: 135, movement: 6, stamina: 10 },
+    { id: 4, name: 'Professional Human', work: 85, movement: 3.5, stamina: 13 },
+    { id: 5, name: 'Professional Giant', work: 60, movement: 2.5, stamina: 25 },
+  ],
   tools: [
     {
       name: 'Cooking Calculator',
@@ -49,6 +57,9 @@ export const mutations = {
   },
   SET_NODES: (state, payload) => {
     state.nodes = payload
+  },
+  SET_NODE_PROFIT: ({ nodes }, { id, profit }) => {
+    nodes[id].profit = profit
   },
 }
 

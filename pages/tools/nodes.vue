@@ -78,6 +78,7 @@
                   v-if="
                     node.materials[0].marketPrice || node.materials[0].codex
                   "
+                  :id="index"
                   :name="node.name"
                   :contribution="node.contribution"
                   :image="node.image"
@@ -96,7 +97,7 @@
   </main>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   async fetch() {
@@ -105,6 +106,7 @@ export default {
       .then((res) => res)
     this.$store.commit('SET_NODES', nodes)
   },
+  fetchOnServer: false,
   data() {
     return {
       heroimg: 'world',
@@ -143,6 +145,7 @@ export default {
       }
     },
     ...mapGetters(['getNodesByProfit', 'getNodesByRegion']),
+    ...mapState(['workers']),
   },
   methods: {
     generateRegionImage(region) {
