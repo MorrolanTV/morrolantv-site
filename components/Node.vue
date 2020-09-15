@@ -13,7 +13,7 @@
           :key="material.id"
           class="resimg-wrapper"
         >
-          <img class="resimg" :src="getCodexImage(material.codex.icon)" />
+          <img class="resimg" :src="getCodexImage(material.icon)" />
         </div>
       </div>
       <div class="is-flex align-center">
@@ -84,6 +84,10 @@
 import { mapState } from 'vuex'
 export default {
   props: {
+    id: {
+      type: Number,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -133,29 +137,14 @@ export default {
       moveSpeed: 0,
       worker: null,
       cp: 0,
+      initial: true,
     }
   },
   computed: {
     profitCP() {
-      return this.profit / this.cp
+      return this.cp > 0 ? this.profit / this.cp : 0
     },
     ...mapState(['workers']),
-  },
-  watch: {
-    cp() {
-      this.calculate()
-    },
-    worker() {
-      this.workSpeed = this.worker.work
-      this.moveSpeed = this.worker.movement
-      this.calculate()
-    },
-    workSpeed() {
-      this.calculate()
-    },
-    moveSpeed() {
-      this.calculate()
-    },
   },
   mounted() {
     this.cp = this.contribution
@@ -169,8 +158,29 @@ export default {
     this.workSpeed = this.worker.work
     this.moveSpeed = this.worker.movement
     this.calculate()
+    this.applyFormWatchers()
   },
   methods: {
+    applyFormWatchers() {
+      this.$watch('cp', function () {
+        this.calculate()
+        this.$emit('recalculated')
+      })
+      this.$watch('worker', function (newVal, oldVal) {
+        this.workSpeed = this.worker.work
+        this.moveSpeed = this.worker.movement
+        this.calculate()
+        this.$emit('recalculated')
+      })
+      this.$watch('workSpeed', function (newVal, oldVal) {
+        this.calculate()
+        this.$emit('recalculated')
+      })
+      this.$watch('moveSpeed', function (newVal, oldVal) {
+        this.calculate()
+        this.$emit('recalculated')
+      })
+    },
     calculate() {
       const { profit, minutesPerTask } = this.detailedReport(
         this.workSpeed,
@@ -179,6 +189,10 @@ export default {
       )
       this.profit = profit
       this.minutesPerTask = minutesPerTask
+      this.$store.commit('SET_NODE_PROFIT', {
+        id: this.id,
+        profit: this.profitCP,
+      })
     },
     detailedReport(workSpeed, moveSpeed, stamina) {
       const timeWorking = this.calculateTimeWorking(this.workload, workSpeed)
@@ -212,10 +226,14 @@ export default {
       return require(`~/assets/img/tools/general/REGION_${this.region.toLowerCase()}.png`)
     },
     getItemPrice(material) {
-      if (material.marketPrice) return material.marketPrice.pricePerOne
-      if (material.codex && material.codex.prices)
-        return parseFloat(material.codex.prices.buy.replace(/,/g, ''))
-      return 0
+      const marketPrice = this.getLocalizedPrice(material)
+      const codexPrice = material.codexBuyPrice ? material.codexBuyPrice : 0
+      return marketPrice || codexPrice
+    },
+    getLocalizedPrice(material) {
+      return this.$store.state.playerRegion === 'NA'
+        ? material.priceNA
+        : material.priceEU
     },
     parseTime(minutes) {
       const displayHours = Math.floor(minutes / 60)

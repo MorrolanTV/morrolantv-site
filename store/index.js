@@ -1,7 +1,10 @@
 export const state = () => ({
   isStreamLive: false,
   nodes: [],
-  profitOrder: [],
+  nodesCalculated: false,
+  profitList: new Map(),
+  profitsUpdated: 1,
+  playerRegion: 'NA',
   workers: [
     { id: 0, name: 'Artisan Goblin', work: 150, movement: 7, stamina: 15 },
     { id: 1, name: 'Artisan Human', work: 100, movement: 4.5, stamina: 23 },
@@ -58,16 +61,31 @@ export const mutations = {
   SET_NODES: (state, payload) => {
     state.nodes = payload
   },
-  SET_NODE_PROFIT: ({ nodes }, { id, profit }) => {
-    nodes[id].profit = profit
+  SET_NODE_PROFIT: (state, payload) => {
+    state.profitList.set(payload.id, payload.profit)
+    state.nodesCalculated = state.profitList.size === state.nodes.length
+  },
+  PROFITS_UPDATED: (state) => {
+    state.profitsUpdated += 1
   },
 }
 
 export const getters = {
   getNodesByProfit: (state) => {
-    return state.nodes
+    const sorted = [...state.nodes].sort(function (a, b) {
+      return state.profitList.get(b.id) - state.profitList.get(a.id)
+    })
+    if (state.profitsUpdated > 0) {
+      return sorted
+    }
   },
   getNodesByRegion: (state) => (region) => {
-    return state.nodes.filter((node) => node.region.toLowerCase() === region)
+    const sorted = [...state.nodes].sort(function (a, b) {
+      return state.profitList.get(b.id) - state.profitList.get(a.id)
+    })
+    return sorted.filter((node) => node.region.toLowerCase() === region)
+  },
+  getNodesUnsorted: (state) => {
+    return state.nodes
   },
 }

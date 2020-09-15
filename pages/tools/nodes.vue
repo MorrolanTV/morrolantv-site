@@ -48,7 +48,13 @@
                 sunt in culpa qui officia deserunt mollit anim id est laborum."
               </p>
             </div>
-            <div class="nodecalc-filter-wrapper">
+            <h5 class="mb-3">
+              Material prices fixed until api is working correctly.
+              {{ timeUpdated }}
+            </h5>
+            <div
+              class="nodecalc-filter-wrapper is-flex align-center justify-between mb-3"
+            >
               <div
                 class="filter-list"
                 :class="selectedRegion != '' ? 'hasSelected' : ''"
@@ -63,30 +69,30 @@
                   <img :src="generateRegionImage(region)" class="region-img" />
                 </div>
               </div>
+              <div class="sort-options">
+                <button class="button is-primary" @click="updateList()">
+                  Re-Sort
+                </button>
+              </div>
             </div>
-            <h5 class="mb-3">
-              Material prices fixed until api is working correctly.
-              {{ timeUpdated }}
-            </h5>
             <div class="nodecalc-list columns">
               <div
-                v-for="(node, index) in nodes"
-                :key="index"
+                v-for="node in nodes"
+                :key="node.id"
                 class="node-wrapper column is-one-third"
               >
                 <Node
-                  v-if="
-                    node.materials[0].marketPrice || node.materials[0].codex
-                  "
-                  :id="index"
+                  v-if="node.Materials[0]"
+                  :id="node.id"
                   :name="node.name"
                   :contribution="node.contribution"
                   :image="node.image"
-                  :materials="node.materials"
+                  :materials="node.Materials"
                   :region="node.region"
                   :workload="node.workload"
                   :distance="node.distance"
                   :average-yield="node.averageYield"
+                  @recalculated="updateListAuto"
                 />
               </div>
             </div>
@@ -101,21 +107,31 @@ import { mapGetters, mapState } from 'vuex'
 
 export default {
   async fetch() {
-    const nodes = await this.$axios
-      .$get('https://morrolantv-dev-api.herokuapp.com/nodes')
-      .then((res) => res)
-    // To get from users
-    // this.$auth.strategy.token.get()
-    // headers: {
-    //      Authorization: `Bearer ${accessToken}`
-    // }
-    this.$store.commit('SET_NODES', nodes)
+    if (this.$auth.loggedIn) {
+      const nodes = await this.$axios
+        .$get('/user/userNodes', {
+          headers: {
+            Authorization: this.$auth.getToken('auth0'),
+          },
+        })
+        .then((res) => res)
+      if (nodes) {
+        this.$store.commit('SET_NODES', nodes)
+      }
+    } else {
+      // Fetch default node data
+      const nodes = await this.$axios.$get('/nodes').then((res) => res)
+      if (nodes) {
+        this.$store.commit('SET_NODES', nodes)
+      }
+    }
   },
   fetchOnServer: false,
   data() {
     return {
       heroimg: 'world',
       error: null,
+      autoUpdate: false,
       initialFilter: 'profit',
       filterMethod: 'profit',
       selectedRegion: '',
@@ -132,27 +148,39 @@ export default {
   },
   computed: {
     timeUpdated() {
-      if (this.nodes && this.nodes.length > 0 && this.nodes[0].materials[0]) {
-        const [date, time] = this.nodes[0].materials[0].updated.split('T')
+      if (this.nodes && this.nodes.length > 0 && this.nodes[0].Materials[0]) {
+        const [date, time] = this.nodes[0].Materials[0].updatedAt.split('T')
         return `Last Upated at ${date} ${time}`
       } else {
         return ''
       }
     },
     nodes() {
-      switch (this.filterMethod) {
-        case 'profit':
-          return this.getNodesByProfit
-        case 'region':
-          return this.getNodesByRegion(this.selectedRegion)
-        default:
-          return this.getNodesByProfit
+      if (this.nodesCalculated) {
+        switch (this.filterMethod) {
+          case 'profit':
+            return this.getNodesByProfit
+          case 'region':
+            return this.getNodesByRegion(this.selectedRegion)
+          default:
+            return this.getNodesByProfit
+        }
+      } else {
+        return this.getNodesUnsorted
       }
     },
-    ...mapGetters(['getNodesByProfit', 'getNodesByRegion']),
-    ...mapState(['workers']),
+    ...mapGetters(['getNodesByProfit', 'getNodesByRegion', 'getNodesUnsorted']),
+    ...mapState(['workers', 'nodesCalculated', 'profitsUpdated']),
   },
   methods: {
+    updateList() {
+      this.$store.commit('PROFITS_UPDATED')
+    },
+    updateListAuto() {
+      if (this.autoUpdate) {
+        this.$store.commit('PROFITS_UPDATED')
+      }
+    },
     generateRegionImage(region) {
       return require(`~/assets/img/tools/general/REGION_${region}.png`)
     },
