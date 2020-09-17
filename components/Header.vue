@@ -8,22 +8,12 @@
     <div class="nav-items">
       <nuxt-link to="/" class="nav-item">Home</nuxt-link>
       <nuxt-link to="/tools" class="nav-item">Tools</nuxt-link>
-      <nuxt-link to="/" class="nav-item">Gear</nuxt-link>
-      <nuxt-link to="/" class="nav-item">Twitch</nuxt-link>
-      <nuxt-link to="/" class="nav-item">About</nuxt-link>
+      <nuxt-link to="/gear" class="nav-item">Gear</nuxt-link>
+      <nuxt-link to="/stream" class="nav-item">Stream</nuxt-link>
+      <nuxt-link to="/about" class="nav-item">About</nuxt-link>
       <client-only
-        ><nuxt-link v-if="$auth.loggedIn" to="/profile"
-          >Profile</nuxt-link
-        ></client-only
-      >
-      <client-only
-        ><a v-if="$auth.loggedIn" @click="$auth.logout()"
+        ><a v-if="$auth.loggedIn" class="nav-item" @click="$auth.logout()"
           >LOGOUT</a
-        ></client-only
-      >
-      <client-only
-        ><a v-if="!$auth.loggedIn" @click="$auth.loginWith('auth0')"
-          >LOGIN</a
         ></client-only
       >
     </div>

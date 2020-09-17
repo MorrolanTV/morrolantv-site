@@ -1,6 +1,6 @@
 <template>
   <main>
-    <section class="hero subpage w-100">
+    <!--<section class="hero subpage w-100">
       <div class="image-wrapper">
         <picture>
           <source
@@ -19,8 +19,8 @@
           />
         </picture>
       </div>
-    </section>
-    <section class="section">
+    </section>-->
+    <section class="section no-hero">
       <div class="container">
         <h1 class="title is-1">Black Desert Online Tools</h1>
         <nuxt-link

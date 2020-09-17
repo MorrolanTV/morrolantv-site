@@ -23,7 +23,13 @@
     <section class="section">
       <div class="container">
         <h1 class="title is-1">User Profile</h1>
-        <h3 class="subtitle is-3">Hello {{ user.email }}</h3>
+        <h3 class="subtitle is-3">Manage your stored content</h3>
+        <client-only placeholder="User Content">
+          <div class="user-content">
+            <div class="user-wrapper-nodes">Your Nodes</div>
+            <div class="user-wrapper-recipes">Your Recipes</div>
+          </div>
+        </client-only>
       </div>
     </section>
   </main>
