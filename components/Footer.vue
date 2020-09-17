@@ -4,8 +4,8 @@
       <div class="footer-content columns">
         <div class="footer-col column">
           <h6 class="subtitle is-6">Socials</h6>
-          <div class="columns">
-            <div class="column">
+          <div class="is-flex footer-social-icons">
+            <div class="mr-5">
               <a>
                 <fa :icon="['fab', 'twitch']" /><span class="ml-2"
                   >Twitch</span
@@ -17,7 +17,7 @@
                 ></a
               >
             </div>
-            <div class="column">
+            <div>
               <a>
                 <fa :icon="['fab', 'youtube']" /><span class="ml-2"
                   >YouTube</span
@@ -54,13 +54,18 @@
 </template>
 <style lang="scss">
 footer {
-  border-top: 8px solid $purple;
-  background: $grey-darkest;
+  border-top: 8px solid $border-accent;
+  background: $background-footer;
 }
 .footer-content {
-  display: flex;
-  justify-content: stretch;
   padding: 40px 0;
+  @media (max-width: 718px) {
+    padding: 20px 0;
+    text-align: center;
+    .footer-social-icons {
+      justify-content: center;
+    }
+  }
 }
 .footer-col {
   a,

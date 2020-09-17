@@ -4,14 +4,14 @@
   }
 }
 
-@function purpleBoxShadow($amount, $right) {
+@function boxShadow($amount, $right, $color) {
   $box-shadow: '';
   $shadows: '';
   @for $i from 1 through $amount {
     @if $right {
-      $shadows: -#{$i}px #{$i}px $purple;
+      $shadows: -#{$i}px #{$i}px #{$color};
     } @else {
-      $shadows: #{$i}px #{$i}px $purple;
+      $shadows: #{$i}px #{$i}px #{$color};
     }
 
     $box-shadow: $box-shadow + $shadows + ' ,';

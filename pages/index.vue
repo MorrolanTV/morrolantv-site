@@ -26,8 +26,8 @@
               frameborder="0"
               allowfullscreen="false"
               scrolling="no"
-              height="500"
-              width="888"
+              height="100%"
+              width="100%"
             ></iframe>
           </div>
         </div>
@@ -83,6 +83,19 @@
       </div>
       <div class="angle-right"></div>
     </section>
+    <section class="section content mobile">
+      <div class="stream-title mobile">
+        <h1 class="title is-uppercase">
+          {{ streamMessage }}
+        </h1>
+        <h6 v-if="!twitchState.live" class="subtitle is-6">
+          <a href="#highlight"
+            >While you wait, check out the video collection
+            <fa :icon="['fas', 'chevron-right']"
+          /></a>
+        </h6>
+      </div>
+    </section>
     <Toollist />
     <GameCollection />
   </main>
@@ -91,7 +104,7 @@
 <script>
 export default {
   data() {
-    return { heroimg: 'background', twitchState: {} }
+    return { heroimg: 'background-building', twitchState: {} }
   },
   // eslint-disable-next-line vue/order-in-components
   asyncData({ $axios }) {
@@ -127,10 +140,34 @@ export default {
   &.soc {
     justify-content: flex-end;
     bottom: 0;
-    transform: translateY(50%);
+    transform: translateY(30%);
     padding: 0 100px;
     .showcase-element {
       flex-basis: 350px;
+    }
+    @media (max-width: 1906px) {
+      padding: 0;
+      transform: translateY(0%);
+      .showcase-element {
+        flex-basis: auto;
+        .social-wrapper {
+          padding: 4px 20px 12px 20px;
+          box-shadow: none;
+        }
+        .title,
+        .subtitle {
+          display: none;
+        }
+        .social {
+          flex-direction: column;
+          a {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+    @media (max-width: 718px) {
+      display: none;
     }
   }
   &.str {
@@ -141,27 +178,55 @@ export default {
     .showcase-element {
       width: 888px;
       flex-grow: 0;
+      @media (max-width: 1250px) {
+        width: 444px;
+      }
+      @media (max-width: 625px) {
+        width: 333px;
+      }
+    }
+    @media (max-width: 718px) {
+      transform: translateY(-35%);
+      .stream-title {
+        display: none;
+      }
     }
   }
 }
 
 .tw-wrapper {
-  background: $blue;
+  background: $background-accent;
   transition: 1s;
-  box-shadow: purpleBoxShadow(8, false);
+  box-shadow: boxShadow(8, false, $yellow);
   height: 500px;
   width: 888px;
+  @media (max-width: 1250px) {
+    width: 444px;
+    height: 250px;
+  }
+  @media (max-width: 625px) {
+    width: 333px;
+    height: 188px;
+  }
 }
 
 .stream-title {
   margin-top: 30px;
+  &.mobile {
+    margin-bottom: 50px;
+    display: none;
+    text-align: center;
+    @media (max-width: 718px) {
+      display: block;
+    }
+  }
 }
 
 .social-wrapper {
-  background: $blue;
+  background: $background-accent;
   padding: 20px;
   transition: 1s;
-  box-shadow: purpleBoxShadow(8, true);
+  box-shadow: boxShadow(8, true, $yellow);
 }
 
 @include layoutScrolled {
@@ -205,9 +270,12 @@ export default {
   background: linear-gradient(
       to right bottom,
       transparent 49%,
-      $grey-darker 50%
+      $background-primary 50%
     ),
-    linear-gradient(-50deg, $grey-darker 16px, transparent 0);
+    linear-gradient(-50deg, $background-primary 16px, transparent 0);
   z-index: 2;
+  @media (max-width: 718px) {
+    display: none;
+  }
 }
 </style>

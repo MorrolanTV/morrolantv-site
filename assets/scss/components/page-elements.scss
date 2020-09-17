@@ -1,9 +1,15 @@
+@media (max-width: 1727px) {
+  .container {
+    max-width: none !important;
+  }
+}
+
 .section {
   &.content {
     margin-bottom: 150px;
   }
   &.lighter {
-    background-color: $grey;
+    background-color: $background-secondary;
   }
   &.last {
     padding-bottom: 150px;
@@ -11,6 +17,19 @@
   }
   &.no-hero {
     margin-top: 150px;
+  }
+  @media (max-width: 718px) {
+    padding: 1rem 1.5rem;
+    &.content {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+  &.mobile {
+    display: none;
+    @media (max-width: 718px) {
+      display: block;
+    }
   }
 }
 
@@ -39,6 +58,13 @@
   height: 800px;
   min-height: 300px;
   margin-bottom: 100px;
+  @media (max-width: 1250px) {
+    height: 500px;
+  }
+  @media (max-width: 718px) {
+    margin-bottom: 0;
+    height: 400px;
+  }
 
   &.subpage {
     height: calc(40vh);

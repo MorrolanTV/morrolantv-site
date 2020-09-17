@@ -1,26 +1,42 @@
 @import '~bulma/sass/utilities/initial-variables.sass';
 
-$grey-darkest: rgb(15, 26, 37);
-$grey-darker: rgb(17, 23, 30);
-$grey-dark: rgb(30, 39, 48);
-$grey: rgb(28, 35, 43);
-$blue: rgb(22, 38, 55);
-$bluegrey: #323d48;
+//Color variables
+$black: #0b0e11;
+$black-grey: #0e0f13;
+$grey-dark: #11171e;
+$grey-blue: #162637;
+$grey-darker-alpha: rgba(18, 23, 28, 0.75);
 $purple: #b133ec;
 $yellow: #e6b250;
-$primary: $blue;
+$yellow-dark: #9e690b;
+$red: #8c1807;
+
+//Theme colors
+$scheme-main: $black-grey;
+$primary: $black-grey;
+$secondary: $grey-blue;
 $light: $yellow;
-$scheme-main: $grey-darker;
+
+$background-primary: $black-grey;
+$background-secondary: $grey-dark;
+$background-accent: $grey-blue;
+$background-header: $grey-darker-alpha;
+$background-footer: $black;
+
+$border-primary: $white-bis;
+$border-accent: $yellow;
+
+$text: $white-bis;
+$link: $white-bis;
+$link-hover: $yellow;
+$text-strong: $white-bis;
+$border-light: #f3f3f3;
+
 $family-sans-serif: 'Montserrat', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
   'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 $family-sans-serif-sub: 'Julius Sans One', 'Oxygen', 'Ubuntu', 'Cantarell',
   'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-$text: $white-bis;
-$link: $white-bis;
-$link-hover: $yellow;
 $fullhd: 1664px + (2 * $gap);
-$text-strong: $white-bis;
-$border-light: #f3f3f3;
 
 @import '~bulma/sass/utilities/_all.sass';
 @import '~bulma/sass/base/_all.sass';

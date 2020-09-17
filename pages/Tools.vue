@@ -82,7 +82,7 @@ export default {
   }
 }
 .tool-content {
-  background: $blue;
+  background: $background-accent;
   height: 100%;
   padding: 20px;
 }

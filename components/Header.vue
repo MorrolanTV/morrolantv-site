@@ -108,4 +108,10 @@ nav {
     }
   }
 }
+
+@media (max-width: 718px) {
+  .logo-banner {
+    transform: translateY(-40px);
+  }
+}
 </style>
