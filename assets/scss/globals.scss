@@ -2,8 +2,8 @@
 
 //Color variables
 $black: #0b0e11;
-$black-grey: #0e0f13;
-$grey-dark: #11171e;
+$black-grey: #090c15;
+$grey-dark: #0a0e13;
 $grey-blue: #162637;
 $grey-darker-alpha: rgba(18, 23, 28, 0.75);
 $purple: #b133ec;
@@ -20,7 +20,8 @@ $light: $yellow;
 $background-primary: $black-grey;
 $background-secondary: $grey-dark;
 $background-accent: $grey-blue;
-$background-header: $grey-darker-alpha;
+$background-header-effect: $grey-darker-alpha;
+$background-header: $background-secondary;
 $background-footer: $black;
 
 $border-primary: $white-bis;

@@ -1,21 +1,41 @@
 <template>
-  <nav>
-    <div class="logo-wrapper">
-      <div class="logo-banner">
-        <img src="~/assets/img/desktopLogo.png" />
+  <nav
+    class="navbar"
+    role="navigation"
+    aria-label="main navigation"
+    :class="{ isActive: isActive }"
+  >
+    <div class="navbar-brand">
+      <div class="logo-wrapper">
+        <div class="logo-banner">
+          <img src="~/assets/img/desktopLogo.png" />
+        </div>
       </div>
-    </div>
-    <div class="nav-items">
-      <nuxt-link to="/" class="nav-item">Home</nuxt-link>
-      <nuxt-link to="/tools" class="nav-item">Tools</nuxt-link>
-      <nuxt-link to="/gear" class="nav-item">Gear</nuxt-link>
-      <nuxt-link to="/stream" class="nav-item">Stream</nuxt-link>
-      <nuxt-link to="/about" class="nav-item">About</nuxt-link>
-      <client-only
-        ><a v-if="$auth.loggedIn" class="nav-item" @click="$auth.logout()"
-          >LOGOUT</a
-        ></client-only
+      <a
+        role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+        @click="openMenu()"
       >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="nav-items navbar-brand">
+        <nuxt-link to="/" class="nav-item">Home</nuxt-link>
+        <nuxt-link to="/tools" class="nav-item">Tools</nuxt-link>
+        <nuxt-link to="/gear" class="nav-item">Gear</nuxt-link>
+        <nuxt-link to="/stream" class="nav-item">Stream</nuxt-link>
+        <nuxt-link to="/about" class="nav-item">About</nuxt-link>
+        <client-only
+          ><a v-if="$auth.loggedIn" class="nav-item" @click="$auth.logout()"
+            >LOGOUT</a
+          ></client-only
+        >
+      </div>
     </div>
   </nav>
 </template>
@@ -26,13 +46,13 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      isOpen: false,
+      isActive: false,
     }
   },
   computed: mapGetters(['isAuthenticated']),
   methods: {
-    toggle() {
-      this.isOpen = !this.isOpen
+    openMenu() {
+      this.isActive = !this.isActive
     },
   },
 }
@@ -51,7 +71,11 @@ nav {
   height: 78px;
   transition: top 0.25s;
   transition-timing-function: ease;
-  background: linear-gradient(to bottom, rgba(18, 23, 28, 0.75), transparent);
+  background: linear-gradient(
+    to bottom,
+    $background-header-effect,
+    transparent
+  );
   font-size: 13px;
 
   &::before {
@@ -66,10 +90,22 @@ nav {
     transition: 0.5s;
     transition-timing-function: ease;
     opacity: 0;
-    background: #12171c;
+    background: $background-header;
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
+}
+
+.navbar-burger {
+  height: 78px;
+  &:hover {
+    background: none;
+    color: $link;
+  }
+}
+
+.navbar-menu {
+  justify-content: flex-end;
 }
 
 .nav-items {
@@ -106,6 +142,37 @@ nav {
     .logo-banner {
       transform: translateY(-40px);
     }
+  }
+}
+
+@media (max-width: 1015px) {
+  nav {
+    display: block;
+    padding: 0;
+    &::before {
+      transition: none;
+    }
+    &.isActive {
+      &::before {
+        opacity: 1;
+      }
+      .logo-banner {
+        transform: translateY(-40px);
+      }
+      .navbar-menu {
+        display: block;
+      }
+    }
+  }
+  .navbar-brand {
+    width: 100%;
+    padding: 0 50px;
+  }
+  .nav-items {
+    flex-direction: column;
+  }
+  .nav-item {
+    margin: 20px 0;
   }
 }
 

@@ -81,7 +81,7 @@
           </div>
         </div>
       </div>
-      <div class="angle-right"></div>
+      <div class="angle-left"></div>
     </section>
     <section class="section content mobile">
       <div class="stream-title mobile">
@@ -104,7 +104,7 @@
 <script>
 export default {
   data() {
-    return { heroimg: 'background-building', twitchState: {} }
+    return { heroimg: 'background', twitchState: {} }
   },
   // eslint-disable-next-line vue/order-in-components
   asyncData({ $axios }) {
@@ -162,6 +162,9 @@ export default {
           flex-direction: column;
           a {
             margin-right: 0;
+            &:hover {
+              color: $link;
+            }
           }
         }
       }
@@ -175,6 +178,7 @@ export default {
     align-items: center;
     top: 50%;
     transform: translateY(-50%);
+    z-index: 210;
     .showcase-element {
       width: 888px;
       flex-grow: 0;
@@ -223,7 +227,8 @@ export default {
 }
 
 .social-wrapper {
-  background: $background-accent;
+  background-color: #11171e;
+  background-image: url("data:image/svg+xml,%3Csvg width='84' height='48' viewBox='0 0 84 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h12v6H0V0zm28 8h12v6H28V8zm14-8h12v6H42V0zm14 0h12v6H56V0zm0 8h12v6H56V8zM42 8h12v6H42V8zm0 16h12v6H42v-6zm14-8h12v6H56v-6zm14 0h12v6H70v-6zm0-16h12v6H70V0zM28 32h12v6H28v-6zM14 16h12v6H14v-6zM0 24h12v6H0v-6zm0 8h12v6H0v-6zm14 0h12v6H14v-6zm14 8h12v6H28v-6zm-14 0h12v6H14v-6zm28 0h12v6H42v-6zm14-8h12v6H56v-6zm0-8h12v6H56v-6zm14 8h12v6H70v-6zm0 8h12v6H70v-6zM14 24h12v6H14v-6zm14-8h12v6H28v-6zM14 8h12v6H14V8zM0 8h12v6H0V8z' fill='%23162637' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
   padding: 20px;
   transition: 1s;
   box-shadow: boxShadow(8, true, $yellow);
@@ -273,6 +278,23 @@ export default {
       $background-primary 50%
     ),
     linear-gradient(-50deg, $background-primary 16px, transparent 0);
+  z-index: 2;
+  @media (max-width: 718px) {
+    display: none;
+  }
+}
+
+.angle-left {
+  width: 100%;
+  height: 23px;
+  position: absolute;
+  left: 0px;
+  bottom: 0;
+  background: linear-gradient(
+    to left bottom,
+    transparent 49%,
+    $background-primary 50%
+  );
   z-index: 2;
   @media (max-width: 718px) {
     display: none;
