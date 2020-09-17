@@ -309,7 +309,7 @@ export default {
   }
 }
 .node-form {
-  background: $grey;
+  background: $background-secondary;
   padding: 20px;
   .field-cp {
     flex-basis: 60px;

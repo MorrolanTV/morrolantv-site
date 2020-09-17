@@ -142,6 +142,9 @@ export default {
     bottom: 0;
     transform: translateY(30%);
     padding: 0 100px;
+    right: 0;
+    width: auto;
+    z-index: 210;
     .showcase-element {
       flex-basis: 350px;
     }
@@ -162,9 +165,6 @@ export default {
           flex-direction: column;
           a {
             margin-right: 0;
-            &:hover {
-              color: $link;
-            }
           }
         }
       }
@@ -178,7 +178,6 @@ export default {
     align-items: center;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 210;
     .showcase-element {
       width: 888px;
       flex-grow: 0;
@@ -254,6 +253,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    &:hover {
+      color: $link;
+    }
     &#youtube {
       background: linear-gradient(90deg, #e71414, #ff3232);
     }

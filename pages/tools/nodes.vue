@@ -48,10 +48,16 @@
                 sunt in culpa qui officia deserunt mollit anim id est laborum."
               </p>
             </div>
-            <h5 class="mb-3">
-              Material prices fixed until api is working correctly.
-              {{ timeUpdated }}
-            </h5>
+            <div class="is-flex justify-between">
+              <h5 class="mb-3">
+                Use the region icons to filter nodes. Nodes are sorted by
+                profit/cp.
+              </h5>
+              <h5 class="mb-3">
+                {{ timeUpdated }}
+              </h5>
+            </div>
+
             <div
               class="nodecalc-filter-wrapper is-flex align-center justify-between mb-3"
             >
