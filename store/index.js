@@ -1,10 +1,13 @@
 export const state = () => ({
-  isStreamLive: false,
-  nodes: [],
-  nodesCalculated: false,
-  profitList: new Map(),
-  profitsUpdated: 1,
-  playerRegion: 'NA',
+  isStreamLive: false, // Just that
+  nodesCalculated: false, // To notify parent when ready to sort by profit
+  nodeUserListLoaded: false, // If user node list loaded, switch to default after logout
+  nodes: [], // Just that
+  updatedNodes: new Map(), // Marked nodes (id, cp, ws, ms) to save back to user storage
+  profitList: new Map(), // Sort Map for sort functions, hold id and profit
+  profitsUpdated: 1, // Used to trigger reactivity for maps
+  playerRegion: 'NA', // Used to determine region for calc
+  redirectUrl: '', // If string is set, redirect to there after login, then reset
   workers: [
     { id: 0, name: 'Artisan Goblin', work: 150, movement: 7, stamina: 15 },
     { id: 1, name: 'Artisan Human', work: 100, movement: 4.5, stamina: 23 },
@@ -67,6 +70,21 @@ export const mutations = {
   },
   PROFITS_UPDATED: (state) => {
     state.profitsUpdated += 1
+  },
+  SET_REDIRECT_URL: (state, payload) => {
+    state.redirectUrl = payload
+  },
+  CLEAR_REDIRECT_URL: (state) => {
+    state.redirectUrl = ''
+  },
+  SET_USER_NODELIST: (state) => {
+    state.nodeUserListLoaded = true
+  },
+  SET_DEFAULT_NODELIST: (state) => {
+    state.nodeUserListLoaded = false
+  },
+  MARK_NODE_UPDATED(state, { id, data }) {
+    state.updatedNodes.set(id, data)
   },
 }
 

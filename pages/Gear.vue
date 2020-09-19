@@ -6,6 +6,9 @@
         <h3 class="title is-3">Warrior Gear (Main)</h3>
         <h3 class="title is-3">Lifeskills</h3>
         <h3 class="title is-3">Stats</h3>
+        <p>
+          {{ canEdit }}
+        </p>
       </div>
     </section>
   </main>
@@ -16,6 +19,14 @@ export default {
     return {
       heroimg: 'tools',
     }
+  },
+  computed: {
+    canEdit() {
+      return (
+        this.$auth.user &&
+        this.$auth.user.sub === 'google-oauth2|117323980375187460896'
+      )
+    },
   },
 }
 </script>

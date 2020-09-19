@@ -5,19 +5,22 @@
       :style="{
         'background-image': `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(${image})`,
       }"
+      @click="openForm()"
     >
       <div class="is-flex align-center">
         <h5 class="mr-2">{{ name }}</h5>
         <div
           v-for="material in materials"
           :key="material.id"
-          class="resimg-wrapper"
+          class="materialimg-wrapper"
         >
-          <img class="resimg" :src="getCodexImage(material.icon)" />
+          <img class="materialimg" :src="getCodexImage(material.icon)" />
         </div>
       </div>
       <div class="is-flex align-center">
-        <h5 class="mr-2">{{ parseValue(profitCP) }}</h5>
+        <h5 class="mr-2">
+          {{ `${parseValue(profitCP)} / CP (${contribution})` }}
+        </h5>
         <img
           class="region-image"
           :src="generateRegionImage()"
@@ -25,7 +28,7 @@
         />
       </div>
     </div>
-    <div class="node-form">
+    <div class="node-form" :class="{ edit: edit }">
       <div class="field">
         <div class="field-body">
           <div class="field">
@@ -41,7 +44,7 @@
             </div>
           </div>
           <div class="field field-cp is-narrow">
-            <label class="label">CP</label>
+            <label class="label">CP Used</label>
             <div class="control">
               <input
                 v-model.number="cp"
@@ -113,6 +116,14 @@ export default {
       default: 0,
       required: true,
     },
+    presetWorkspeed: {
+      type: Number,
+      default: 0,
+    },
+    presetMovespeed: {
+      type: Number,
+      default: 0,
+    },
     distance: {
       type: Number,
       default: 0,
@@ -138,6 +149,7 @@ export default {
       worker: null,
       cp: 0,
       initial: true,
+      edit: false,
     }
   },
   computed: {
@@ -155,8 +167,10 @@ export default {
     const index = profits.indexOf(Math.max(...profits))
 
     this.worker = this.workers[index]
-    this.workSpeed = this.worker.work
-    this.moveSpeed = this.worker.movement
+    this.workSpeed =
+      this.presetWorkspeed > 0 ? this.presetWorkspeed : this.worker.work
+    this.moveSpeed =
+      this.presetMovespeed > 0 ? this.presetMovespeed : this.worker.movement
     this.calculate()
     this.applyFormWatchers()
   },
@@ -164,6 +178,14 @@ export default {
     applyFormWatchers() {
       this.$watch('cp', function () {
         this.calculate()
+        this.$store.commit('MARK_NODE_UPDATED', {
+          id: this.id,
+          data: {
+            cp: this.cp,
+            workspeed: this.workSpeed,
+            movespeed: this.moveSpeed,
+          },
+        })
         this.$emit('recalculated')
       })
       this.$watch('worker', function (newVal, oldVal) {
@@ -173,13 +195,32 @@ export default {
         this.$emit('recalculated')
       })
       this.$watch('workSpeed', function (newVal, oldVal) {
+        this.$store.commit('MARK_NODE_UPDATED', {
+          id: this.id,
+          data: {
+            cp: this.cp,
+            workspeed: this.workSpeed,
+            movespeed: this.moveSpeed,
+          },
+        })
         this.calculate()
         this.$emit('recalculated')
       })
       this.$watch('moveSpeed', function (newVal, oldVal) {
+        this.$store.commit('MARK_NODE_UPDATED', {
+          id: this.id,
+          data: {
+            cp: this.cp,
+            workspeed: this.workSpeed,
+            movespeed: this.moveSpeed,
+          },
+        })
         this.calculate()
         this.$emit('recalculated')
       })
+    },
+    openForm() {
+      this.edit = !this.edit
     },
     calculate() {
       const { profit, minutesPerTask } = this.detailedReport(
@@ -304,15 +345,24 @@ export default {
   padding: 10px 20px;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
   .region-image {
     height: 40px;
+  }
+  .materialimg {
+    max-height: 44px;
   }
 }
 .node-form {
   background: $background-secondary;
-  padding: 20px;
+  max-height: 0;
+  transition: max-height 0.2s;
+  overflow: hidden;
+  &.edit {
+    max-height: 300px;
+  }
   .field-cp {
-    flex-basis: 60px;
+    flex-basis: 100px;
   }
 }
 </style>

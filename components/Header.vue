@@ -35,6 +35,14 @@
             >LOGOUT</a
           ></client-only
         >
+        <client-only
+          ><a
+            v-if="!$auth.loggedIn"
+            class="nav-item"
+            @click="$auth.loginWith('auth0')"
+            >LOGIN</a
+          ></client-only
+        >
       </div>
     </div>
   </nav>

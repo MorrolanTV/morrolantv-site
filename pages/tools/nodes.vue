@@ -33,25 +33,49 @@
           </div>
           <div v-else>
             <div class="nodecalc-header">
-              <h3 class="title is-4">Explanation</h3>
-              <p>
-                Maybe place a section explaining how to use the calculator for
-                new players? Video maybe?
+              <h3 class="title is-4">Guide</h3>
+              <p class="mb-3">
+                This tool provides a general comparison of node profitability.
+                Many factors influence your net gain, and these numbers serve as
+                an estimate to help you find the better nodes quicker.
               </p>
-              <p>
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum."
+              <p class="mb-2">
+                <strong class="has-text-info"
+                  >To get numbers more precise to your situation, you can click
+                  the node and change the following values:</strong
+                >
               </p>
+              <ul>
+                <li class="mb-1">
+                  <strong>Worker:</strong> The tool will automatically select
+                  the cheapest worker while maintaining max profit. Switch here
+                  if you don't have said worker available.
+                </li>
+                <li class="mb-1">
+                  <strong>CP Used:</strong> Currently the tool does not
+                  automatically take the CP cost of previous nodes you have to
+                  get into account. Adjust this value depending on how many
+                  nodes in the path you chose.
+                </li>
+                <li class="mb-1">
+                  <strong>Workspeed:</strong> Fine tune your workers workspeed
+                  with this value.
+                </li>
+                <li class="mb-1">
+                  <strong>Movespeed:</strong> Fine tune your workers movespeed
+                  with this value.
+                </li>
+              </ul>
+              <client-only>
+                <p v-if="!$auth.loggedIn" class="mt-3" @click="loginNodes()">
+                  <a class="link-light">Login</a> to save your edits.
+                </p>
+              </client-only>
             </div>
             <div class="is-flex justify-between">
               <h5 class="mb-3">
                 Use the region icons to filter nodes. Nodes are sorted by
-                profit/cp.
+                profit/cp
               </h5>
               <h5 class="mb-3">
                 {{ timeUpdated }}
@@ -76,6 +100,16 @@
                 </div>
               </div>
               <div class="sort-options">
+                <client-only>
+                  <button
+                    v-if="$auth.loggedIn"
+                    class="button is-primary save"
+                    :class="{ saving: saving }"
+                    @click="saveNodes()"
+                  >
+                    {{ saving ? 'Saving..' : 'Save' }}
+                  </button>
+                </client-only>
                 <button class="button is-primary" @click="updateList()">
                   Re-Sort
                 </button>
@@ -96,6 +130,8 @@
                   :materials="node.Materials"
                   :region="node.region"
                   :workload="node.workload"
+                  :preset-workspeed="node.workspeed"
+                  :preset-movespeed="node.movespeed"
                   :distance="node.distance"
                   :average-yield="node.averageYield"
                   @recalculated="updateListAuto"
@@ -132,7 +168,6 @@ export default {
       }
     }
   },
-  fetchOnServer: false,
   data() {
     return {
       heroimg: 'world',
@@ -141,6 +176,7 @@ export default {
       initialFilter: 'profit',
       filterMethod: 'profit',
       selectedRegion: '',
+      saving: false,
       regions: [
         'balenos',
         'calpheon',
@@ -176,9 +212,30 @@ export default {
       }
     },
     ...mapGetters(['getNodesByProfit', 'getNodesByRegion', 'getNodesUnsorted']),
-    ...mapState(['workers', 'nodesCalculated', 'profitsUpdated']),
+    ...mapState([
+      'workers',
+      'nodesCalculated',
+      'profitsUpdated',
+      'nodeUserListLoaded',
+      'updatedNodes',
+    ]),
   },
+  /* activated() {
+    // Prevent  wrong nodelist in keep-alive after login state change
+    if (!this.$auth.loggedIn && this.nodeUserListLoaded) {
+      this.$store.commit('SET_DEFAULT_NODELIST')
+      this.$fetch()
+    } else if (this.$auth.loggedIn && !this.nodeUserListLoaded) {
+      this.$store.commit('SET_USER_NODELIST')
+      this.$fetch()
+    }
+  }, */
+  fetchOnServer: false,
   methods: {
+    async loginNodes() {
+      await this.$store.commit('SET_REDIRECT_URL', '/tools/nodes')
+      this.$auth.loginWith('auth0')
+    },
     updateList() {
       this.$store.commit('PROFITS_UPDATED')
     },
@@ -199,12 +256,28 @@ export default {
         this.filterMethod = 'region'
       }
     },
+    async saveNodes() {
+      this.saving = true
+      await this.$axios
+        .$post('/user/userNodes', {
+          nodes: JSON.stringify([...this.updatedNodes]),
+          headers: {
+            Authorization: this.$auth.getToken('auth0'),
+          },
+        })
+        .then(() => (this.saving = false))
+    },
   },
 }
 </script>
 <style lang="scss" scoped>
 .nodecalc-header {
   margin-bottom: 50px;
+}
+.nodecalc-filter-wrapper {
+  position: sticky;
+  top: 77px;
+  background: $background-primary;
 }
 .nodecalc-list {
   flex-wrap: wrap;
@@ -220,6 +293,12 @@ export default {
         filter: grayscale(100%);
       }
     }
+  }
+}
+button.save {
+  transition: 0.2s;
+  &.saving {
+    background: $yellow;
   }
 }
 .region-filter {
