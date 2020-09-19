@@ -1,7 +1,10 @@
 <template>
   <main>
     <section class="hero w-100">
-      <div class="image-wrapper">
+      <div
+        class="image-wrapper"
+        style="mask-image: linear-gradient(to top, transparent 0%, #090c15 10%)"
+      >
         <picture>
           <source
             :srcset="require(`~/assets/img/webp/${heroimg}.webp`)"
