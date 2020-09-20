@@ -83,3 +83,38 @@
     opacity: 1;
   }
 }
+
+.angle-right {
+  width: 100%;
+  height: 100px;
+  position: absolute;
+  bottom: 0;
+  left: 0px;
+  background: linear-gradient(
+      to right bottom,
+      transparent 49%,
+      $background-primary 50%
+    ),
+    linear-gradient(-50deg, $background-primary 16px, transparent 0);
+  z-index: 2;
+  @media (max-width: 718px) {
+    display: none;
+  }
+}
+
+.angle-left {
+  width: 100%;
+  height: 23px;
+  position: absolute;
+  left: 0px;
+  bottom: 0;
+  background: linear-gradient(
+    to left bottom,
+    transparent 49%,
+    $background-primary 50%
+  );
+  z-index: 2;
+  @media (max-width: 718px) {
+    display: none;
+  }
+}

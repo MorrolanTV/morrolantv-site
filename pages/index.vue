@@ -1,10 +1,7 @@
 <template>
   <main>
     <section class="hero w-100">
-      <div
-        class="image-wrapper"
-        style="mask-image: linear-gradient(to top, transparent 0%, #090c15 10%)"
-      >
+      <div class="image-wrapper">
         <picture>
           <source
             :srcset="require(`~/assets/img/webp/${heroimg}.webp`)"
@@ -84,7 +81,9 @@
           </div>
         </div>
       </div>
-      <div class="angle-left"></div>
+      <div class="blackspirit-wrapper">
+        <img :src="require('~/assets/img/blackspirit.svg')" />
+      </div>
     </section>
     <section class="section content mobile">
       <div class="stream-title mobile">
@@ -100,6 +99,9 @@
       </div>
     </section>
     <Toollist />
+    <div class="blackspirit-wrapper push">
+      <img :src="require('~/assets/img/blackspirit_push.svg')" />
+    </div>
     <GameCollection />
   </main>
 </template>
@@ -271,38 +273,21 @@ export default {
   }
 }
 
-.angle-right {
-  width: 100%;
-  height: 100px;
+.blackspirit-wrapper {
   position: absolute;
-  bottom: 0;
-  left: 0px;
-  background: linear-gradient(
-      to right bottom,
-      transparent 49%,
-      $background-primary 50%
-    ),
-    linear-gradient(-50deg, $background-primary 16px, transparent 0);
-  z-index: 2;
-  @media (max-width: 718px) {
-    display: none;
+  bottom: -35px;
+  left: 100px;
+  &.push {
+    position: relative;
+    img {
+      position: absolute;
+      right: 150px;
+      top: -42px;
+    }
   }
-}
-
-.angle-left {
-  width: 100%;
-  height: 23px;
-  position: absolute;
-  left: 0px;
-  bottom: 0;
-  background: linear-gradient(
-    to left bottom,
-    transparent 49%,
-    $background-primary 50%
-  );
-  z-index: 2;
-  @media (max-width: 718px) {
-    display: none;
+  img {
+    width: 200px;
+    opacity: 0.8;
   }
 }
 </style>

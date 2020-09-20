@@ -2,8 +2,8 @@
 
 //Color variables
 $black: #0b0e11;
-$black-grey: #090c15;
-$grey-dark: #0a0e13;
+$black-grey: #0a090b;
+$grey-dark: #0c0c0f;
 $grey-blue: #162637;
 $blue: rgb(46, 89, 155);
 $grey-darker-alpha: rgba(18, 23, 28, 0.75);
@@ -24,7 +24,7 @@ $background-secondary: $grey-dark;
 $background-accent: $grey-blue;
 $background-header-effect: $grey-darker-alpha;
 $background-header: $background-secondary;
-$background-footer: $black;
+$background-footer: $background-secondary;
 
 $border-primary: $white-bis;
 $border-accent: $yellow;
