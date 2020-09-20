@@ -49,15 +49,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   data() {
     return {
       isActive: false,
     }
   },
-  computed: mapGetters(['isAuthenticated']),
   methods: {
     openMenu() {
       this.isActive = !this.isActive

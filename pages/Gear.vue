@@ -6,8 +6,9 @@
         <h3 class="title is-3">Warrior Gear (Main)</h3>
         <h3 class="title is-3">Lifeskills</h3>
         <h3 class="title is-3">Stats</h3>
-        <p>
-          {{ canEdit }}
+        <p v-if="canEdit">
+          Hello Morro, adjust your gear here. Not Morro? Nothing to see here
+          then.
         </p>
       </div>
     </section>

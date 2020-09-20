@@ -1,35 +1,21 @@
 <template>
   <main>
-    <section class="hero subpage w-100">
-      <div class="image-wrapper">
-        <picture>
-          <source
-            :srcset="require(`~/assets/img/webp/${heroimg}.webp`)"
-            type="image/webp"
-          />
-          <source
-            :srcset="require(`~/assets/img/webp/${heroimg}.jpg`)"
-            type="image/jpeg"
-          />
-          <img
-            class="image"
-            :src="require(`~/assets/img/webp/${heroimg}.jpg`)"
-            style="top: -100%"
-            alt="Alt Text!"
-          />
-        </picture>
-      </div>
-    </section>
-    <section class="section">
+    <section class="section no-hero">
       <div class="container">
         <h1 class="title is-1">User Profile</h1>
-        <h3 class="subtitle is-3">Manage your stored content</h3>
-        <client-only placeholder="User Content">
-          <div class="user-content">
-            <div class="user-wrapper-nodes">Your Nodes</div>
-            <div class="user-wrapper-recipes">Your Recipes</div>
-          </div>
-        </client-only>
+        <h5 class="subtitle is-5">
+          The profile page will be expanded in the future
+        </h5>
+        <h3 class="mt-4 title is-3">Functions for users:</h3>
+        <p>
+          - You can adjust your
+          <nuxt-link to="/tools/nodes">NODES</nuxt-link> and save them to your
+          profile.
+        </p>
+        <p>
+          - As a logged in user you can save
+          <nuxt-link to="/tools">RECIPES</nuxt-link> in your cookbok.
+        </p>
       </div>
     </section>
   </main>
@@ -42,10 +28,5 @@ export default {
     }
   },
   middleware: 'auth',
-  computed: {
-    user() {
-      return this.$auth.user
-    },
-  },
 }
 </script>

@@ -70,8 +70,9 @@ export default {
   auth: {
     redirect: {
       login: '/',
-      callback: '/auth/signed-in',
-      home: false,
+      logout: '/',
+      callback: '/auth/signed-in/',
+      home: '/profile',
     },
     strategies: {
       local: false,

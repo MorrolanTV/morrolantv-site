@@ -232,8 +232,7 @@ export default {
   }, */
   fetchOnServer: false,
   methods: {
-    async loginNodes() {
-      await this.$store.commit('SET_REDIRECT_URL', '/tools/nodes')
+    loginNodes() {
       this.$auth.loginWith('auth0')
     },
     updateList() {

@@ -22,3 +22,12 @@ a {
     }
   }
 }
+
+p {
+  a {
+    color: $yellow !important;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
