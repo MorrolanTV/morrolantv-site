@@ -99,9 +99,6 @@
       </div>
     </section>
     <Toollist />
-    <div class="blackspirit-wrapper push">
-      <img :src="require('~/assets/img/blackspirit_push.svg')" />
-    </div>
     <GameCollection />
   </main>
 </template>
@@ -277,13 +274,8 @@ export default {
   position: absolute;
   bottom: -35px;
   left: 100px;
-  &.push {
-    position: relative;
-    img {
-      position: absolute;
-      right: 150px;
-      top: -42px;
-    }
+  @media (max-width: 1700px) {
+    display: none;
   }
   img {
     width: 200px;

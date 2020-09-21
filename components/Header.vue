@@ -76,11 +76,7 @@ nav {
   height: 78px;
   transition: top 0.25s;
   transition-timing-function: ease;
-  background: linear-gradient(
-    to bottom,
-    $background-header-effect,
-    transparent
-  );
+  background: $background-header-effect;
   font-size: 13px;
 
   &::before {
