@@ -99,7 +99,7 @@
         </div>
       </div>
       <div class="is-flex justify-center">
-        <button class="button is-primary" @click="saveNodes()">
+        <button class="button is-primary" @click="submitText()">
           {{ saving ? 'Saving..' : 'Save' }}
         </button>
       </div>
@@ -110,7 +110,7 @@
 export default {
   props: {
     info: {
-      type: Object,
+      type: Array,
       required: true,
     },
   },
@@ -133,44 +133,41 @@ export default {
     handleFilesUpload() {
       this.files = this.$refs.files.files
     },
-    submitText() {
+    async submitText() {
       this.saving = true
-      this.$axios
-        .post('/gear/text', this.info, {
+      try {
+        await this.$axios.post('/gear/text', {
+          collection: this.info,
           headers: {
             Authorization: this.$auth.getToken('auth0'),
           },
         })
-        .then(function () {
-          this.saving = false
-        })
-        .catch(function () {
-          alert('Change failed!')
-          this.saving = false
-        })
+        this.saving = false
+      } catch {
+        this.saving = false
+        alert('Change failed!')
+      }
     },
-    submitFiles() {
+    async submitFiles() {
       const formData = new FormData()
       for (let i = 0; i < this.files.length; i++) {
         const file = this.files[i]
         formData.append('files[' + i + ']', file)
       }
-      this.$axios
-        .post('/gear/images', formData, {
+      try {
+        await this.$axios.post('/gear/images', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: this.$auth.getToken('auth0'),
           },
         })
-        .then(function () {
-          this.infoText = 'Images were uploaded'
-          this.files = ''
-          setTimeout(() => (this.infoText = ''))
-        })
-        .catch(function () {
-          this.infoText = 'Upload errorr'
-          setTimeout(() => (this.infoText = ''))
-        })
+        this.infoText = 'Images were uploaded'
+        this.files = ''
+        setTimeout(() => (this.infoText = ''))
+      } catch {
+        this.infoText = 'Upload errorr'
+        setTimeout(() => (this.infoText = ''))
+      }
     },
   },
 }

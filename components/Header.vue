@@ -31,7 +31,7 @@
         <nuxt-link to="/stream" class="nav-item">Stream</nuxt-link>
         <nuxt-link to="/about" class="nav-item">About</nuxt-link>
         <client-only
-          ><a v-if="$auth.loggedIn" class="nav-item" @click="$auth.logout()"
+          ><a v-if="$auth.loggedIn" class="nav-item" @click="logout()"
             >LOGOUT</a
           ></client-only
         >
@@ -58,6 +58,11 @@ export default {
   methods: {
     openMenu() {
       this.isActive = !this.isActive
+    },
+    logout() {
+      this.$auth.logout()
+      window.location.href =
+        'https://dev-83h5hy98.us.auth0.com/v2/logout?returnTo=http%3A%2F%2Flocalhost:3000'
     },
   },
 }

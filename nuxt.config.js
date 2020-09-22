@@ -79,10 +79,7 @@ export default {
       auth0: {
         domain: process.env.AUTH0_DOMAIN,
         client_id: process.env.AUTH0_CLIENT_ID,
-        audience:
-          process.env.NODE_ENV !== 'production'
-            ? 'http://localhost:5100'
-            : 'https://api.morrolan.tv',
+        audience: process.env.AUTH0_AUDIENCE,
       },
     },
   },

@@ -3,6 +3,11 @@
     <section class="section no-hero">
       <div class="container">
         <h1 class="title is-1">User Profile</h1>
+        <client-only>
+          <h3 v-if="$auth.loggedIn" class="title is-3">
+            Hello {{ $auth.user.name }}
+          </h3>
+        </client-only>
         <h5 class="subtitle is-5">
           The profile page will be expanded in the future
         </h5>
