@@ -15,33 +15,33 @@
         <li>- The lifeskill gear image is called "LifeskillGear.png"</li>
       </ul>
       <div class="upload-forms">
-        <div class="mb-2 mr-2">
-          <p>{{ infoText }}</p>
-          <div class="file has-name">
-            <label class="file-label">
-              <input
-                id="files"
-                ref="files"
-                class="file-input"
-                type="file"
-                name="resume"
-                multiple
-                @change="handleFilesUpload()"
-              />
-              <span class="file-cta">
-                <span class="file-icon">
-                  <fa :icon="['fas', 'upload']" />
+        <form @submit.prevent="onSubmitFiles">
+          <div class="mb-2 mr-2">
+            <p>{{ infoText }}</p>
+            <div class="file has-name">
+              <label class="file-label">
+                <input
+                  id="files"
+                  ref="files"
+                  class="file-input"
+                  type="file"
+                  name="file"
+                  multiple
+                  @change="handleFilesUpload()"
+                />
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <fa :icon="['fas', 'upload']" />
+                  </span>
+                  <span class="file-label"> Choose files </span>
                 </span>
-                <span class="file-label"> Choose files </span>
-              </span>
-            </label>
+              </label>
+            </div>
           </div>
-        </div>
-        <div>
-          <button class="button is-primary" @click="submitFiles()">
-            Upload
-          </button>
-        </div>
+          <div>
+            <button type="submit" class="button is-primary">Upload</button>
+          </div>
+        </form>
       </div>
       <div class="mb-4">
         <span v-for="file in files" :key="file.name">
@@ -148,16 +148,15 @@ export default {
         alert('Change failed!')
       }
     },
-    async submitFiles() {
+    async onSubmitFiles() {
       const formData = new FormData()
-      for (let i = 0; i < this.files.length; i++) {
-        const file = this.files[i]
-        formData.append('files[' + i + ']', file)
+      for (const file of this.files) {
+        formData.append('file', file)
       }
       try {
         await this.$axios.post('/gear/images', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'undefined',
             Authorization: this.$auth.getToken('auth0'),
           },
         })

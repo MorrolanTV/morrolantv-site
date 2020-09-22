@@ -38,47 +38,50 @@
             <div class="equipement-wrapper is-flex justify-around">
               <div>
                 <div class="itemimg-wrapper mb-2">
-                  <img :src="require('~/assets/img/gear/Armor1.PNG')" />
+                  <img :src="baseImgUrl + '/images/gear/Helmet.PNG'" />
                   <p>Stacks: {{ getItemInfo('Helmet').stacks }}</p>
                   <p>Attempts: {{ getItemInfo('Helmet').attempts }}</p>
                 </div>
                 <div class="itemimg-wrapper">
-                  <img :src="require('~/assets/img/gear/Armor1.PNG')" />
+                  <img :src="baseImgUrl + '/images/gear/Armor.PNG'" />
                   <p>Stacks: {{ getItemInfo('Armor').stacks }}</p>
                   <p>Attempts: {{ getItemInfo('Armor').attempts }}</p>
                 </div>
               </div>
               <div>
                 <div class="itemimg-wrapper mb-2">
-                  <img :src="require('~/assets/img/gear/Gear.PNG')" />
+                  <img :src="baseImgUrl + '/images/gear/Gear.PNG'" />
                 </div>
               </div>
               <div>
                 <div class="itemimg-wrapper mb-2">
-                  <img :src="require('~/assets/img/gear/Armor1.PNG')" />
+                  <img :src="baseImgUrl + '/images/gear/Gloves.PNG'" />
                   <p>Stacks: {{ getItemInfo('Gloves').stacks }}</p>
                   <p>Attempts: {{ getItemInfo('Gloves').attempts }}</p>
                 </div>
                 <div class="itemimg-wrapper">
-                  <img :src="require('~/assets/img/gear/Armor1.PNG')" />
+                  <img :src="baseImgUrl + '/images/gear/Boots.PNG'" />
                   <p>Stacks: {{ getItemInfo('Boots').stacks }}</p>
                   <p>Attempts: {{ getItemInfo('Boots').attempts }}</p>
                 </div>
               </div>
             </div>
-            <div class="weapons-wrapper is-flex justify-center">
+            <div
+              class="weapons-wrapper is-flex justify-center"
+              style="align-items: flex-end"
+            >
               <div class="itemimg-wrapper mr-2">
-                <img :src="require('~/assets/img/gear/Weapon1.PNG')" />
+                <img :src="baseImgUrl + '/images/gear/Weapon.PNG'" />
                 <p>Stacks: {{ getItemInfo('Weapon').stacks }}</p>
                 <p>Attempts: {{ getItemInfo('Weapon').attempts }}</p>
               </div>
               <div class="itemimg-wrapper mr-2">
-                <img :src="require('~/assets/img/gear/Weapon1.PNG')" />
+                <img :src="baseImgUrl + '/images/gear/Awaken.PNG'" />
                 <p>Stacks: {{ getItemInfo('Awaken').stacks }}</p>
                 <p>Attempts: {{ getItemInfo('Awaken').attempts }}</p>
               </div>
               <div class="itemimg-wrapper">
-                <img :src="require('~/assets/img/gear/Weapon1.PNG')" />
+                <img :src="baseImgUrl + '/images/gear/Offhand.PNG'" />
                 <p>Stacks: {{ getItemInfo('Offhand').stacks }}</p>
                 <p>Attempts: {{ getItemInfo('Offhand').attempts }}</p>
               </div>
@@ -87,12 +90,18 @@
           <div class="gear-section">
             <div class="values-wrapper">
               <div
-                v-for="value of valueList"
+                v-for="(value, index) of valueList"
                 :key="value.name"
                 class="valueinfo"
               >
                 <span class="uppercase mr-3">{{ value.name }}</span
                 ><span>{{ value.value }}</span>
+                <span>
+                  <fa
+                    v-if="index == valueList.length - 1"
+                    :icon="['fas', 'coins']"
+                  />
+                </span>
               </div>
             </div>
           </div>
@@ -104,10 +113,10 @@
             <h3 class="title is-3">Lifeskills</h3>
             <div class="screenshot-wrapper">
               <div>
-                <img :src="require('~/assets/img/gear/Lifeskill.PNG')" />
+                <img :src="baseImgUrl + '/images/gear/Lifeskill.PNG'" />
               </div>
               <div>
-                <img :src="require('~/assets/img/gear/LifeskillGear.PNG')" />
+                <img :src="baseImgUrl + '/images/gear/LifeskillGear.PNG'" />
               </div>
             </div>
           </div>
@@ -141,6 +150,9 @@ export default {
         this.$auth.user &&
         this.$auth.user.sub === 'google-oauth2|117323980375187460896'
       )
+    },
+    baseImgUrl() {
+      return this.$axios.defaults.baseURL
     },
     valueList() {
       return this.collecection.filter((item) => item.value)
