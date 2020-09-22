@@ -158,6 +158,7 @@ export default {
       return this.collecection.filter((item) => item.value)
     },
   },
+  fetchOnServer: false,
   methods: {
     getItemInfo(name) {
       return this.collecection.find((item) => item.name === name)
