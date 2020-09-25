@@ -1,12 +1,13 @@
 <template>
-  <div v-if="$fetchState.pending">
-    <main>
-      <section class="section no-hero">
-        <div class="container">
-          <div class="loader"></div>
+  <div v-if="$fetchState.pending || jokeActive">
+    <section class="section no-hero">
+      <div class="container">
+        <div class="gear-joke-wrapper">
+          <h1 class="title is-1">This is a my gear. It is a good gear.</h1>
+          <fa :icon="['fas', 'cog']" />
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   </div>
   <div v-else-if="$fetchState.error">
     <main>
@@ -142,6 +143,7 @@ export default {
     return {
       heroimg: 'tools',
       collecection: [],
+      jokeActive: true,
     }
   },
   computed: {
@@ -159,6 +161,9 @@ export default {
     },
   },
   fetchOnServer: false,
+  mounted() {
+    setTimeout(() => (this.jokeActive = false), 2000)
+  },
   methods: {
     getItemInfo(name) {
       return this.collecection.find((item) => item.name === name)
@@ -178,5 +183,33 @@ export default {
 }
 .gear-section {
   margin-bottom: 60px;
+}
+.gear-joke-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 300px;
+  margin: 200px 0;
+  svg {
+    -webkit-animation: spin 6s linear infinite;
+    -moz-animation: spin 6s linear infinite;
+    animation: spin 6s linear infinite;
+    @-moz-keyframes spin {
+      100% {
+        -moz-transform: rotate(360deg);
+      }
+    }
+    @-webkit-keyframes spin {
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+    @keyframes spin {
+      100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+  }
 }
 </style>

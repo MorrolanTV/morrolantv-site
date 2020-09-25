@@ -86,7 +86,7 @@ export default {
   fontawesome: {
     component: 'fa',
     icons: {
-      solid: ['faChevronRight', 'faUpload', 'faCoins'],
+      solid: ['faChevronRight', 'faUpload', 'faCoins', 'faCog'],
       brands: ['faTwitter', 'faTwitch', 'faYoutube', 'faDiscord'],
     },
   },

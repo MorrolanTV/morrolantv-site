@@ -12,10 +12,19 @@
           stream, though I also stream a variety of single player RPGs. You can
           see more about the games I play down below under the Schedule tab.
         </p>
-        <h3 class="title is-3">Stream Schedule</h3>
-        <p>I currently play Black Desert on Stream</p>
-        <h3 class="title is-3"></h3>
-        <p>I currently play Black Desert on Stream</p>
+        <h3 class="title is-3">Sponsors</h3>
+        <div class="sponsors-wrapper is-flex align-center">
+          <div class="sponsor-element mr-5">
+            <a target="_blank" href="http://nopi.ng/morrolantv"
+              ><img :src="require('~/assets/img/noping.png')"
+            /></a>
+          </div>
+          <div class="sponsor-element">
+            <a target="_blank" href="https://advanced.gg/ref/MORROLAN"
+              ><img :src="require('~/assets/img/focus.jpg')"
+            /></a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -23,9 +32,7 @@
 <script>
 export default {
   data() {
-    return {
-      heroimg: 'tools',
-    }
+    return {}
   },
 }
 </script>

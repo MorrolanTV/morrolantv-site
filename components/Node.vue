@@ -101,6 +101,11 @@ export default {
       default: 1,
       required: false,
     },
+    cpAdd: {
+      type: Number,
+      default: 1,
+      required: false,
+    },
     image: {
       type: String,
       default: '',
@@ -125,11 +130,6 @@ export default {
       default: 0,
     },
     distance: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    averageYield: {
       type: Number,
       default: 0,
       required: true,
@@ -240,15 +240,15 @@ export default {
       const timeTravelling = this.calculateTravelTime(moveSpeed, this.distance)
       const total = timeWorking + timeTravelling
       const minutesPerTask = total / 60
-      const cyclesPerDay = this.calculateCycles(15, minutesPerTask, stamina)
+      const cyclesPerDay = this.calculateCycles(24, minutesPerTask, stamina)
         .total
       const profit = Math.floor(
-        this.materials
-          .map((x) => this.getItemPrice(x))
-          .reduce((a, b) => a + b, 0) *
-          cyclesPerDay *
-          this.averageYield -
-          (1030 / 3) * cyclesPerDay
+        this.materials.reduce(
+          (a, mat) =>
+            a +
+            cyclesPerDay * (mat.NodeMaterial.yield * this.getItemPrice(mat)),
+          0
+        )
       )
       return {
         timeWorking,

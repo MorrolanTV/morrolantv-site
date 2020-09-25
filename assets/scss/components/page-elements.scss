@@ -118,3 +118,14 @@
     display: none;
   }
 }
+
+button {
+  &.is-secondary {
+    &:focus,
+    &:active {
+      color: $link;
+      outline: 0;
+      border-color: #dbdbdb;
+    }
+  }
+}

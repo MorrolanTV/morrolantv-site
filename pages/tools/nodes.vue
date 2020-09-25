@@ -126,6 +126,7 @@
                   :id="node.id"
                   :name="node.name"
                   :contribution="node.contribution"
+                  :cp-add="node.cpAdd"
                   :image="node.image"
                   :materials="node.Materials"
                   :region="node.region"
@@ -133,7 +134,6 @@
                   :preset-workspeed="node.workspeed"
                   :preset-movespeed="node.movespeed"
                   :distance="node.distance"
-                  :average-yield="node.averageYield"
                   @recalculated="updateListAuto"
                 />
               </div>
