@@ -25,13 +25,23 @@
     </div>
     <div class="navbar-menu">
       <div class="nav-items navbar-brand">
-        <nuxt-link to="/" class="nav-item">Home</nuxt-link>
-        <nuxt-link to="/tools" class="nav-item">Tools</nuxt-link>
-        <nuxt-link to="/gear" class="nav-item">Gear</nuxt-link>
-        <nuxt-link to="/stream" class="nav-item">Stream</nuxt-link>
-        <nuxt-link to="/about" class="nav-item">About</nuxt-link>
+        <nuxt-link to="/" class="nav-item" @click.native="closeMenu()"
+          >Home</nuxt-link
+        >
+        <nuxt-link to="/tools" class="nav-item" @click.native="closeMenu()"
+          >Tools</nuxt-link
+        >
+        <nuxt-link to="/gear" class="nav-item" @click.native="closeMenu()"
+          >Gear</nuxt-link
+        >
+        <nuxt-link to="/stream" class="nav-item" @click.native="closeMenu()"
+          >Stream</nuxt-link
+        >
+        <nuxt-link to="/about" class="nav-item" @click.native="closeMenu()"
+          >About</nuxt-link
+        >
         <client-only
-          ><a v-if="$auth.loggedIn" class="nav-item" @click="logout()"
+          ><a v-if="$auth.loggedIn" class="nav-item" @click.native="logout()"
             >LOGOUT</a
           ></client-only
         >
@@ -58,6 +68,9 @@ export default {
   methods: {
     openMenu() {
       this.isActive = !this.isActive
+    },
+    closeMenu() {
+      this.isActive = false
     },
     logout() {
       this.$auth.logout()
@@ -151,7 +164,7 @@ nav {
   }
 }
 
-@media (max-width: 1015px) {
+@media (max-width: 1023px) {
   nav {
     display: block;
     padding: 0;

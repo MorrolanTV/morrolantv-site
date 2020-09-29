@@ -17,6 +17,10 @@
   }
   &.no-hero {
     margin-top: 150px;
+    &.lighter {
+      margin-top: 78px;
+      padding-top: 150px;
+    }
   }
   @media (max-width: 718px) {
     padding: 1rem 1.5rem;

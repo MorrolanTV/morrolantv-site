@@ -3,7 +3,7 @@
     <section class="section no-hero">
       <div class="container">
         <div class="gear-joke-wrapper">
-          <h1 class="title is-1">This is a my gear. It is a good gear.</h1>
+          <h1 class="title is-1">Gear:</h1>
           <fa :icon="['fas', 'cog']" />
         </div>
       </div>

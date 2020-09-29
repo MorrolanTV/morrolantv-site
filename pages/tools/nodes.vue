@@ -283,6 +283,7 @@ export default {
 }
 .filter-list {
   display: flex;
+  flex-wrap: wrap;
   img {
     height: 70px;
   }

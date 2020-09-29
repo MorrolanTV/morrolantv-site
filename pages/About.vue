@@ -1,6 +1,6 @@
 <template>
   <main>
-    <section class="section no-hero">
+    <section class="section no-hero lighter">
       <div class="container">
         <h1 class="title is-1">About Morrolan</h1>
         <h3 class="title is-3">Info</h3>
@@ -13,7 +13,7 @@
           see more about the games I play down below under the Schedule tab.
         </p>
         <h3 class="title is-3">Sponsors</h3>
-        <div class="sponsors-wrapper is-flex align-center">
+        <div class="sponsors-wrapper is-flex align-center flex-wrap">
           <div class="sponsor-element mr-5">
             <a target="_blank" href="http://nopi.ng/morrolantv"
               ><img :src="require('~/assets/img/noping.png')"

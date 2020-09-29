@@ -9,13 +9,57 @@ export const state = () => ({
   playerRegion: 'NA', // Used to determine region for calc
   redirectUrl: '', // If string is set, redirect to there after login, then reset
   workers: [
-    { id: 0, name: 'Artisan Goblin', work: 150, movement: 7, stamina: 15 },
-    { id: 1, name: 'Artisan Human', work: 100, movement: 4.5, stamina: 23 },
-    { id: 2, name: 'Artisan Giant', work: 85, movement: 3.5, stamina: 35 },
-    { id: 3, name: 'Professional Goblin', work: 135, movement: 6, stamina: 10 },
-    { id: 4, name: 'Professional Human', work: 85, movement: 3.5, stamina: 13 },
-    { id: 5, name: 'Professional Giant', work: 60, movement: 2.5, stamina: 25 },
+    {
+      id: 0,
+      name: 'Artisan Goblin',
+      work: 150,
+      movement: 7,
+      stamina: 15,
+      luck: 11,
+    },
+    {
+      id: 1,
+      name: 'Artisan Human',
+      work: 100,
+      movement: 4.5,
+      stamina: 23,
+      luck: 22,
+    },
+    {
+      id: 2,
+      name: 'Artisan Giant',
+      work: 85,
+      movement: 3.5,
+      stamina: 35,
+      luck: 11,
+    },
+    {
+      id: 3,
+      name: 'Professional Goblin',
+      work: 135,
+      movement: 6,
+      stamina: 10,
+      luck: 11,
+    },
+    {
+      id: 4,
+      name: 'Professional Human',
+      work: 85,
+      movement: 3.5,
+      stamina: 13,
+      luck: 22,
+    },
+    {
+      id: 5,
+      name: 'Professional Giant',
+      work: 60,
+      movement: 2.5,
+      stamina: 25,
+      luck: 11,
+    },
   ],
+  recipes: [],
+  recipeList: new Map(),
   tools: [
     {
       name: 'Cooking Calculator',
@@ -25,14 +69,14 @@ export const state = () => ({
       long:
         'Cooking can be a great active lifeskill to gain both CP and silver at the same time. With this calculator you can quickly figure out what profits to expect from recepies.',
       image: 'cooking',
-      path: '/',
+      path: '/tools/cooking',
     },
     {
       name: 'Crate Calculator',
       gname: 'Black Desert Online',
       desc: 'Coming soon',
       long:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        'To achieve the highest profit, creating and selling your crates in the correct location is important.',
       image: 'crate',
       path: '/',
     },
@@ -40,8 +84,7 @@ export const state = () => ({
       name: 'Horse Breeding',
       gname: 'Black Desert Online',
       desc: 'Coming soon',
-      long:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      long: 'Find out how expensive your new horse is going to be',
       image: 'horse',
       path: '/',
     },
@@ -86,6 +129,12 @@ export const mutations = {
   MARK_NODE_UPDATED(state, { id, data }) {
     state.updatedNodes.set(id, data)
   },
+  SET_RECIPE_TREE: (state, payload) => {
+    state.recipes = payload
+  },
+  RECIPE_INITIALIZED(state, { id, data }) {
+    state.recipeList.set(id, data)
+  },
 }
 
 export const getters = {
@@ -106,4 +155,15 @@ export const getters = {
   getNodesUnsorted: (state) => {
     return state.nodes
   },
+  getRecipes: (state) => {
+    return state.recipes
+  },
+  getRecipesByProfit: (state) => {
+    return state.recipes
+  },
+  getRecipePractical: (state) => (recipeId) => {
+    return state.recipeList.get(recipeId)
+  },
 }
+
+export const actions = {}
