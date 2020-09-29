@@ -162,7 +162,12 @@ export default {
     this.cp = this.contribution
     const profits = this.workers.map(
       (stats) =>
-        this.detailedReport(stats.work, stats.movement, stats.stamina).profit
+        this.detailedReport(
+          stats.work,
+          stats.movement,
+          stats.stamina,
+          stats.luck
+        ).profit
     )
     const index = profits.indexOf(Math.max(...profits))
 
@@ -226,7 +231,8 @@ export default {
       const { profit, minutesPerTask } = this.detailedReport(
         this.workSpeed,
         this.moveSpeed,
-        this.worker.stamina
+        this.worker.stamina,
+        this.worker.luck
       )
       this.profit = profit
       this.minutesPerTask = minutesPerTask
@@ -235,7 +241,7 @@ export default {
         profit: this.profitCP,
       })
     },
-    detailedReport(workSpeed, moveSpeed, stamina) {
+    detailedReport(workSpeed, moveSpeed, stamina, luck) {
       const timeWorking = this.calculateTimeWorking(this.workload, workSpeed)
       const timeTravelling = this.calculateTravelTime(moveSpeed, this.distance)
       const total = timeWorking + timeTravelling
@@ -246,7 +252,9 @@ export default {
         this.materials.reduce(
           (a, mat) =>
             a +
-            cyclesPerDay * (mat.NodeMaterial.yield * this.getItemPrice(mat)),
+            cyclesPerDay *
+              ((mat.NodeMaterial.yield + (luck / 100) * mat.NodeMaterial.luck) *
+                this.getItemPrice(mat)),
           0
         )
       )
@@ -338,6 +346,7 @@ export default {
 </script>
 <style lang="scss">
 .node-header {
+  background-color: $grey-blue;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

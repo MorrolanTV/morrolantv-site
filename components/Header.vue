@@ -41,7 +41,7 @@
           >About</nuxt-link
         >
         <client-only
-          ><a v-if="$auth.loggedIn" class="nav-item" @click.native="logout()"
+          ><a v-if="$auth.loggedIn" class="nav-item" @click="logout()"
             >LOGOUT</a
           ></client-only
         >
