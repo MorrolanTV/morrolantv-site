@@ -105,4 +105,10 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {},
+  env: {
+    logoutUrl:
+      process.env.NODE_ENV !== 'production'
+        ? 'http%3A%2F%2Flocalhost:3000'
+        : 'https%3A%2F%2Fsirfilior-dev.com',
+  },
 }

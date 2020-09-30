@@ -75,7 +75,8 @@ export default {
     logout() {
       this.$auth.logout()
       window.location.href =
-        'https://dev-83h5hy98.us.auth0.com/v2/logout?returnTo=http%3A%2F%2Flocalhost:3000'
+        'https://dev-83h5hy98.us.auth0.com/v2/logout?returnTo=' +
+        process.env.logoutUrl
     },
   },
 }
