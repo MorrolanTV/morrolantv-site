@@ -19,7 +19,7 @@
       </div>
       <div class="is-flex align-center">
         <h5 class="mr-2">
-          {{ `${parseValue(profitCP)} / CP (${contribution})` }}
+          {{ `${parseValue(profitCP)} / CP (${cp})` }}
         </h5>
         <img
           class="region-image"
@@ -47,7 +47,7 @@
             <label class="label">CP Used</label>
             <div class="control">
               <input
-                v-model.number="cp"
+                v-model.number="cpInput"
                 type="number"
                 class="input"
                 placeholder="Contribution"
@@ -147,7 +147,7 @@ export default {
       workSpeed: 0,
       moveSpeed: 0,
       worker: null,
-      cp: 0,
+      cpInput: 0,
       initial: true,
       edit: false,
     }
@@ -156,10 +156,13 @@ export default {
     profitCP() {
       return this.cp > 0 ? this.profit / this.cp : 0
     },
+    cp() {
+      return this.contribution + this.cpInput
+    },
     ...mapState(['workers']),
   },
   mounted() {
-    this.cp = this.contribution
+    this.cpInput = this.cpAdd
     const profits = this.workers.map(
       (stats) =>
         this.detailedReport(
@@ -186,7 +189,7 @@ export default {
         this.$store.commit('MARK_NODE_UPDATED', {
           id: this.id,
           data: {
-            cp: this.cp,
+            cp: this.cpInput,
             workspeed: this.workSpeed,
             movespeed: this.moveSpeed,
           },
