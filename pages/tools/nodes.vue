@@ -192,7 +192,7 @@ export default {
     timeUpdated() {
       if (this.nodes && this.nodes.length > 0 && this.nodes[0].Materials[0]) {
         const [date, time] = this.nodes[0].Materials[0].updatedAt.split('T')
-        return `Last Upated at ${date} ${time}`
+        return `Last Updated at ${date} ${time}`
       } else {
         return ''
       }
