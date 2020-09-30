@@ -69,7 +69,7 @@ export const state = () => ({
       long:
         'Cooking can be a great active lifeskill to gain both CP and silver at the same time. With this calculator you can quickly figure out what profits to expect from recepies.',
       image: 'cooking',
-      path: '/tools/cooking',
+      path: '/',
     },
     {
       name: 'Crate Calculator',

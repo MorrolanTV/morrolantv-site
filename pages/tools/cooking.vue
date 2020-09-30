@@ -23,7 +23,7 @@
       <div class="container">
         <h1 class="title is-1">Cooking Calculator</h1>
         <div class="recipe-calculator">
-          <div v-if="$fetchState.pending" class="loader"></div>
+          <div v-if="$fetchState.pending || 1" class="loader"></div>
           <div v-else-if="$fetchState.error" class="error-wrapper">
             <div class="error">
               <h3 class="title">API ERROR</h3>
@@ -113,12 +113,12 @@ export default {
   // eslint-disable-next-line vue/order-in-components
   async fetch() {
     // Fetch default node data
-    const cookbook = await this.$axios.$get('/recipes').then((res) => {
+    /* const cookbook = await this.$axios.$get('/recipes').then((res) => {
       return res
     })
     this.cookbook = cookbook
     const tree = this.buildRecipeTree().flat()
-    this.$store.commit('SET_RECIPE_TREE', tree)
+    this.$store.commit('SET_RECIPE_TREE', tree) */
   },
   computed: {
     timeUpdated() {
