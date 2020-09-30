@@ -1,16 +1,12 @@
 h1,
+h2,
+h3,
 h4,
 h5,
 h6 {
   font-family: $family-sans-serif-sub;
   text-transform: uppercase;
-}
-
-h2,
-h3 {
-  &.title {
-    font-weight: 400;
-  }
+  font-weight: 700;
 }
 
 a {
