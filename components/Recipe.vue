@@ -149,8 +149,8 @@ export default {
       this.perHour = profitPer * (900 * 4) // 4 is for the amount of cooking utensils you can get through in one hour
 
       // Testing
-      if (this.name === 'Carrot Confit')
-        console.log(cost, base, rare, profitPer)
+      /* if (this.name === 'Carrot Confit')
+        console.log(cost, base, rare, profitPer) */
 
       this.cost = cost
       this.profit = profitPer
@@ -212,8 +212,8 @@ export default {
       }
     },
     getItemPrice(material) {
-      if (JSON.stringify(material).includes('Carrot Confit'))
-        console.log(this.localizedPrice(material) * (material.quantity || 1))
+      /* if (JSON.stringify(material).includes('Carrot Confit'))
+        console.log(this.localizedPrice(material) * (material.quantity || 1)) */
       if (this.localizedPrice(material))
         return this.localizedPrice(material) * (material.quantity || 1)
       const buy = material.codexBuyPrice ? material.codexBuyPrice : 0

@@ -133,11 +133,26 @@
                   :workload="node.workload"
                   :preset-workspeed="node.workspeed"
                   :preset-movespeed="node.movespeed"
-                  :distance="node.distance"
+                  :distances="JSON.parse(node.distances)"
+                  :lodging="node.lodging"
                   @recalculated="updateListAuto"
                 />
               </div>
             </div>
+          </div>
+        </div>
+        <div class="modal" :class="error ? 'is-active' : ''">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <h4 class="title is-4">Error</h4>
+            <h5 class="subtitle is-5">{{ errorMessage }}</h5>
+            <button
+              class="button is-primary"
+              aria-label="close"
+              @click="reloadPage()"
+            >
+              OK
+            </button>
           </div>
         </div>
       </div>
@@ -172,10 +187,8 @@ export default {
     return {
       heroimg: 'world',
       error: null,
+      errorMessage: '',
       autoUpdate: false,
-      initialFilter: 'profit',
-      filterMethod: 'profit',
-      selectedRegion: '',
       saving: false,
       regions: [
         'balenos',
@@ -185,6 +198,7 @@ export default {
         'mediah',
         'serendia',
         'valencia',
+        'margoria',
       ],
     }
   },
@@ -199,25 +213,19 @@ export default {
     },
     nodes() {
       if (this.nodesCalculated) {
-        switch (this.filterMethod) {
-          case 'profit':
-            return this.getNodesByProfit
-          case 'region':
-            return this.getNodesByRegion(this.selectedRegion)
-          default:
-            return this.getNodesByProfit
-        }
+        return this.getNodesByProfit
       } else {
         return this.getNodesUnsorted
       }
     },
-    ...mapGetters(['getNodesByProfit', 'getNodesByRegion', 'getNodesUnsorted']),
+    ...mapGetters(['getNodesByProfit', 'getNodesUnsorted']),
     ...mapState([
       'workers',
       'nodesCalculated',
       'profitsUpdated',
       'nodeUserListLoaded',
       'updatedNodes',
+      'selectedRegion',
     ]),
   },
   /* activated() {
@@ -231,6 +239,11 @@ export default {
     }
   }, */
   fetchOnServer: false,
+  mounted() {
+    if (localStorage.getItem('usernodes')) {
+      this.restoreUsernodes()
+    }
+  },
   methods: {
     loginNodes() {
       this.$auth.loginWith('auth0')
@@ -248,11 +261,9 @@ export default {
     },
     selectRegion(region) {
       if (region === this.selectedRegion) {
-        this.selectedRegion = ''
-        this.filterMethod = this.initialFilter
+        this.$store.commit('SET_REGION_FILTER', '')
       } else {
-        this.selectedRegion = region
-        this.filterMethod = 'region'
+        this.$store.commit('SET_REGION_FILTER', region)
       }
     },
     async saveNodes() {
@@ -264,7 +275,32 @@ export default {
             Authorization: this.$auth.getToken('auth0'),
           },
         })
-        .then(() => (this.saving = false))
+        .then(() => {
+          if (this.hasBackup) localStorage.removeItem('usernodes')
+          this.saving = false
+        })
+        .catch(() => {
+          this.saving = false
+          this.persistUsernodes()
+          this.errorMessage =
+            'Could not save nodes. Press OK to reload the page.'
+          this.error = true
+        })
+    },
+    persistUsernodes() {
+      localStorage.setItem('usernodes', JSON.stringify([...this.updatedNodes]))
+    },
+    restoreUsernodes() {
+      try {
+        const nodes = new Map(JSON.parse(localStorage.getItem('usernodes')))
+        this.$store.commit('RESTORE_USERNODES', nodes)
+      } catch (e) {
+        localStorage.removeItem('usernodes')
+      }
+      localStorage.removeItem('usernodes')
+    },
+    reloadPage() {
+      window.location.reload()
     },
   },
 }
@@ -277,6 +313,8 @@ export default {
   position: sticky;
   top: 77px;
   background: $background-primary;
+  z-index: 2;
+  padding-top: 15px;
 }
 .nodecalc-list {
   flex-wrap: wrap;

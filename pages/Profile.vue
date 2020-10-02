@@ -11,6 +11,7 @@
         <h5 class="subtitle is-5">
           The profile page will be expanded in the future
         </h5>
+        <div v-if="active">Your status: Last active at: {{ active }}</div>
         <h3 class="mt-4 title is-3">Functions for users:</h3>
         <p>
           - You can adjust your
@@ -27,11 +28,27 @@
 </template>
 <script>
 export default {
+  async fetch() {
+    if (this.$auth.loggedIn) {
+      const stats = await this.$axios
+        .$get('/user/info', {
+          headers: {
+            Authorization: this.$auth.getToken('auth0'),
+          },
+        })
+        .then((res) => res)
+      if (stats) {
+        this.active = stats.activeAt
+      }
+    }
+  },
   data() {
     return {
       heroimg: 'tools',
+      active: '',
     }
   },
+  fetchOnServer: false,
   middleware: 'auth',
 }
 </script>
