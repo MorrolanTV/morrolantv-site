@@ -46,7 +46,7 @@ export const state = () => ({
   updatedNodes: new Map(), // Marked nodes (id, cp, ws, ms) to save back to user storage
   profitList: new Map(), // Sort Map for sort functions, hold id and profit
   profitsUpdated: 1, // Used to trigger reactivity for maps
-  selectedRegion: '', // Used to filter nodes by region,
+  linkingActive: false,
   workers: [
     {
       id: 0,
@@ -123,8 +123,8 @@ export const mutations = {
   SET_DEFAULT_NODELIST: (state) => {
     state.nodeUserListLoaded = false
   },
-  SET_NODE_PROFIT: (state, payload) => {
-    state.profitList.set(payload.id, payload.profit)
+  SET_NODE_PROFIT: (state, { id, data }) => {
+    state.profitList.set(id, data)
     state.nodesCalculated = state.profitList.size === state.nodes.length
   },
   PROFITS_UPDATED: (state) => {
@@ -132,9 +132,6 @@ export const mutations = {
   },
   MARK_NODE_UPDATED(state, { id, data }) {
     state.updatedNodes.set(id, data)
-  },
-  SET_REGION_FILTER: (state, payload) => {
-    state.selectedRegion = payload
   },
   SET_RECIPE_TREE: (state, payload) => {
     state.recipes = payload
@@ -146,14 +143,11 @@ export const mutations = {
 
 export const getters = {
   getNodesByProfit: (state) => {
-    let nodes = [...state.nodes]
-    if (state.selectedRegion) {
-      nodes = nodes.filter(
-        (node) => node.region.toLowerCase() === state.selectedRegion
+    const sorted = [...state.nodes].sort(function (a, b) {
+      return (
+        state.profitList.get(b.id).profitGrp -
+        state.profitList.get(a.id).profitGrp
       )
-    }
-    const sorted = nodes.sort(function (a, b) {
-      return state.profitList.get(b.id) - state.profitList.get(a.id)
     })
     if (state.profitsUpdated > 0) {
       return sorted

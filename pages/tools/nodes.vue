@@ -190,6 +190,7 @@ export default {
       errorMessage: '',
       autoUpdate: false,
       saving: false,
+      selectedRegion: '',
       regions: [
         'balenos',
         'calpheon',
@@ -213,8 +214,15 @@ export default {
     },
     nodes() {
       if (this.nodesCalculated) {
-        return this.getNodesByProfit
+        let nodes = this.getNodesByProfit
+        if (this.selectedRegion)
+          nodes = nodes.filter(
+            (node) => node.region.toLowerCase() === this.selectedRegion
+          )
+        return nodes
       } else {
+        // Return all to mount nodes and start calculating
+        // Is not shown in view
         return this.getNodesUnsorted
       }
     },
@@ -225,7 +233,6 @@ export default {
       'profitsUpdated',
       'nodeUserListLoaded',
       'updatedNodes',
-      'selectedRegion',
     ]),
   },
   /* activated() {
@@ -261,9 +268,9 @@ export default {
     },
     selectRegion(region) {
       if (region === this.selectedRegion) {
-        this.$store.commit('SET_REGION_FILTER', '')
+        this.selectedRegion = ''
       } else {
-        this.$store.commit('SET_REGION_FILTER', region)
+        this.selectedRegion = region
       }
     },
     async saveNodes() {

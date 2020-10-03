@@ -1,5 +1,5 @@
 <template>
-  <div class="node-wrapper">
+  <div class="node-wrapper" @click="handleLink">
     <div
       class="node-header"
       :style="{
@@ -7,21 +7,24 @@
       }"
       @click="openForm()"
     >
-      <div class="is-flex align-center">
-        <h5 class="mr-2">{{ name }}</h5>
+      <div class="node-header-left is-flex align-center">
+        <h5 class="node-name mr-2">{{ name }}</h5>
         <div
           v-for="material in materials"
           :key="material.id"
           class="materialimg-wrapper"
+          :data-tooltip="
+            material.name + (materialFlooded(material) ? ' - flooded' : '')
+          "
         >
           <img class="materialimg" :src="getCodexImage(material.icon)" />
           <div v-if="materialFlooded(material)" class="flooded"></div>
         </div>
       </div>
-      <div class="is-flex align-center">
-        <h5 class="mr-2">
+      <div class="node-header-right is-flex align-center">
+        <h5 class="node-stats mr-2">
           <span style="display: block; white-space: nowrap">{{
-            `${parseValue(profitCP)} / `
+            `${parseValue(profitCP)} `
           }}</span
           ><span style="white-space: nowrap">CP {{ cp }}</span>
         </h5>
@@ -162,6 +165,11 @@ export default {
       default: '',
       required: true,
     },
+    group: {
+      type: Object,
+      required: false,
+      default: null,
+    },
   },
   data() {
     return {
@@ -174,16 +182,20 @@ export default {
       cpInput: 0,
       initial: true,
       edit: false,
+      linkgroup: null,
     }
   },
   computed: {
     profitCP() {
       return this.cp > 0 ? this.profit / this.cp : 0
     },
+    profitGrp() {
+      return this.profitCP
+    },
     cp() {
       return this.contribution + this.cpInput
     },
-    ...mapState(['workers', 'updatedNodes']),
+    ...mapState(['workers', 'updatedNodes', 'linkingActive']),
   },
   beforeMount() {
     if (this.updatedNodes.has(this.id)) {
@@ -217,68 +229,6 @@ export default {
     this.applyFormWatchers()
   },
   methods: {
-    applyFormWatchers() {
-      this.$watch('cpInput', function () {
-        this.calculate()
-        this.$store.commit('MARK_NODE_UPDATED', {
-          id: this.id,
-          data: {
-            cp: this.cpInput,
-            workspeed: this.workSpeed,
-            movespeed: this.moveSpeed,
-            lodging: this.home,
-          },
-        })
-        this.$emit('recalculated')
-      })
-      this.$watch('worker', function (newVal, oldVal) {
-        this.workSpeed = this.worker.work
-        this.moveSpeed = this.worker.movement
-        this.calculate()
-        this.$emit('recalculated')
-      })
-      this.$watch('workSpeed', function (newVal, oldVal) {
-        this.$store.commit('MARK_NODE_UPDATED', {
-          id: this.id,
-          data: {
-            cp: this.cp,
-            workspeed: this.workSpeed,
-            movespeed: this.moveSpeed,
-            lodging: this.home,
-          },
-        })
-        this.calculate()
-        this.$emit('recalculated')
-      })
-      this.$watch('moveSpeed', function (newVal, oldVal) {
-        this.$store.commit('MARK_NODE_UPDATED', {
-          id: this.id,
-          data: {
-            cp: this.cp,
-            workspeed: this.workSpeed,
-            movespeed: this.moveSpeed,
-            lodging: this.home,
-          },
-        })
-        this.calculate()
-        this.$emit('recalculated')
-      })
-      this.$watch('home', function (newVal, oldVal) {
-        this.$store.commit('MARK_NODE_UPDATED', {
-          id: this.id,
-          data: {
-            cp: this.cp,
-            workspeed: this.workSpeed,
-            movespeed: this.moveSpeed,
-          },
-        })
-        this.calculate()
-        this.$emit('recalculated')
-      })
-    },
-    openForm() {
-      this.edit = !this.edit
-    },
     calculate() {
       const { profit, minutesPerTask } = this.detailedReport(
         this.workSpeed,
@@ -290,7 +240,11 @@ export default {
       this.minutesPerTask = minutesPerTask
       this.$store.commit('SET_NODE_PROFIT', {
         id: this.id,
-        profit: this.profitCP,
+        data: {
+          profit: this.profitCP,
+          profitGrp: this.profitGrp,
+          cp: this.contribution + this.cpInput,
+        },
       })
     },
     detailedReport(workSpeed, moveSpeed, stamina, luck) {
@@ -320,6 +274,20 @@ export default {
         minutesPerTask,
         cyclesPerDay,
         profit,
+      }
+    },
+    handleLink() {
+      if (this.linkingActive) {
+        /* this.$store.commit('MARK_NODE_UPDATED', {
+          id: this.id,
+          data: {
+            cp: this.cpInput,
+            workspeed: this.workSpeed,
+            movespeed: this.moveSpeed,
+            lodging: this.home,
+            group: this.group
+          },
+        }) */
       }
     },
     getCodexImage(image) {
@@ -407,6 +375,68 @@ export default {
         total: activeCycles + inactiveCycles,
       }
     },
+    applyFormWatchers() {
+      this.$watch('cpInput', function () {
+        this.calculate()
+        this.$store.commit('MARK_NODE_UPDATED', {
+          id: this.id,
+          data: {
+            cp: this.cpInput,
+            workspeed: this.workSpeed,
+            movespeed: this.moveSpeed,
+            lodging: this.home,
+          },
+        })
+        this.$emit('recalculated')
+      })
+      this.$watch('worker', function (newVal, oldVal) {
+        this.workSpeed = this.worker.work
+        this.moveSpeed = this.worker.movement
+        this.calculate()
+        this.$emit('recalculated')
+      })
+      this.$watch('workSpeed', function (newVal, oldVal) {
+        this.$store.commit('MARK_NODE_UPDATED', {
+          id: this.id,
+          data: {
+            cp: this.cp,
+            workspeed: this.workSpeed,
+            movespeed: this.moveSpeed,
+            lodging: this.home,
+          },
+        })
+        this.calculate()
+        this.$emit('recalculated')
+      })
+      this.$watch('moveSpeed', function (newVal, oldVal) {
+        this.$store.commit('MARK_NODE_UPDATED', {
+          id: this.id,
+          data: {
+            cp: this.cp,
+            workspeed: this.workSpeed,
+            movespeed: this.moveSpeed,
+            lodging: this.home,
+          },
+        })
+        this.calculate()
+        this.$emit('recalculated')
+      })
+      this.$watch('home', function (newVal, oldVal) {
+        this.$store.commit('MARK_NODE_UPDATED', {
+          id: this.id,
+          data: {
+            cp: this.cp,
+            workspeed: this.workSpeed,
+            movespeed: this.moveSpeed,
+          },
+        })
+        this.calculate()
+        this.$emit('recalculated')
+      })
+    },
+    openForm() {
+      this.edit = !this.edit
+    },
   },
 }
 </script>
@@ -441,6 +471,12 @@ export default {
     left: 11px;
     background-image: url("data:image/svg+xml,%3Csvg id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cdefs%3E%3Cstyle%3E.cls-1,.cls-3%7Bopacity:0.65;%7D.cls-2,.cls-3%7Bfill:%23c1272d;%7D%3C/style%3E%3C/defs%3E%3Cg class='cls-1'%3E%3Crect class='cls-2' y='40' width='44' height='4'/%3E%3C/g%3E%3Cpolyline class='cls-3' points='31.75 23.38 31.75 0 12.25 0 12.25 23.38 0 23.38 22 40 44 23.38'/%3E%3Cg class='cls-1'%3E%3Cpath d='M20.66,9.68c0,3.15-1.65,4.71-3.58,4.71s-3.48-1.49-3.5-4.51,1.63-4.66,3.61-4.66S20.66,6.83,20.66,9.68Zm-5.47.14c0,1.9.67,3.35,1.93,3.35s1.93-1.42,1.93-3.4c0-1.82-.52-3.33-1.93-3.33S15.19,7.93,15.19,9.82Zm1.75,10.85L25.72,5.22H27L18.23,20.67Zm13.45-4.81c0,3.15-1.65,4.72-3.56,4.72s-3.48-1.5-3.5-4.49S25,11.4,26.94,11.4,30.39,13,30.39,15.86ZM24.92,16c0,1.91.71,3.36,1.95,3.36S28.8,17.93,28.8,16s-.52-3.34-1.93-3.34S24.92,14.12,24.92,16Z'/%3E%3C/g%3E%3C/svg%3E");
   }
+}
+.node-header-left {
+  flex-grow: 1;
+}
+.node-header-right {
+  flex-shrink: 0;
 }
 .node-form {
   max-height: 0;
