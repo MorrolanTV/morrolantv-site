@@ -41,10 +41,13 @@ export const state = () => ({
     },
   ],
   nodesCalculated: false, // To notify parent when ready to sort by profit
+  nodeGroupsCalculated: false,
   nodeUserListLoaded: false, // If user node list loaded, switch to default after logout
   nodes: new Map(), // Just that
   profitList: new Map(), // Sort Map for sort functions, hold id and profit
   profitsUpdated: 1, // Used to trigger reactivity for maps
+  groupsUpdated: 1,
+  groupsCalculated: 1,
   linkingActive: false,
   linkOrigin: null,
   linkTarget: null,
@@ -128,6 +131,19 @@ export const mutations = {
     state.profitList.set(id, data)
     state.nodesCalculated = state.profitList.size === state.nodes.size
   },
+  LINK_CALCULATED: (state, { id, data }) => {
+    state.nodes.get(id).groupCP = data.cpGroup
+    state.nodes.get(id).groupProfit = data.profitGroup
+    state.groupsCalculated += 1
+    state.nodeGroupsCalculated = state.groupsCalculated >= state.nodes.size
+    if (state.nodeGroupsCalculated) {
+      state.groupsUpdated += 1
+      state.profitsUpdated += 1
+    }
+  },
+  LINKS_UPDATED: (state) => {
+    state.groupsUpdated += 1
+  },
   PROFITS_UPDATED: (state) => {
     state.profitsUpdated += 1
   },
@@ -137,6 +153,7 @@ export const mutations = {
     node.workspeed = data.workspeed
     node.movespeed = data.movespeed
     node.lodging = data.lodging
+    node.changed = true
   },
   TOGGLE_LINKING(state, status) {
     state.linkingActive = status
@@ -164,8 +181,8 @@ export const getters = {
   getNodesByProfit: (state) => {
     const sorted = Array.from([...state.nodes.values()]).sort(function (a, b) {
       return (
-        state.profitList.get(b.id).profitGrp -
-        state.profitList.get(a.id).profitGrp
+        state.profitList.get(b.id).profitCP -
+        state.profitList.get(a.id).profitCP
       )
     })
     if (state.profitsUpdated > 0) {
@@ -173,7 +190,13 @@ export const getters = {
     }
   },
   getNodesUnsorted: (state) => {
-    return Array.from([...state.nodes.values()])
+    const n = Array.from([...state.nodes.values()])
+    if (state.profitsUpdated > 0) {
+      return n
+    }
+  },
+  getChangedNodes: (state) => {
+    return Array.from([...state.nodes.values()]).filter((x) => x.changed)
   },
   getRecipes: (state) => {
     return state.recipes

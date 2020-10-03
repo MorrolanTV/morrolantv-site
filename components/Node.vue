@@ -1,5 +1,9 @@
 <template>
-  <div class="node-wrapper" @click="handleLink">
+  <div
+    class="node-wrapper"
+    :class="group ? `grouped group-${group.id}` : ''"
+    @click="handleLink"
+  >
     <div
       class="node-header"
       :style="{
@@ -169,36 +173,92 @@ export default {
     },
     group: {
       type: Object,
-      required: false,
       default: null,
     },
   },
   data() {
     return {
       profit: 0,
+      profitGroup: 0,
+      cpGroup: 0,
       minutesPerTask: 0,
       workSpeed: 0,
       moveSpeed: 0,
       home: null,
       worker: null,
       cpInput: 0,
+      cpLocal: 0,
       initial: true,
       edit: false,
     }
   },
   computed: {
     profitCP() {
-      return this.cp > 0 ? this.profit / this.cp : 0
+      if (!this.group) return this.cp > 0 ? this.profit / this.cp : 0
+      else return this.cp > 0 ? (this.profitGroup + this.profit) / this.cp : 0
     },
     cp() {
-      return this.contribution + this.cpInput
+      return this.cpLocal + this.cpInput + this.cpGroup
     },
-    ...mapState(['workers', 'updatedNodes', 'linkingActive', 'linkSelected']),
+    ...mapState([
+      'workers',
+      'profitList',
+      'nodes',
+      'groupsUpdated',
+      'nodesCalculated',
+      'linkingActive',
+      'linkSelected',
+    ]),
+  },
+  watch: {
+    // Calculating values for groups needs established profitsCP
+    nodesCalculated() {
+      let cpGrp = 0
+      let profGrp = 0
+      if (this.group) {
+        for (const id of this.group.links) {
+          const node = this.nodes.get(id)
+          cpGrp += node.contribution
+          cpGrp += node.cpAdd
+          profGrp += this.profitList.get(id).profit
+        }
+      }
+      this.$store.commit('LINK_CALCULATED', {
+        id: this.id,
+        data: {
+          cpGroup: cpGrp,
+          profitGroup: profGrp,
+          profit: this.profit,
+          profitCP: (this.profit + profGrp) / this.cp,
+        },
+      })
+      this.applyFormWatchers()
+    },
+    groupsUpdated() {
+      if (this.group) {
+        this.cpGroup = this.nodes.get(this.id).groupCP
+          ? this.nodes.get(this.id).groupCP
+          : 0
+        this.profitGroup = this.nodes.get(this.id).groupProfit
+          ? this.nodes.get(this.id).groupProfit
+          : 0
+        this.calculate()
+      }
+    },
   },
   beforeMount() {
     // Assign to edit in v-model
     this.cpInput = this.cpAdd
+    this.cpLocal = this.contribution
     this.home = this.lodging
+    if (this.group) {
+      this.cpGroup = this.nodes.get(this.id).groupCP
+        ? this.nodes.get(this.id).groupCP
+        : 0
+      this.profitGroup = this.nodes.get(this.id).groupProfit
+        ? this.nodes.get(this.id).groupProfit
+        : 0
+    }
   },
   mounted() {
     const profits = this.workers.map(
@@ -218,10 +278,13 @@ export default {
     this.moveSpeed =
       this.presetMovespeed > 0 ? this.presetMovespeed : this.worker.movement
     this.calculate()
-    this.applyFormWatchers()
   },
   methods: {
     calculate() {
+      if (this.id === 1) {
+        console.log(this.profitCP)
+      }
+
       const { profit, minutesPerTask } = this.detailedReport(
         this.workSpeed,
         this.moveSpeed,
@@ -233,9 +296,8 @@ export default {
       this.$store.commit('SET_NODE_PROFIT', {
         id: this.id,
         data: {
-          profit: this.profitCP,
-          profitGrp: this.profitCP,
-          cp: this.contribution + this.cpInput,
+          profit: this.profit,
+          profitCP: this.profitCP,
         },
       })
     },
@@ -340,12 +402,6 @@ export default {
      * @param {Number} stamina - The stamina of a worker.
      */
     calculateCycles(activeHours, minutesPerTask, stamina) {
-      if (activeHours > 24)
-        this.error = {
-          title: 'WRONG INPUT',
-          subtitle: 'There cannot be more than 24 hours in a day.',
-          text: 'The value got auto adjusted to max',
-        }
       const activeCycles = (activeHours * 60) / minutesPerTask
       const inactiveCycles = Math.min(
         ((24 - activeHours) * 60) / minutesPerTask,
@@ -379,6 +435,7 @@ export default {
       })
     },
     updateNode() {
+      this.calculate()
       this.$store.commit('UPDATE_NODE', {
         id: this.id,
         data: {
@@ -389,7 +446,6 @@ export default {
           group: this.group,
         },
       })
-      this.calculate()
       this.$emit('recalculated')
     },
     openForm() {

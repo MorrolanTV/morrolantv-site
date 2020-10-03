@@ -122,7 +122,7 @@
                 </button>
               </div>
             </div>
-            <div class="nodecalc-list columns">
+            <div v-show="nodeGroupsCalculated" class="nodecalc-list columns">
               <div
                 v-for="node in nodes"
                 :key="node.id"
@@ -142,6 +142,7 @@
                   :preset-movespeed="node.movespeed"
                   :distances="JSON.parse(node.distances)"
                   :lodging="node.lodging"
+                  :group="JSON.parse(node.group)"
                   @recalculated="updateListAuto"
                 />
               </div>
@@ -221,26 +222,22 @@ export default {
       }
     },
     nodes() {
-      if (this.nodesCalculated) {
+      if (this.nodeGroupsCalculated) {
         let nodes = this.getNodesByProfit
         if (this.selectedRegion)
           nodes = nodes.filter(
             (node) => node.region.toLowerCase() === this.selectedRegion
           )
         return nodes
-      } else {
-        // Return all to mount nodes and start calculating
-        // Is not shown in view
-        return this.getNodesUnsorted
-      }
+      } else return this.getNodesUnsorted
     },
-    ...mapGetters(['getNodesByProfit', 'getNodesUnsorted']),
+    ...mapGetters(['getNodesByProfit', 'getNodesUnsorted', 'getChangedNodes']),
     ...mapState([
       'workers',
       'nodesCalculated',
+      'nodeGroupsCalculated',
       'profitsUpdated',
       'nodeUserListLoaded',
-      'updatedNodes',
       'linkingActive',
     ]),
   },
@@ -289,7 +286,7 @@ export default {
       this.saving = true
       await this.$axios
         .$post('/user/userNodes', {
-          nodes: JSON.stringify([...this.updatedNodes]),
+          nodes: JSON.stringify([...this.getChangedNodes]),
           headers: {
             Authorization: this.$auth.getToken('auth0'),
           },
@@ -307,7 +304,10 @@ export default {
         })
     },
     persistUsernodes() {
-      localStorage.setItem('usernodes', JSON.stringify([...this.updatedNodes]))
+      localStorage.setItem(
+        'usernodes',
+        JSON.stringify([...this.getChangedNodes])
+      )
     },
     restoreUsernodes() {
       try {
@@ -360,5 +360,17 @@ button {
 }
 .region-filter {
   cursor: pointer;
+}
+</style>
+<style lang="scss">
+$nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
+  #c5be59, #a31a5f #4fce99, #5081af, #b93daf, #e0925d, #2d9299 #9b3535;
+.node-wrapper.grouped {
+  border: 2px solid;
+  @for $i from 1 through length($nodelinks-colors) {
+    &:nth-child(#{length($nodelinks-colors)}n + #{$i}) {
+      border-color: nth($nodelinks-colors, $i);
+    }
+  }
 }
 </style>
