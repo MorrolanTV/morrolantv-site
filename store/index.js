@@ -42,11 +42,12 @@ export const state = () => ({
   ],
   nodesCalculated: false, // To notify parent when ready to sort by profit
   nodeUserListLoaded: false, // If user node list loaded, switch to default after logout
-  nodes: [], // Just that
-  updatedNodes: new Map(), // Marked nodes (id, cp, ws, ms) to save back to user storage
+  nodes: new Map(), // Just that
   profitList: new Map(), // Sort Map for sort functions, hold id and profit
   profitsUpdated: 1, // Used to trigger reactivity for maps
   linkingActive: false,
+  linkOrigin: null,
+  linkTarget: null,
   workers: [
     {
       id: 0,
@@ -112,7 +113,7 @@ export const mutations = {
     state.redirectUrl = ''
   },
   SET_NODES: (state, payload) => {
-    state.nodes = payload
+    state.nodes = new Map(payload.map((node) => [node.id, node]))
   },
   RESTORE_USERNODES: (state, payload) => {
     state.updatedNodes = payload
@@ -125,13 +126,31 @@ export const mutations = {
   },
   SET_NODE_PROFIT: (state, { id, data }) => {
     state.profitList.set(id, data)
-    state.nodesCalculated = state.profitList.size === state.nodes.length
+    state.nodesCalculated = state.profitList.size === state.nodes.size
   },
   PROFITS_UPDATED: (state) => {
     state.profitsUpdated += 1
   },
-  MARK_NODE_UPDATED(state, { id, data }) {
-    state.updatedNodes.set(id, data)
+  UPDATE_NODE(state, { id, data }) {
+    const node = state.nodes.get(id)
+    node.cpAdd = data.cp
+    node.workspeed = data.workspeed
+    node.movespeed = data.movespeed
+    node.lodging = data.lodging
+  },
+  TOGGLE_LINKING(state, status) {
+    state.linkingActive = status
+  },
+  NODE_LINK(state, id) {
+    if (!state.linkOrigin) state.linkOrigin = id
+    else if (!state.linkTarget) state.linkTarget = id
+    if (state.linkOrigin && state.linkTarget) {
+      // const origInfo = state.updatedNodes.get(state.linkOrigin)
+      // const targInfo = state.updatedNodes.get(state.linkTarget)
+
+      state.linkOrigin = null
+      state.linkTarget = null
+    }
   },
   SET_RECIPE_TREE: (state, payload) => {
     state.recipes = payload
@@ -143,7 +162,7 @@ export const mutations = {
 
 export const getters = {
   getNodesByProfit: (state) => {
-    const sorted = [...state.nodes].sort(function (a, b) {
+    const sorted = Array.from([...state.nodes.values()]).sort(function (a, b) {
       return (
         state.profitList.get(b.id).profitGrp -
         state.profitList.get(a.id).profitGrp
@@ -154,7 +173,7 @@ export const getters = {
     }
   },
   getNodesUnsorted: (state) => {
-    return state.nodes
+    return Array.from([...state.nodes.values()])
   },
   getRecipes: (state) => {
     return state.recipes

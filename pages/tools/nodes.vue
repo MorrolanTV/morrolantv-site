@@ -104,12 +104,19 @@
                   <button
                     v-if="$auth.loggedIn"
                     class="button is-primary save"
-                    :class="{ saving: saving }"
+                    :class="{ enabled: saving }"
                     @click="saveNodes()"
                   >
                     {{ saving ? 'Saving..' : 'Save' }}
                   </button>
                 </client-only>
+                <button
+                  class="button is-primary"
+                  :class="{ enabled: linkingActive }"
+                  @click="handleLinking()"
+                >
+                  {{ linkingActive ? 'Stop' : 'Edit links' }}
+                </button>
                 <button class="button is-primary" @click="updateList()">
                   Re-Sort
                 </button>
@@ -190,6 +197,7 @@ export default {
       errorMessage: '',
       autoUpdate: false,
       saving: false,
+      linking: false,
       selectedRegion: '',
       regions: [
         'balenos',
@@ -233,6 +241,7 @@ export default {
       'profitsUpdated',
       'nodeUserListLoaded',
       'updatedNodes',
+      'linkingActive',
     ]),
   },
   /* activated() {
@@ -272,6 +281,9 @@ export default {
       } else {
         this.selectedRegion = region
       }
+    },
+    handleLinking() {
+      this.$store.commit('TOGGLE_LINKING', !this.linkingActive)
     },
     async saveNodes() {
       this.saving = true
@@ -340,9 +352,9 @@ export default {
     }
   }
 }
-button.save {
+button {
   transition: 0.2s;
-  &.saving {
+  &.enabled {
     background: $yellow;
   }
 }

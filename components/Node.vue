@@ -9,16 +9,18 @@
     >
       <div class="node-header-left is-flex align-center">
         <h5 class="node-name mr-2">{{ name }}</h5>
-        <div
-          v-for="material in materials"
-          :key="material.id"
-          class="materialimg-wrapper"
-          :data-tooltip="
-            material.name + (materialFlooded(material) ? ' - flooded' : '')
-          "
-        >
-          <img class="materialimg" :src="getCodexImage(material.icon)" />
-          <div v-if="materialFlooded(material)" class="flooded"></div>
+        <div class="material-list is-flex">
+          <div
+            v-for="material in materials"
+            :key="material.id"
+            class="materialimg-wrapper"
+            :data-tooltip="
+              material.name + (materialFlooded(material) ? ' - flooded' : '')
+            "
+          >
+            <img class="materialimg" :src="getCodexImage(material.icon)" />
+            <div v-if="materialFlooded(material)" class="flooded"></div>
+          </div>
         </div>
       </div>
       <div class="node-header-right is-flex align-center">
@@ -182,31 +184,21 @@ export default {
       cpInput: 0,
       initial: true,
       edit: false,
-      linkgroup: null,
     }
   },
   computed: {
     profitCP() {
       return this.cp > 0 ? this.profit / this.cp : 0
     },
-    profitGrp() {
-      return this.profitCP
-    },
     cp() {
       return this.contribution + this.cpInput
     },
-    ...mapState(['workers', 'updatedNodes', 'linkingActive']),
+    ...mapState(['workers', 'updatedNodes', 'linkingActive', 'linkSelected']),
   },
   beforeMount() {
-    if (this.updatedNodes.has(this.id)) {
-      this.cpInput = this.updatedNodes.get(this.id).cp
-      this.workSpeed = this.updatedNodes.get(this.id).workspeed
-      this.moveSpeed = this.updatedNodes.get(this.id).movespeed
-      this.home = this.updatedNodes.get(this.id).lodging
-    } else {
-      this.cpInput = this.cpAdd
-      this.home = this.lodging
-    }
+    // Assign to edit in v-model
+    this.cpInput = this.cpAdd
+    this.home = this.lodging
   },
   mounted() {
     const profits = this.workers.map(
@@ -242,7 +234,7 @@ export default {
         id: this.id,
         data: {
           profit: this.profitCP,
-          profitGrp: this.profitGrp,
+          profitGrp: this.profitCP,
           cp: this.contribution + this.cpInput,
         },
       })
@@ -278,16 +270,7 @@ export default {
     },
     handleLink() {
       if (this.linkingActive) {
-        /* this.$store.commit('MARK_NODE_UPDATED', {
-          id: this.id,
-          data: {
-            cp: this.cpInput,
-            workspeed: this.workSpeed,
-            movespeed: this.moveSpeed,
-            lodging: this.home,
-            group: this.group
-          },
-        }) */
+        this.$store.commit('NODE_LINK', this.id)
       }
     },
     getCodexImage(image) {
@@ -376,66 +359,43 @@ export default {
       }
     },
     applyFormWatchers() {
-      this.$watch('cpInput', function () {
-        this.calculate()
-        this.$store.commit('MARK_NODE_UPDATED', {
-          id: this.id,
-          data: {
-            cp: this.cpInput,
-            workspeed: this.workSpeed,
-            movespeed: this.moveSpeed,
-            lodging: this.home,
-          },
-        })
-        this.$emit('recalculated')
-      })
       this.$watch('worker', function (newVal, oldVal) {
         this.workSpeed = this.worker.work
         this.moveSpeed = this.worker.movement
         this.calculate()
         this.$emit('recalculated')
       })
+      this.$watch('cpInput', function () {
+        this.updateNode()
+      })
       this.$watch('workSpeed', function (newVal, oldVal) {
-        this.$store.commit('MARK_NODE_UPDATED', {
-          id: this.id,
-          data: {
-            cp: this.cp,
-            workspeed: this.workSpeed,
-            movespeed: this.moveSpeed,
-            lodging: this.home,
-          },
-        })
-        this.calculate()
-        this.$emit('recalculated')
+        this.updateNode()
       })
       this.$watch('moveSpeed', function (newVal, oldVal) {
-        this.$store.commit('MARK_NODE_UPDATED', {
-          id: this.id,
-          data: {
-            cp: this.cp,
-            workspeed: this.workSpeed,
-            movespeed: this.moveSpeed,
-            lodging: this.home,
-          },
-        })
-        this.calculate()
-        this.$emit('recalculated')
+        this.updateNode()
       })
       this.$watch('home', function (newVal, oldVal) {
-        this.$store.commit('MARK_NODE_UPDATED', {
-          id: this.id,
-          data: {
-            cp: this.cp,
-            workspeed: this.workSpeed,
-            movespeed: this.moveSpeed,
-          },
-        })
-        this.calculate()
-        this.$emit('recalculated')
+        this.updateNode()
       })
     },
+    updateNode() {
+      this.$store.commit('UPDATE_NODE', {
+        id: this.id,
+        data: {
+          cp: this.cpInput,
+          workspeed: this.workSpeed,
+          movespeed: this.moveSpeed,
+          lodging: this.home,
+          group: this.group,
+        },
+      })
+      this.calculate()
+      this.$emit('recalculated')
+    },
     openForm() {
-      this.edit = !this.edit
+      if (!this.linkingActive) {
+        this.edit = !this.edit
+      }
     },
   },
 }
@@ -474,6 +434,7 @@ export default {
 }
 .node-header-left {
   flex-grow: 1;
+  justify-content: space-between;
 }
 .node-header-right {
   flex-shrink: 0;
