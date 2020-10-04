@@ -204,7 +204,8 @@ export default {
       'workers',
       'profitList',
       'nodes',
-      'groupsUpdated',
+      'groupStatsUpdated',
+      'groupProfitsUpdated',
       'nodesCalculated',
       'linkingActive',
       'linkSelected',
@@ -212,21 +213,18 @@ export default {
   },
   watch: {
     // Calculating values for groups needs established profitsCP
+    // This runs after first mound which calculats all group
+    // Function just summs up all profits from group links
     nodesCalculated() {
-      let cpGrp = 0
       let profGrp = 0
       if (this.group) {
         for (const id of this.group.links) {
-          const node = this.nodes.get(id)
-          cpGrp += node.contribution
-          cpGrp += node.cpAdd
           profGrp += this.profitList.get(id).profit
         }
       }
       this.$store.commit('LINK_CALCULATED', {
         id: this.id,
         data: {
-          cpGroup: cpGrp,
           profitGroup: profGrp,
           profit: this.profit,
           profitCP: (this.profit + profGrp) / this.cp,
@@ -234,15 +232,19 @@ export default {
       })
       this.applyFormWatchers()
     },
-    groupsUpdated() {
+    groupStatsUpdated() {
       if (this.group) {
         this.cpGroup = this.nodes.get(this.id).groupCP
           ? this.nodes.get(this.id).groupCP
           : 0
+        this.calculate()
+      }
+    },
+    groupProfitsUpdated() {
+      if (this.group) {
         this.profitGroup = this.nodes.get(this.id).groupProfit
           ? this.nodes.get(this.id).groupProfit
           : 0
-        this.calculate()
       }
     },
   },
@@ -252,12 +254,11 @@ export default {
     this.cpLocal = this.contribution
     this.home = this.lodging
     if (this.group) {
-      this.cpGroup = this.nodes.get(this.id).groupCP
-        ? this.nodes.get(this.id).groupCP
-        : 0
-      this.profitGroup = this.nodes.get(this.id).groupProfit
-        ? this.nodes.get(this.id).groupProfit
-        : 0
+      for (const id of this.group.links) {
+        const node = this.nodes.get(id)
+        this.cpGroup += node.contribution
+        this.cpGroup += node.cpAdd
+      }
     }
   },
   mounted() {
@@ -281,10 +282,6 @@ export default {
   },
   methods: {
     calculate() {
-      if (this.id === 1) {
-        console.log(this.profitCP)
-      }
-
       const { profit, minutesPerTask } = this.detailedReport(
         this.workSpeed,
         this.moveSpeed,
@@ -444,6 +441,7 @@ export default {
           movespeed: this.moveSpeed,
           lodging: this.home,
           group: this.group,
+          updateLinks: !!this.group,
         },
       })
       this.$emit('recalculated')

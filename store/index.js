@@ -46,7 +46,8 @@ export const state = () => ({
   nodes: new Map(), // Just that
   profitList: new Map(), // Sort Map for sort functions, hold id and profit
   profitsUpdated: 1, // Used to trigger reactivity for maps
-  groupsUpdated: 1,
+  groupStatsUpdated: 1,
+  groupProfitsUpdated: 1,
   groupsCalculated: 1,
   linkingActive: false,
   linkOrigin: null,
@@ -132,17 +133,13 @@ export const mutations = {
     state.nodesCalculated = state.profitList.size === state.nodes.size
   },
   LINK_CALCULATED: (state, { id, data }) => {
-    state.nodes.get(id).groupCP = data.cpGroup
     state.nodes.get(id).groupProfit = data.profitGroup
     state.groupsCalculated += 1
     state.nodeGroupsCalculated = state.groupsCalculated >= state.nodes.size
     if (state.nodeGroupsCalculated) {
-      state.groupsUpdated += 1
+      state.groupProfitsUpdated += 1
       state.profitsUpdated += 1
     }
-  },
-  LINKS_UPDATED: (state) => {
-    state.groupsUpdated += 1
   },
   PROFITS_UPDATED: (state) => {
     state.profitsUpdated += 1
@@ -154,6 +151,24 @@ export const mutations = {
     node.movespeed = data.movespeed
     node.lodging = data.lodging
     node.changed = true
+    if (data.updateLinks) {
+      // Update cp acress all groups
+      // Find all groups of updated node
+      for (const id of data.group.links) {
+        let cpGrp = 0
+        const linknode = state.nodes.get(id)
+        if (linknode.group) {
+          // For all iter groups, gather all cp from iter group
+          for (const linkID of linknode.group.links) {
+            const node = state.nodes.get(linkID)
+            cpGrp += node.contribution
+            cpGrp += node.cpAdd
+          }
+          linknode.groupCP = cpGrp
+        }
+      }
+      state.groupStatsUpdated += 1
+    }
   },
   TOGGLE_LINKING(state, status) {
     state.linkingActive = status
