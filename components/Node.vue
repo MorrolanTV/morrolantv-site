@@ -175,6 +175,14 @@ export default {
       type: Object,
       default: null,
     },
+    groupCp: {
+      type: Number,
+      default: null,
+    },
+    groupProfit: {
+      type: Number,
+      default: null,
+    },
   },
   data() {
     return {
@@ -206,6 +214,7 @@ export default {
       'nodes',
       'groupStatsUpdated',
       'groupProfitsUpdated',
+      'groupGotUpdate',
       'nodeGroupsCalculated',
       'linkingActive',
       'linkSelected',
@@ -222,11 +231,14 @@ export default {
     },
     groupStatsUpdated() {
       if (this.group) {
-        this.cpGroup = this.nodes.get(this.id).groupCP
-          ? this.nodes.get(this.id).groupCP
-          : 0
-        this.calculate()
-        this.$store.commit('GROUP_NODE_RECALCUATED', this.id)
+        // Guard to not recalculate ALL groups
+        if (this.groupGotUpdate.includes(this.id)) {
+          this.cpGroup = this.nodes.get(this.id).groupCP
+            ? this.nodes.get(this.id).groupCP
+            : 0
+          this.calculate()
+          this.$store.commit('GROUP_NODE_RECALCUATED', this.id)
+        }
       }
     },
     groupProfitsUpdated() {
@@ -243,11 +255,15 @@ export default {
     this.cpLocal = this.contribution
     this.home = this.lodging
     if (this.group) {
-      for (const id of this.group.links) {
-        const node = this.nodes.get(id)
-        this.cpGroup += node.contribution
-        this.cpGroup += node.cpAdd
+      if (this.groupCp) this.cpGroup = this.groupCp
+      else {
+        for (const id of this.group.links) {
+          const node = this.nodes.get(id)
+          this.cpGroup += node.contribution
+          this.cpGroup += node.cpAdd
+        }
       }
+      if (this.groupProfit) this.profitGroup = this.groupProfit
     }
   },
   mounted() {

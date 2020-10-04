@@ -143,6 +143,8 @@
                   :distances="JSON.parse(node.distances)"
                   :lodging="node.lodging"
                   :group="JSON.parse(node.group)"
+                  :group-cp="node.groupCP ? node.groupCP : null"
+                  :group-profit="node.groupProfit ? node.groupProfit : null"
                   @recalculated="updateListAuto"
                 />
               </div>
@@ -368,7 +370,7 @@ $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
 .node-wrapper.grouped {
   border: 2px solid;
   @for $i from 1 through length($nodelinks-colors) {
-    &:nth-child(#{length($nodelinks-colors)}n + #{$i}) {
+    &.group-#{$i} {
       border-color: nth($nodelinks-colors, $i);
     }
   }

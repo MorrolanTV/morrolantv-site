@@ -48,6 +48,7 @@ export const state = () => ({
   profitsUpdated: 1, // Used to trigger reactivity for maps
   groupStatsUpdated: 1,
   groupProfitsUpdated: 1,
+  groupGotUpdate: [],
   groupsToCalculate: [],
   groupsRecalculated: 0,
   linkingActive: false,
@@ -151,7 +152,10 @@ export const mutations = {
   },
   GROUP_NODE_RECALCUATED: (state, payload) => {
     if (state.groupsToCalculate.includes(payload)) state.groupsRecalculated += 1
-    if (state.groupsRecalculated === state.groupsToCalculate.length) {
+    if (
+      state.groupsRecalculated === state.groupsToCalculate.length &&
+      state.groupsToCalculate.length > 0
+    ) {
       for (const linkID of state.groupsToCalculate) {
         let profGrp = 0
         for (const id of JSON.parse(state.nodes.get(linkID).group).links) {
@@ -163,6 +167,7 @@ export const mutations = {
       }
       state.groupsRecalculated = 0
       state.groupsToCalculate = []
+      state.groupGotUpdate = []
       state.groupProfitsUpdated += 1
     }
   },
@@ -176,6 +181,7 @@ export const mutations = {
     if (data.updateLinks) {
       // Update cp acress all groups
       // Find all groups of updated node
+      state.groupGotUpdate = [id, ...data.group.links]
       state.groupsToCalculate = data.group.links
       state.nodes.get(id).groupCP = data.groupCP
       for (const lid of data.group.links) {
