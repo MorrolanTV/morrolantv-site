@@ -230,15 +230,14 @@ export default {
       this.applyFormWatchers()
     },
     groupStatsUpdated() {
-      if (this.group) {
-        // Guard to not recalculate ALL groups
-        if (this.groupGotUpdate.includes(this.id)) {
-          this.cpGroup = this.nodes.get(this.id).groupCP
-            ? this.nodes.get(this.id).groupCP
-            : 0
-          this.calculate()
-          this.$store.commit('GROUP_NODE_RECALCUATED', this.id)
-        }
+      // Guard to not recalculate ALL groups
+      if (this.groupGotUpdate.includes(this.id)) {
+        if (!this.group) this.group = JSON.parse(this.nodes.get(this.id).group)
+        this.cpGroup = this.nodes.get(this.id).groupCP
+          ? this.nodes.get(this.id).groupCP
+          : 0
+        this.calculate()
+        this.$store.commit('GROUP_NODE_RECALCUATED', this.id)
       }
     },
     groupProfitsUpdated() {

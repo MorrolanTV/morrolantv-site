@@ -210,11 +210,43 @@ export const mutations = {
     if (!state.linkOrigin) state.linkOrigin = id
     else if (!state.linkTarget) state.linkTarget = id
     if (state.linkOrigin && state.linkTarget) {
-      // const origInfo = state.updatedNodes.get(state.linkOrigin)
-      // const targInfo = state.updatedNodes.get(state.linkTarget)
+      const origNode = state.nodes.get(state.linkOrigin)
+      const targNode = state.nodes.get(state.linkTarget)
+      if (!origNode.group) {
+        // Build groups
+        const origGrp = targNode.group
+          ? JSON.parse(targNode.group)
+          : { id: 3, links: [] }
+        const trgGroup = targNode.group
+          ? JSON.parse(targNode.group)
+          : { id: 3, links: [] }
+        origGrp.links = [state.linkTarget, ...origGrp.links]
+        trgGroup.links = [state.linkOrigin, ...trgGroup.links]
 
+        // Get full list of nodes to recalculate groups for
+        const combined = [state.linkTarget, ...trgGroup.links]
+
+        // Set group in node map
+        origNode.group = JSON.stringify(origGrp)
+        targNode.group = JSON.stringify(trgGroup)
+
+        // Combine cp for all nodes in linked group
+        for (const lid of combined) {
+          let profCP = 0
+          for (const gid of JSON.parse(state.nodes.get(lid).group).links) {
+            // New group will contain node itself. Dont add these stats to groupCP
+            profCP += gid !== lid ? state.nodes.get(gid).contribution : 0
+            profCP += gid !== lid ? state.nodes.get(gid).cpAdd : 0
+          }
+          state.nodes.get(lid).groupCP = profCP
+        }
+        state.groupsRecalculated = 0
+        state.groupGotUpdate = combined
+        state.groupsToCalculate = combined
+      }
       state.linkOrigin = null
       state.linkTarget = null
+      state.groupStatsUpdated += 1
     }
   },
   SET_RECIPE_TREE: (state, payload) => {
