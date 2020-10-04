@@ -131,14 +131,21 @@ export const mutations = {
   SET_NODE_PROFIT: (state, { id, data }) => {
     state.profitList.set(id, data)
     state.nodesCalculated = state.profitList.size === state.nodes.size
-  },
-  LINK_CALCULATED: (state, { id, data }) => {
-    state.nodes.get(id).groupProfit = data.profitGroup
-    state.groupsCalculated += 1
-    state.nodeGroupsCalculated = state.groupsCalculated >= state.nodes.size
-    if (state.nodeGroupsCalculated) {
-      state.groupProfitsUpdated += 1
-      state.profitsUpdated += 1
+    // Perform initial summ up of all groups
+    if (state.nodesCalculated && !state.nodeGroupsCalculated) {
+      const groupNodes = Array.from([...state.nodes.values()]).filter(
+        (x) => x.group
+      )
+      for (const node of groupNodes) {
+        let profGrp = 0
+        for (const id of JSON.parse(node.group).links) {
+          profGrp += state.profitList.get(id).profit
+        }
+        state.nodes.get(node.id).groupProfit = profGrp
+        const nodeProfit = state.profitList.get(node.id)
+        nodeProfit.profitCP = (nodeProfit.profit + profGrp) / nodeProfit.cp
+      }
+      state.nodeGroupsCalculated = true
     }
   },
   PROFITS_UPDATED: (state) => {
@@ -200,7 +207,7 @@ export const getters = {
         state.profitList.get(a.id).profitCP
       )
     })
-    if (state.profitsUpdated > 0) {
+    if (state.profitsUpdated > 0 && state.nodeGroupsCalculated) {
       return sorted
     }
   },

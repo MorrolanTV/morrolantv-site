@@ -206,30 +206,18 @@ export default {
       'nodes',
       'groupStatsUpdated',
       'groupProfitsUpdated',
-      'nodesCalculated',
+      'nodeGroupsCalculated',
       'linkingActive',
       'linkSelected',
     ]),
   },
   watch: {
-    // Calculating values for groups needs established profitsCP
-    // This runs after first mound which calculats all group
-    // Function just summs up all profits from group links
-    nodesCalculated() {
-      let profGrp = 0
+    nodeGroupsCalculated() {
       if (this.group) {
-        for (const id of this.group.links) {
-          profGrp += this.profitList.get(id).profit
-        }
+        this.profitGroup = this.nodes.get(this.id).groupProfit
+          ? this.nodes.get(this.id).groupProfit
+          : 0
       }
-      this.$store.commit('LINK_CALCULATED', {
-        id: this.id,
-        data: {
-          profitGroup: profGrp,
-          profit: this.profit,
-          profitCP: (this.profit + profGrp) / this.cp,
-        },
-      })
       this.applyFormWatchers()
     },
     groupStatsUpdated() {
@@ -293,6 +281,7 @@ export default {
       this.$store.commit('SET_NODE_PROFIT', {
         id: this.id,
         data: {
+          cp: this.cp,
           profit: this.profit,
           profitCP: this.profitCP,
         },
