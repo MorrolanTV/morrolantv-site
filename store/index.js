@@ -48,7 +48,8 @@ export const state = () => ({
   profitsUpdated: 1, // Used to trigger reactivity for maps
   groupStatsUpdated: 1,
   groupProfitsUpdated: 1,
-  groupsCalculated: 1,
+  groupsToCalculate: [],
+  groupsRecalculated: 0,
   linkingActive: false,
   linkOrigin: null,
   linkTarget: null,
@@ -148,8 +149,22 @@ export const mutations = {
       state.nodeGroupsCalculated = true
     }
   },
-  PROFITS_UPDATED: (state) => {
-    state.profitsUpdated += 1
+  GROUP_NODE_RECALCUATED: (state, payload) => {
+    if (state.groupsToCalculate.includes(payload)) state.groupsRecalculated += 1
+    if (state.groupsRecalculated === state.groupsToCalculate.length) {
+      for (const linkID of state.groupsToCalculate) {
+        let profGrp = 0
+        for (const id of JSON.parse(state.nodes.get(linkID).group).links) {
+          profGrp += state.profitList.get(id).profit
+        }
+        state.nodes.get(linkID).groupProfit = profGrp
+        const nodeProfit = state.profitList.get(linkID)
+        nodeProfit.profitCP = (nodeProfit.profit + profGrp) / nodeProfit.cp
+      }
+      state.groupsRecalculated = 0
+      state.groupsToCalculate = []
+      state.groupProfitsUpdated += 1
+    }
   },
   UPDATE_NODE(state, { id, data }) {
     const node = state.nodes.get(id)
@@ -161,12 +176,14 @@ export const mutations = {
     if (data.updateLinks) {
       // Update cp acress all groups
       // Find all groups of updated node
-      for (const id of data.group.links) {
+      state.groupsToCalculate = data.group.links
+      state.nodes.get(id).groupCP = data.groupCP
+      for (const lid of data.group.links) {
         let cpGrp = 0
-        const linknode = state.nodes.get(id)
+        const linknode = state.nodes.get(lid)
         if (linknode.group) {
           // For all iter groups, gather all cp from iter group
-          for (const linkID of linknode.group.links) {
+          for (const linkID of JSON.parse(linknode.group).links) {
             const node = state.nodes.get(linkID)
             cpGrp += node.contribution
             cpGrp += node.cpAdd
@@ -176,6 +193,9 @@ export const mutations = {
       }
       state.groupStatsUpdated += 1
     }
+  },
+  PROFITS_UPDATED: (state) => {
+    state.profitsUpdated += 1
   },
   TOGGLE_LINKING(state, status) {
     state.linkingActive = status

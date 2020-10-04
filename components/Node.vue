@@ -226,6 +226,7 @@ export default {
           ? this.nodes.get(this.id).groupCP
           : 0
         this.calculate()
+        this.$store.commit('GROUP_NODE_RECALCUATED', this.id)
       }
     },
     groupProfitsUpdated() {
@@ -430,6 +431,7 @@ export default {
           movespeed: this.moveSpeed,
           lodging: this.home,
           group: this.group,
+          groupCP: this.cpGroup,
           updateLinks: !!this.group,
         },
       })
