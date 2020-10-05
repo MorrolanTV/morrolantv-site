@@ -214,9 +214,12 @@ export default {
       'nodes',
       'groupStatsUpdated',
       'groupProfitsUpdated',
+      'groupDeleteUpdated',
       'groupGotUpdate',
+      'groupGotDeleted',
       'nodeGroupsCalculated',
       'linkingActive',
+      'unlinkingActive',
       'linkSelected',
     ]),
   },
@@ -245,6 +248,13 @@ export default {
         this.profitGroup = this.nodes.get(this.id).groupProfit
           ? this.nodes.get(this.id).groupProfit
           : 0
+      }
+    },
+    groupDeleteUpdated() {
+      if (this.groupGotDeleted.includes(this.id)) {
+        this.group = null
+        this.cpGroup = 0
+        this.profitGroup = 0
       }
     },
   },
@@ -333,9 +343,8 @@ export default {
       }
     },
     handleLink() {
-      if (this.linkingActive) {
-        this.$store.commit('NODE_LINK', this.id)
-      }
+      if (this.linkingActive) this.$store.commit('NODE_LINK', this.id)
+      if (this.unlinkingActive) this.$store.commit('NODE_UNLINK', this.id)
     },
     getCodexImage(image) {
       return 'https://bdocodex.com/' + image
@@ -453,7 +462,7 @@ export default {
       this.$emit('recalculated')
     },
     openForm() {
-      if (!this.linkingActive) {
+      if (!this.linkingActive && !this.unlinkingActive) {
         this.edit = !this.edit
       }
     },

@@ -81,7 +81,6 @@
                 {{ timeUpdated }}
               </h5>
             </div>
-
             <div
               class="nodecalc-filter-wrapper is-flex align-center justify-between mb-3"
             >
@@ -103,7 +102,7 @@
                 <client-only>
                   <button
                     v-if="$auth.loggedIn"
-                    class="button is-primary save"
+                    class="button is-primary save functional"
                     :class="{ enabled: saving }"
                     @click="saveNodes()"
                   >
@@ -111,11 +110,29 @@
                   </button>
                 </client-only>
                 <button
-                  class="button is-primary"
+                  v-if="!nodesError"
+                  class="button is-primary functional"
                   :class="{ enabled: linkingActive }"
                   @click="handleLinking()"
                 >
-                  {{ linkingActive ? 'Stop' : 'Edit links' }}
+                  {{ linkingActive ? 'Stop' : 'Add links' }}
+                </button>
+                <button
+                  v-else
+                  class="button is-primary functional"
+                  :data-tooltip="nodesError"
+                  :class="{ enabled: linkingActive }"
+                  @click="handleLinking()"
+                >
+                  {{ linkingActive ? 'Stop' : 'Add links' }}
+                </button>
+                <button
+                  class="button is-primary functional"
+                  data-tooltip="Unlink - Click either one of a group node"
+                  :class="{ enabled: unlinkingActive }"
+                  @click="handleUnlink()"
+                >
+                  {{ unlinkingActive ? 'Abort' : 'Unlink' }}
                 </button>
                 <button class="button is-primary" @click="updateList()">
                   Re-Sort
@@ -236,11 +253,13 @@ export default {
     ...mapGetters(['getNodesByProfit', 'getNodesUnsorted', 'getChangedNodes']),
     ...mapState([
       'workers',
+      'nodesError',
       'nodesCalculated',
       'nodeGroupsCalculated',
       'profitsUpdated',
       'nodeUserListLoaded',
       'linkingActive',
+      'unlinkingActive',
     ]),
   },
   /* activated() {
@@ -283,6 +302,9 @@ export default {
     },
     handleLinking() {
       this.$store.commit('TOGGLE_LINKING', !this.linkingActive)
+    },
+    handleUnlink() {
+      this.$store.commit('TOGGLE_UNLINKING', !this.unlinkingActive)
     },
     async saveNodes() {
       this.saving = true
@@ -352,12 +374,6 @@ export default {
         filter: grayscale(100%);
       }
     }
-  }
-}
-button {
-  transition: 0.2s;
-  &.enabled {
-    background: $yellow;
   }
 }
 .region-filter {

@@ -40,6 +40,7 @@ export const state = () => ({
       path: '/tools/nodes',
     },
   ],
+  nodesError: '',
   nodesCalculated: false, // To notify parent when ready to sort by profit
   nodeGroupsCalculated: false,
   nodeUserListLoaded: false, // If user node list loaded, switch to default after logout
@@ -48,12 +49,16 @@ export const state = () => ({
   profitsUpdated: 1, // Used to trigger reactivity for maps
   groupStatsUpdated: 1,
   groupProfitsUpdated: 1,
+  groupDeleteUpdated: 1,
   groupGotUpdate: [],
+  groupGotDeleted: [],
   groupsToCalculate: [],
   groupsRecalculated: 0,
   linkingActive: false,
+  unlinkingActive: false,
   linkOrigin: null,
   linkTarget: null,
+  linkLatestID: 0,
   workers: [
     {
       id: 0,
@@ -140,7 +145,9 @@ export const mutations = {
       )
       for (const node of groupNodes) {
         let profGrp = 0
-        for (const id of JSON.parse(node.group).links) {
+        const g = JSON.parse(node.group)
+        if (g.id > state.linkLatestID) state.linkLatestID = g.id
+        for (const id of g.links) {
           profGrp += state.profitList.get(id).profit
         }
         state.nodes.get(node.id).groupProfit = profGrp
@@ -205,6 +212,11 @@ export const mutations = {
   },
   TOGGLE_LINKING(state, status) {
     state.linkingActive = status
+    if (status) state.unlinkingActive = false
+  },
+  TOGGLE_UNLINKING(state, status) {
+    state.unlinkingActive = status
+    if (status) state.linkingActive = false
   },
   NODE_LINK(state, id) {
     if (!state.linkOrigin) state.linkOrigin = id
@@ -213,13 +225,14 @@ export const mutations = {
       const origNode = state.nodes.get(state.linkOrigin)
       const targNode = state.nodes.get(state.linkTarget)
       if (!origNode.group) {
+        if (!targNode.group) state.linkLatestID += 1
         // Build groups
         const origGrp = targNode.group
           ? JSON.parse(targNode.group)
-          : { id: 3, links: [] }
+          : { id: state.linkLatestID, links: [] }
         const trgGroup = targNode.group
           ? JSON.parse(targNode.group)
-          : { id: 3, links: [] }
+          : { id: state.linkLatestID, links: [] }
         origGrp.links = [state.linkTarget, ...origGrp.links]
         trgGroup.links = [state.linkOrigin, ...trgGroup.links]
 
@@ -243,10 +256,39 @@ export const mutations = {
         state.groupsRecalculated = 0
         state.groupGotUpdate = combined
         state.groupsToCalculate = combined
+        state.groupStatsUpdated += 1
+      } else {
+        state.nodesError = 'Press first on unlinked nodes'
+        state.linkingActive = false
       }
       state.linkOrigin = null
       state.linkTarget = null
+    }
+  },
+  NODE_UNLINK(state, id) {
+    if (state.nodes.get(id).group) {
+      const group = JSON.parse(state.nodes.get(id).group)
+      // Remove id from all linked groups
+      for (const lid of group.links) {
+        const linkgroup = JSON.parse(state.nodes.get(lid).group)
+        const newLinks = linkgroup.links.filter((x) => x !== id)
+        if (newLinks.length > 0) {
+          linkgroup.links = newLinks
+          state.groupGotUpdate = [lid, ...state.groupGotUpdate]
+          state.groupsToCalculate = [lid, ...state.groupsToCalculate]
+        } else {
+          // Remove complete group
+          state.nodes.get(lid).group = null
+          state.groupGotDeleted = [lid, ...state.groupGotDeleted]
+        }
+      }
+      // Remove group from clicked node
+      state.nodes.get(id).group = null
+      state.groupGotDeleted = [id, ...state.groupGotDeleted]
+
+      state.groupsRecalculated = 0
       state.groupStatsUpdated += 1
+      state.groupDeleteUpdated += 1
     }
   },
   SET_RECIPE_TREE: (state, payload) => {

@@ -124,12 +124,21 @@
 }
 
 button {
+  transition: 0.2s;
   &.is-secondary {
     &:focus,
     &:active {
       color: $link;
       outline: 0;
       border-color: #dbdbdb;
+    }
+  }
+  &.is-primary {
+    &.enabled {
+      background: $yellow;
+    }
+    &.functional:hover {
+      background: $yellow !important;
     }
   }
 }
