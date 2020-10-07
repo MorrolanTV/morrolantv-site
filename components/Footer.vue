@@ -6,24 +6,24 @@
           <h6 class="subtitle is-6">Socials</h6>
           <div class="is-flex footer-social-icons">
             <div class="mr-5">
-              <a>
+              <a href="https://www.twitch.tv/morrolantv">
                 <fa :icon="['fab', 'twitch']" /><span class="ml-2"
                   >Twitch</span
                 ></a
               >
-              <a>
+              <a href="https://discord.gg/morrolantv">
                 <fa :icon="['fab', 'discord']" /><span class="ml-2"
                   >Discord</span
                 ></a
               >
             </div>
             <div>
-              <a>
+              <a href="https://youtube.com/morrolantv">
                 <fa :icon="['fab', 'youtube']" /><span class="ml-2"
                   >YouTube</span
                 ></a
               >
-              <a>
+              <a href="https://twitter.com/Morrolantv">
                 <fa :icon="['fab', 'twitter']" /><span class="ml-2"
                   >Twitter</span
                 ></a
@@ -38,9 +38,7 @@
         </div>
         <div class="footer-col column">
           <h6 class="subtitle is-6">Legal</h6>
-          <a>Terms of Use</a>
-          <a>Cookies</a>
-          <a>Privacy</a>
+          <nuxt-link to="/legal/terms">Policy</nuxt-link>
         </div>
         <div class="footer-col column">
           <h6 class="subtitle is-6">Information</h6>

@@ -98,7 +98,62 @@
                   <img :src="generateRegionImage(region)" class="region-img" />
                 </div>
               </div>
-              <div class="sort-options">
+              <div class="sort-options is-flex align-center">
+                <div class="buttons has-addons mb-0 mr-2">
+                  <button
+                    class="button mb-0"
+                    :class="
+                      playerRegion === 'NA' ? 'is-selected is-warning' : ''
+                    "
+                    @click="setMarketRegion('NA')"
+                  >
+                    NA
+                  </button>
+                  <button
+                    class="button mb-0"
+                    :class="
+                      playerRegion === 'EU' ? 'is-selected is-warning' : ''
+                    "
+                    @click="setMarketRegion('EU')"
+                  >
+                    EU
+                  </button>
+                </div>
+                <h4 v-if="linkingActive" class="is-6 mr-3">
+                  <span v-if="!linkOrigin">Select ungrouped node</span>
+                  <span v-if="linkOrigin && !linkTarget"
+                    >Select second node</span
+                  >
+                  <span></span>
+                </h4>
+                <button
+                  v-if="!nodesError"
+                  class="button is-primary functional mr-2"
+                  :class="{ enabled: linkingActive }"
+                  @click="handleLinking()"
+                >
+                  {{ linkingActive ? 'Stop' : 'Add links' }}
+                </button>
+                <button
+                  v-else
+                  class="button is-primary functional mr-2"
+                  :data-tooltip="nodesError"
+                  :class="{ enabled: linkingActive }"
+                  @click="handleLinking()"
+                >
+                  {{ linkingActive ? 'Stop' : 'Add links' }}
+                </button>
+                <button
+                  class="button is-primary functional mr-2"
+                  data-tooltip="Unlink - Click either one of a group node"
+                  :class="{ enabled: unlinkingActive }"
+                  @click="handleUnlink()"
+                >
+                  {{ unlinkingActive ? 'Abort' : 'Unlink' }}
+                </button>
+                <button class="button is-primary" @click="updateList()">
+                  Re-Sort
+                </button>
                 <client-only>
                   <button
                     v-if="$auth.loggedIn"
@@ -109,34 +164,6 @@
                     {{ saving ? 'Saving..' : 'Save' }}
                   </button>
                 </client-only>
-                <button
-                  v-if="!nodesError"
-                  class="button is-primary functional"
-                  :class="{ enabled: linkingActive }"
-                  @click="handleLinking()"
-                >
-                  {{ linkingActive ? 'Stop' : 'Add links' }}
-                </button>
-                <button
-                  v-else
-                  class="button is-primary functional"
-                  :data-tooltip="nodesError"
-                  :class="{ enabled: linkingActive }"
-                  @click="handleLinking()"
-                >
-                  {{ linkingActive ? 'Stop' : 'Add links' }}
-                </button>
-                <button
-                  class="button is-primary functional"
-                  data-tooltip="Unlink - Click either one of a group node"
-                  :class="{ enabled: unlinkingActive }"
-                  @click="handleUnlink()"
-                >
-                  {{ unlinkingActive ? 'Abort' : 'Unlink' }}
-                </button>
-                <button class="button is-primary" @click="updateList()">
-                  Re-Sort
-                </button>
               </div>
             </div>
             <div v-show="nodeGroupsCalculated" class="nodecalc-list columns">
@@ -252,6 +279,7 @@ export default {
     },
     ...mapGetters(['getNodesByProfit', 'getNodesUnsorted', 'getChangedNodes']),
     ...mapState([
+      'playerRegion',
       'workers',
       'nodesError',
       'nodesCalculated',
@@ -260,6 +288,8 @@ export default {
       'nodeUserListLoaded',
       'linkingActive',
       'unlinkingActive',
+      'linkOrigin',
+      'linkTarget',
     ]),
   },
   /* activated() {
@@ -284,6 +314,9 @@ export default {
     },
     updateList() {
       this.$store.commit('PROFITS_UPDATED')
+    },
+    setMarketRegion(r) {
+      this.$store.commit('SET_MARKET_REGION', r)
     },
     updateListAuto() {
       if (this.autoUpdate) {

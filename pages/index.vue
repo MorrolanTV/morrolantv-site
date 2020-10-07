@@ -37,7 +37,7 @@
           </h1>
           <h6 v-if="!twitchState.live" class="subtitle is-6">
             <a href="#highlight"
-              >While you wait, check out the video collection
+              >Not live?, check out the video collection
               <fa :icon="['fas', 'chevron-right']"
             /></a>
           </h6>
@@ -92,7 +92,7 @@
         </h1>
         <h6 v-if="!twitchState.live" class="subtitle is-6">
           <a href="#highlight"
-            >While you wait, check out the video collection
+            >Not live?, check out the video collection
             <fa :icon="['fas', 'chevron-right']"
           /></a>
         </h6>
@@ -106,10 +106,10 @@
 <script>
 export default {
   data() {
-    return { heroimg: 'background', twitchState: {} }
+    return { heroimg: 'background', twitchState: { live: false } }
   },
   // eslint-disable-next-line vue/order-in-components
-  asyncData({ $axios }) {
+  /* asyncData({ $axios }) {
     let base = 'http://localhost:8888'
     if (process.env.NODE_ENV === 'production')
       base = 'https://eloquent-keller-9336f4.netlify.app'
@@ -122,12 +122,12 @@ export default {
         const data = { live: false }
         return { twitchState: data }
       })
-  },
+  }, */
   computed: {
     streamMessage() {
       return this.twitchState.live
         ? 'MorrolanTV is live on Twitch'
-        : 'MorrolanTV is currently not streaming'
+        : 'MorrolanTV on Twitch'
     },
   },
 }

@@ -20,7 +20,7 @@
         </p>
         <p>
           - As a logged in user you can save
-          <nuxt-link to="/tools">RECIPES</nuxt-link> in your cookbok.
+          <nuxt-link to="/tools">RECIPES</nuxt-link> in your cookbook.
         </p>
       </div>
     </section>

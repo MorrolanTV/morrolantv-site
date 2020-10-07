@@ -54,6 +54,7 @@ export const state = () => ({
   groupGotDeleted: [],
   groupsToCalculate: [],
   groupsRecalculated: 0,
+  nodesRecalculated: 0,
   linkingActive: false,
   unlinkingActive: false,
   linkOrigin: null,
@@ -123,6 +124,10 @@ export const mutations = {
   CLEAR_REDIRECT_URL: (state) => {
     state.redirectUrl = ''
   },
+  SET_MARKET_REGION: (state, payload) => {
+    state.nodesRecalculated = 0
+    state.playerRegion = payload
+  },
   SET_NODES: (state, payload) => {
     state.nodes = new Map(payload.map((node) => [node.id, node]))
   },
@@ -138,6 +143,14 @@ export const mutations = {
   SET_NODE_PROFIT: (state, { id, data }) => {
     state.profitList.set(id, data)
     state.nodesCalculated = state.profitList.size === state.nodes.size
+
+    if (state.nodesCalculated) {
+      state.nodesRecalculated += 1
+      if (state.nodesRecalculated === state.nodes.size) {
+        state.profitsUpdated += 1
+        state.nodesRecalculated = 0
+      }
+    }
     // Perform initial summ up of all groups
     if (state.nodesCalculated && !state.nodeGroupsCalculated) {
       const groupNodes = Array.from([...state.nodes.values()]).filter(
@@ -212,10 +225,14 @@ export const mutations = {
   },
   TOGGLE_LINKING(state, status) {
     state.linkingActive = status
+    state.linkOrigin = null
+    state.linkTarget = null
     if (status) state.unlinkingActive = false
   },
   TOGGLE_UNLINKING(state, status) {
     state.unlinkingActive = status
+    state.linkOrigin = null
+    state.linkTarget = null
     if (status) state.linkingActive = false
   },
   NODE_LINK(state, id) {
@@ -246,7 +263,17 @@ export const mutations = {
         // Combine cp for all nodes in linked group
         for (const lid of combined) {
           let profCP = 0
-          for (const gid of JSON.parse(state.nodes.get(lid).group).links) {
+          const linkgroup = JSON.parse(state.nodes.get(lid).group)
+
+          if (lid !== state.linkOrigin && linkgroup.links) {
+            // Set newly selected origin node id in all non clicked but in group nodes
+            if (!linkgroup.links.includes(state.linkOrigin)) {
+              linkgroup.links = [state.linkOrigin, ...linkgroup.links]
+            }
+            state.nodes.get(lid).group = JSON.stringify(linkgroup)
+          }
+
+          for (const gid of linkgroup.links) {
             // New group will contain node itself. Dont add these stats to groupCP
             profCP += gid !== lid ? state.nodes.get(gid).contribution : 0
             profCP += gid !== lid ? state.nodes.get(gid).cpAdd : 0

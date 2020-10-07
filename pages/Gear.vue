@@ -108,6 +108,7 @@
           </div>
         </div>
       </section>
+      <!-- WIP
       <section class="section content lighter last">
         <div class="container gear-container">
           <div class="gear-section">
@@ -126,7 +127,7 @@
             <p>Insert horse, boat and knowledge image</p>
           </div>
         </div>
-      </section>
+      </section> -->
     </main>
   </div>
 </template>

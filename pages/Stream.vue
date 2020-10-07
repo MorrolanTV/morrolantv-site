@@ -107,7 +107,11 @@
           </div>
           <div class="leaderboards column is-third">
             <h3 class="title is-5">SUBS</h3>
-            <div v-if="subsLoading" class="loader"></div>
+            <p>
+              Subs will be displayed as soon as StreamElements has implemented
+              this feature into their api :)
+            </p>
+            <!--<div v-if="subsLoading" class="loader"></div>
             <div v-else>
               <div class="user-list">
                 <div
@@ -121,7 +125,7 @@
                   >
                 </div>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
       </div>

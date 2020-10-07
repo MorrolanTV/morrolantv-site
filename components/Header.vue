@@ -25,6 +25,9 @@
     </div>
     <div class="navbar-menu">
       <div class="nav-items navbar-brand">
+        <nuxt-link to="/beta" class="nav-item" @click.native="closeMenu()"
+          >BETA / README</nuxt-link
+        >
         <nuxt-link to="/" class="nav-item" @click.native="closeMenu()"
           >Home</nuxt-link
         >
