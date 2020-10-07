@@ -241,6 +241,8 @@ export const mutations = {
     if (state.linkOrigin && state.linkTarget) {
       const origNode = state.nodes.get(state.linkOrigin)
       const targNode = state.nodes.get(state.linkTarget)
+      targNode.changed = true
+      origNode.changed = true
       if (!origNode.group) {
         if (!targNode.group) state.linkLatestID += 1
         // Build groups
@@ -306,11 +308,13 @@ export const mutations = {
         } else {
           // Remove complete group
           state.nodes.get(lid).group = null
+          state.nodes.get(lid).changed = true
           state.groupGotDeleted = [lid, ...state.groupGotDeleted]
         }
       }
       // Remove group from clicked node
       state.nodes.get(id).group = null
+      state.nodes.get(id).changed = true
       state.groupGotDeleted = [id, ...state.groupGotDeleted]
 
       state.groupsRecalculated = 0
