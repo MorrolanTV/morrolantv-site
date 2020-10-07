@@ -65,10 +65,20 @@
                   <strong>Movespeed:</strong> Fine tune your workers movespeed
                   with this value.
                 </li>
-                <li class="mb-1">
+                <li class="mb-3">
                   <strong>Linking:</strong> You can combine two nodes in a group
                   via "Add links". That way you can get more accurate profit/cp
                   for node chains.
+                </li>
+                <li class="mb-1">
+                  <strong>Materials:</strong> If you hover over materials the
+                  tool will inform you if the material is considered "<strong
+                    data-tooltip="n>10000 are listed at minprice. Not inclued in profit"
+                    >flooded</strong
+                  >" or "<strong
+                    data-tooltip="only orders at max price are present"
+                    >maxed</strong
+                  >" on the market.
                 </li>
               </ul>
               <client-only>
