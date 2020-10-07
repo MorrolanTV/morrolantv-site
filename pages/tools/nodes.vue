@@ -73,7 +73,8 @@
               </ul>
               <client-only>
                 <p v-if="!$auth.loggedIn" class="mt-3" @click="loginNodes()">
-                  <a class="link-light">Login</a> to save your edits.
+                  <a class="link-light">Login</a> to save your edits. SAVES WILL
+                  MOST LIKELY BE RESET AFTER BETA.
                 </p>
               </client-only>
             </div>
