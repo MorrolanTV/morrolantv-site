@@ -18,10 +18,6 @@
           <nuxt-link to="/tools/nodes">NODES</nuxt-link> and save them to your
           profile.
         </p>
-        <p>
-          - As a logged in user you can save
-          <nuxt-link to="/tools">RECIPES</nuxt-link> in your cookbook.
-        </p>
       </div>
     </section>
   </main>

@@ -65,6 +65,11 @@
                   <strong>Movespeed:</strong> Fine tune your workers movespeed
                   with this value.
                 </li>
+                <li class="mb-1">
+                  <strong>Linking:</strong> You can combine two nodes in a group
+                  via "Add links". That way you can get more accurate profit/cp
+                  for node chains.
+                </li>
               </ul>
               <client-only>
                 <p v-if="!$auth.loggedIn" class="mt-3" @click="loginNodes()">
@@ -151,7 +156,7 @@
                 >
                   {{ unlinkingActive ? 'Abort' : 'Unlink' }}
                 </button>
-                <button class="button is-primary" @click="updateList()">
+                <button class="button is-primary mr-2" @click="updateList()">
                   Re-Sort
                 </button>
                 <client-only>
@@ -343,7 +348,7 @@ export default {
       this.saving = true
       await this.$axios
         .$post('/user/userNodes', {
-          nodes: JSON.stringify([...this.getChangedNodes]),
+          nodes: [...this.getChangedNodes],
           headers: {
             Authorization: this.$auth.getToken('auth0'),
           },

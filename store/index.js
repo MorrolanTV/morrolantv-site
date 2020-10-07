@@ -6,10 +6,10 @@ export const state = () => ({
     {
       name: 'Cooking Calculator',
       gname: 'Black Desert Online',
-      // WIP Learn what recepies are best to cook
+      // WIP Learn what recipes are best to cook
       desc: 'Coming soon',
       long:
-        'Cooking can be a great active lifeskill to gain both CP and silver at the same time. With this calculator you can quickly figure out what profits to expect from recepies.',
+        'Cooking can be a great active lifeskill to gain both CP and silver at the same time. With this calculator you can quickly figure out what profits to expect from recipes.',
       image: 'cooking',
       path: '/',
     },
