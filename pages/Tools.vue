@@ -1,25 +1,5 @@
 <template>
   <main>
-    <!--<section class="hero subpage w-100">
-      <div class="image-wrapper">
-        <picture>
-          <source
-            :srcset="require(`~/assets/img/webp/${heroimg}.webp`)"
-            type="image/webp"
-          />
-          <source
-            :srcset="require(`~/assets/img/webp/${heroimg}.jpg`)"
-            type="image/jpeg"
-          />
-          <img
-            class="image"
-            :src="require(`~/assets/img/webp/${heroimg}.jpg`)"
-            style="top: -100%"
-            alt="Alt Text!"
-          />
-        </picture>
-      </div>
-    </section>-->
     <section class="section no-hero">
       <div class="container">
         <h1 class="title is-1">Black Desert Online Tools</h1>

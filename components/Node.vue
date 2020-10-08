@@ -4,13 +4,7 @@
     :class="group ? `grouped group-${group.id}` : ''"
     @click="handleLink"
   >
-    <div
-      class="node-header"
-      :style="{
-        'background-image': `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(${image})`,
-      }"
-      @click="openForm()"
-    >
+    <div class="node-header" :style="backgroundStyle" @click="openForm()">
       <div class="node-header-left is-flex align-center">
         <h5 class="node-name mr-2">{{ name }}</h5>
         <div class="material-list is-flex">
@@ -209,6 +203,14 @@ export default {
     },
     cp() {
       return this.cpLocal + this.cpInput + this.cpGroup
+    },
+    backgroundStyle() {
+      if (this.image) {
+        return {
+          'background-image': `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url(${this.image})`,
+        }
+      }
+      return {}
     },
     ...mapState([
       'workers',
