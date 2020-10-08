@@ -314,6 +314,7 @@ export const mutations = {
         const newLinks = linkgroup.links.filter((x) => x !== id)
         if (newLinks.length > 0) {
           linkgroup.links = newLinks
+          state.nodes.get(lid).group = JSON.stringify(linkgroup)
           state.groupGotUpdate = [lid, ...state.groupGotUpdate]
           state.groupsToCalculate = [lid, ...state.groupsToCalculate]
         } else {
