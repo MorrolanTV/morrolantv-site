@@ -324,6 +324,21 @@ export const mutations = {
           state.groupGotDeleted = [lid, ...state.groupGotDeleted]
         }
       }
+      // Reset store cpGroup
+      for (const gid of state.groupGotUpdate) {
+        let cpGrp = 0
+        const linknode = state.nodes.get(gid)
+        if (linknode.group) {
+          // For all iter groups, gather all cp from iter group
+          for (const linkID of JSON.parse(linknode.group).links) {
+            const node = state.nodes.get(linkID)
+            cpGrp += node.contribution
+            cpGrp += node.cpAdd
+          }
+          linknode.groupCP = cpGrp
+        }
+      }
+
       // Remove group from clicked node
       state.nodes.get(id).group = null
       state.nodes.get(id).changed = true
