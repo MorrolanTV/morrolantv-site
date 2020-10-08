@@ -50,6 +50,7 @@ export const state = () => ({
   groupStatsUpdated: 1,
   groupProfitsUpdated: 1,
   groupDeleteUpdated: 1,
+  customNodesUpdated: 1,
   groupGotUpdate: [],
   groupGotDeleted: [],
   groupsToCalculate: [],
@@ -198,6 +199,7 @@ export const mutations = {
     node.movespeed = data.movespeed
     node.lodging = data.lodging
     node.changed = true
+    state.customNodesUpdated += 1
     if (data.updateLinks) {
       // Update cp acress all groups
       // Find all groups of updated node
@@ -222,6 +224,9 @@ export const mutations = {
   },
   PROFITS_UPDATED: (state) => {
     state.profitsUpdated += 1
+  },
+  CUSTOM_UPDATED: (state) => {
+    state.customNodesUpdated += 1
   },
   TOGGLE_LINKING(state, status) {
     state.linkingActive = status
@@ -286,6 +291,7 @@ export const mutations = {
         state.groupGotUpdate = combined
         state.groupsToCalculate = combined
         state.groupStatsUpdated += 1
+        state.customNodesUpdated += 1
       } else {
         state.nodesError = 'Press first on unlinked nodes'
         state.linkingActive = false
@@ -320,6 +326,7 @@ export const mutations = {
       state.groupsRecalculated = 0
       state.groupStatsUpdated += 1
       state.groupDeleteUpdated += 1
+      state.customNodesUpdated += 1
     }
   },
   SET_RECIPE_TREE: (state, payload) => {
@@ -349,7 +356,8 @@ export const getters = {
     }
   },
   getChangedNodes: (state) => {
-    return Array.from([...state.nodes.values()]).filter((x) => x.changed)
+    const n = Array.from([...state.nodes.values()]).filter((x) => x.changed)
+    if (state.customNodesUpdated > 0) return n
   },
   getRecipes: (state) => {
     return state.recipes
