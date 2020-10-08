@@ -134,7 +134,9 @@ export const mutations = {
     state.nodes = new Map(payload.map((node) => [node.id, node]))
   },
   RESTORE_USERNODES: (state, payload) => {
-    state.updatedNodes = payload
+    payload.forEach((element) => {
+      state.nodes.set(element.id, element)
+    })
   },
   SET_SAVESTATE: (state, payload) => {
     state.saveState = payload

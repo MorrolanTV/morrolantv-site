@@ -248,6 +248,9 @@ export default {
       if (nodes) {
         this.$store.commit('SET_NODES', nodes)
       }
+      if (localStorage.getItem('usernodes')) {
+        this.restoreUsernodes()
+      }
     } else {
       // Fetch default node data
       const nodes = await this.$axios.$get('/nodes').then((res) => res)
@@ -323,11 +326,7 @@ export default {
     }
   }, */
   fetchOnServer: false,
-  mounted() {
-    if (localStorage.getItem('usernodes')) {
-      this.restoreUsernodes()
-    }
-  },
+  beforeMount() {},
   methods: {
     loginNodes() {
       this.$auth.loginWith('auth0')
@@ -382,14 +381,11 @@ export default {
         })
     },
     persistUsernodes() {
-      localStorage.setItem(
-        'usernodes',
-        JSON.stringify([...this.getChangedNodes])
-      )
+      localStorage.setItem('usernodes', JSON.stringify(this.getChangedNodes))
     },
     restoreUsernodes() {
       try {
-        const nodes = new Map(JSON.parse(localStorage.getItem('usernodes')))
+        const nodes = JSON.parse(localStorage.getItem('usernodes'))
         this.$store.commit('RESTORE_USERNODES', nodes)
       } catch (e) {
         localStorage.removeItem('usernodes')
