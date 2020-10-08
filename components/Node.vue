@@ -233,7 +233,6 @@ export default {
           ? this.nodes.get(this.id).groupProfit
           : 0
       }
-      this.applyFormWatchers()
     },
     groupStatsUpdated() {
       // Guard to not recalculate ALL groups
@@ -299,6 +298,7 @@ export default {
     this.moveSpeed =
       this.presetMovespeed > 0 ? this.presetMovespeed : this.worker.movement
     this.calculate()
+    this.applyFormWatchers()
   },
   methods: {
     calculate() {
