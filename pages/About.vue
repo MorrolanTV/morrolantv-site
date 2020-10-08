@@ -20,7 +20,7 @@
             /></a>
           </div>
           <div class="sponsor-element">
-            <a target="_blank" href="https://advanced.gg/ref/MORROLAN"
+            <a target="_blank" href="https://advanced.gg/?ref=MORROLANTV"
               ><img :src="require('~/assets/img/focus.jpg')"
             /></a>
           </div>

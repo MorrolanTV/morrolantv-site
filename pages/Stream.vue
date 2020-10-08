@@ -20,9 +20,9 @@
         <div class="stream-functions-wrapper is-flex">
           <div class="toggle-function-wrapper mr-3">
             <div class="chat-commands-toggle">
-              <button class="button is-secondary" @click="openCommands">
+              <!--<button class="button is-secondary" @click="openCommands">
                 Toggle chat commands
-              </button>
+              </button>-->
             </div>
             <div class="function-window" :class="{ isOpen: isOpen }">
               <ul>
@@ -51,11 +51,11 @@
             >
               <ul>
                 <li>Monday: No stream</li>
-                <li>Tuesday: Start - 1 PM</li>
-                <li>Wednesday: Start - 1 PM</li>
-                <li>Thursday: Start - 1 PM</li>
-                <li>Friday: Start - 1 PM</li>
-                <li>Saturday: Start - 1 PM</li>
+                <li>Tuesday: 1 PM PST</li>
+                <li>Wednesday: 1 PM PST</li>
+                <li>Thursday: 1 PM PST</li>
+                <li>Friday: 1 PM PST</li>
+                <li>Saturday: 1 PM PST</li>
                 <li>Sunday: No stream</li>
               </ul>
             </div>

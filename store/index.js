@@ -23,10 +23,10 @@ export const state = () => ({
       path: '/',
     },
     {
-      name: 'Horse Breeding',
+      name: 'Processing Calculator',
       gname: 'Black Desert Online',
       desc: 'Coming soon',
-      long: 'Find out how expensive your new horse is going to be',
+      long: 'See what items are the most profitable to process.',
       image: 'horse',
       path: '/',
     },
@@ -48,6 +48,7 @@ export const state = () => ({
   profitList: new Map(), // Sort Map for sort functions, hold id and profit
   profitsUpdated: 1, // Used to trigger reactivity for maps
   groupStatsUpdated: 1,
+  saveState: true,
   groupProfitsUpdated: 1,
   groupDeleteUpdated: 1,
   customNodesUpdated: 1,
@@ -135,6 +136,9 @@ export const mutations = {
   RESTORE_USERNODES: (state, payload) => {
     state.updatedNodes = payload
   },
+  SET_SAVESTATE: (state, payload) => {
+    state.saveState = payload
+  },
   SET_USER_NODELIST: (state) => {
     state.nodeUserListLoaded = true
   },
@@ -199,6 +203,7 @@ export const mutations = {
     node.movespeed = data.movespeed
     node.lodging = data.lodging
     node.changed = true
+    state.saveState = false
     state.customNodesUpdated += 1
     if (data.updateLinks) {
       // Update cp acress all groups

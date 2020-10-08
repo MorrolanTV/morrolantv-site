@@ -114,6 +114,9 @@
                   <img :src="generateRegionImage(region)" class="region-img" />
                 </div>
               </div>
+              <div v-if="!saveState">
+                <p>Unsaved changes! Hit Save before reloading.</p>
+              </div>
               <div class="sort-options is-flex align-center">
                 <div class="buttons has-addons mb-0 mr-2">
                   <button
@@ -296,6 +299,7 @@ export default {
     ...mapGetters(['getNodesByProfit', 'getNodesUnsorted', 'getChangedNodes']),
     ...mapState([
       'playerRegion',
+      'saveState',
       'workers',
       'nodesError',
       'nodesCalculated',
@@ -367,6 +371,7 @@ export default {
         .then(() => {
           if (this.hasBackup) localStorage.removeItem('usernodes')
           this.saving = false
+          this.$store.commit('SET_SAVESTATE', true)
         })
         .catch(() => {
           this.saving = false
@@ -428,10 +433,17 @@ export default {
 .region-filter {
   cursor: pointer;
 }
+@media (max-width: 1535px) {
+  .node-wrapper.column.is-one-third {
+    width: 50%;
+  }
+}
 </style>
 <style lang="scss">
 $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
-  #c5be59, #a31a5f #4fce99, #5081af, #b93daf, #e0925d, #2d9299 #9b3535;
+  #c5be59, #a31a5f #4fce99, #5081af, #b93daf, #e0925d, #2d9299 #9b3535, white,
+  $blue, $red, $yellow, $purple, #57889b, #a14a64, #c5be59, #a31a5f #4fce99,
+  #5081af, #b93daf, #e0925d, #2d9299 #9b3535;
 .node-wrapper.grouped {
   border: 2px solid;
   @for $i from 1 through length($nodelinks-colors) {

@@ -73,8 +73,7 @@
             >
               <div class="itemimg-wrapper mr-2">
                 <img :src="baseImgUrl + '/images/gear/Weapon.PNG'" />
-                <p>Stacks: {{ getItemInfo('Weapon').stacks }}</p>
-                <p>Attempts: {{ getItemInfo('Weapon').attempts }}</p>
+                <p>Purchased for 100B</p>
               </div>
               <div class="itemimg-wrapper mr-2">
                 <img :src="baseImgUrl + '/images/gear/Awaken.PNG'" />
@@ -89,7 +88,7 @@
             </div>
           </div>
           <div class="gear-section">
-            <div class="values-wrapper">
+            <!--<div class="values-wrapper">
               <div
                 v-for="(value, index) of valueList"
                 :key="value.name"
@@ -104,7 +103,7 @@
                   />
                 </span>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
       </section>

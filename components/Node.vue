@@ -331,16 +331,16 @@ export default {
       const minutesPerTask = total / 60
       const cyclesPerDay = this.calculateCycles(24, minutesPerTask, stamina)
         .total
-      const priceReduce = (a, mat) => {
-        if (this.materialFlooded(mat)) return a + 0
-        return (
-          a +
-          cyclesPerDay *
+      let p = 0
+      for (const mat of this.materials) {
+        if (!this.materialFlooded(mat)) {
+          p +=
+            cyclesPerDay *
             ((mat.NodeMaterial.yield + (luck / 100) * mat.NodeMaterial.luck) *
               this.getItemPrice(mat))
-        )
+        }
       }
-      const profit = Math.floor(this.materials.reduce(priceReduce, 0))
+      const profit = Math.floor(p)
       return {
         timeWorking,
         timeTravelling,

@@ -33,8 +33,8 @@
         </div>
         <div class="footer-col column">
           <h6 class="subtitle is-6">Contact</h6>
-          <p>contact@morrolan.tv</p>
-          <p>MorrolanTV#1111</p>
+          <p>morrolantv@gmail.com</p>
+          <p>MorrolanTV#4686</p>
         </div>
         <div class="footer-col column">
           <h6 class="subtitle is-6">Legal</h6>
