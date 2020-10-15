@@ -328,7 +328,7 @@ export default {
       this.$store.commit('nodes/PROFITS_UPDATED')
     },
     setMarketRegion(r) {
-      this.$store.commit('nodes/SET_MARKET_REGION', r)
+      this.$store.commit('SET_MARKET_REGION', r)
     },
     updateListAuto() {
       if (this.autoUpdate) {

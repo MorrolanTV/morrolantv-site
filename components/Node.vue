@@ -12,7 +12,9 @@
             v-for="material in materials"
             :key="material.id"
             class="materialimg-wrapper"
+            :class="materialDisabled(material) ? 'disabled' : ''"
             :data-tooltip="materialTooltip(material)"
+            @click.stop="toggleMaterial(material.id)"
           >
             <img class="materialimg" :src="getCodexImage(material.icon)" />
             <div
@@ -226,6 +228,8 @@ export default {
       'linkingActive',
       'unlinkingActive',
       'linkSelected',
+      'disabledItemsUpdated',
+      'disabledItems',
     ]),
   },
   watch: {
@@ -261,7 +265,7 @@ export default {
         this.profitGroup = 0
       }
     },
-    playerRegion() {
+    disabledItemsUpdated() {
       this.calculate()
     },
   },
@@ -333,7 +337,7 @@ export default {
         .total
       let p = 0
       for (const mat of this.materials) {
-        if (!this.materialFlooded(mat)) {
+        if (!this.materialFlooded(mat) && !this.materialDisabled(mat)) {
           p +=
             cyclesPerDay *
             ((mat.NodeMaterial.yield + (luck / 100) * mat.NodeMaterial.luck) *
@@ -353,6 +357,9 @@ export default {
     handleLink() {
       if (this.linkingActive) this.$store.commit('nodes/NODE_LINK', this.id)
       if (this.unlinkingActive) this.$store.commit('nodes/NODE_UNLINK', this.id)
+    },
+    toggleMaterial(id) {
+      this.$store.commit('nodes/TOGGLE_MATERIAL', id)
     },
     getCodexImage(image) {
       return 'https://bdocodex.com/' + image
@@ -385,6 +392,9 @@ export default {
       return this.$store.state.playerRegion === 'NA'
         ? material.maxedNA
         : material.maxedEU
+    },
+    materialDisabled(material) {
+      return this.disabledItems.has(material.id)
     },
     getDistanceFromLodging() {
       return this.distances[this.home]
@@ -503,6 +513,9 @@ export default {
   }
   .materialimg-wrapper {
     position: relative;
+    &.disabled {
+      opacity: 0.2;
+    }
     &:last-child {
       margin-right: 10px;
     }

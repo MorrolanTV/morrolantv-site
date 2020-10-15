@@ -15,11 +15,14 @@ export const state = () => ({
   linkOrigin: null,
   linkTarget: null,
   linkLatestID: 0,
+  nodesAutosort: true,
   profitsUpdated: 1, // Used to trigger reactivity for maps
   groupStatsUpdated: 1, // Refresher for all node components after cp has changed
   groupProfitsUpdated: 1, // Refresher for sortlist
   groupDeleteUpdated: 1, // Refresher for component to delete self group
   customNodesUpdated: 1, // Refresher for changedNodesMap
+  disabledItems: new Set(),
+  disabledItemsUpdated: 1,
   workers: [
     {
       id: 0,
@@ -97,26 +100,15 @@ export const mutations = {
     if (state.nodesCalculated) {
       state.nodesRecalculated += 1
       if (state.nodesRecalculated === state.nodes.size) {
-        state.profitsUpdated += 1
+        if (state.nodesAutosort) state.profitsUpdated += 1
+        syncProfit(state)
         state.nodesRecalculated = 0
       }
     }
     // Perform initial summ up of all groups
     if (state.nodesCalculated && !state.nodeGroupsCalculated) {
-      const groupNodes = Array.from([...state.nodes.values()]).filter(
-        (x) => x.group
-      )
-      for (const node of groupNodes) {
-        let profGrp = 0
-        const g = JSON.parse(node.group)
-        if (g.id > state.linkLatestID) state.linkLatestID = g.id
-        for (const id of g.links) {
-          profGrp += state.profitList.get(id).profit
-        }
-        state.nodes.get(node.id).groupProfit = profGrp
-        const nodeProfit = state.profitList.get(node.id)
-        nodeProfit.profitCP = (nodeProfit.profit + profGrp) / nodeProfit.cp
-      }
+      state.nodesAutosort = false
+      syncProfit(state)
       state.nodeGroupsCalculated = true
     }
   },
@@ -280,6 +272,14 @@ export const mutations = {
   PROFITS_UPDATED: (state) => {
     state.profitsUpdated += 1
   },
+  TOGGLE_MATERIAL: (state, id) => {
+    if (state.disabledItems.has(id)) {
+      state.disabledItems.delete(id)
+    } else {
+      state.disabledItems.add(id)
+    }
+    state.disabledItemsUpdated += 1
+  },
 }
 
 export const getters = {
@@ -304,6 +304,23 @@ export const getters = {
     const n = Array.from([...state.nodes.values()]).filter((x) => x.changed)
     if (state.customNodesUpdated > 0) return n
   },
+}
+
+function syncProfit(state) {
+  const groupNodes = Array.from([...state.nodes.values()]).filter(
+    (x) => x.group
+  )
+  for (const node of groupNodes) {
+    let profGrp = 0
+    const g = JSON.parse(node.group)
+    if (g.id > state.linkLatestID) state.linkLatestID = g.id
+    for (const id of g.links) {
+      profGrp += state.profitList.get(id).profit
+    }
+    state.nodes.get(node.id).groupProfit = profGrp
+    const nodeProfit = state.profitList.get(node.id)
+    nodeProfit.profitCP = (nodeProfit.profit + profGrp) / nodeProfit.cp
+  }
 }
 
 function syncCP(state, grpElementIdList) {
