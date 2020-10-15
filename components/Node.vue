@@ -109,7 +109,8 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('nodes')
 export default {
   props: {
     id: {
@@ -225,7 +226,6 @@ export default {
       'linkingActive',
       'unlinkingActive',
       'linkSelected',
-      'playerRegion',
     ]),
   },
   watch: {
@@ -244,7 +244,7 @@ export default {
           ? this.nodes.get(this.id).groupCP
           : 0
         this.calculate()
-        this.$store.commit('GROUP_NODE_RECALCUATED', this.id)
+        this.$store.commit('nodes/GROUP_NODE_RECALCUATED', this.id)
       }
     },
     groupProfitsUpdated() {
@@ -312,7 +312,7 @@ export default {
       )
       this.profit = profit
       this.minutesPerTask = minutesPerTask
-      this.$store.commit('SET_NODE_PROFIT', {
+      this.$store.commit('nodes/SET_NODE_PROFIT', {
         id: this.id,
         data: {
           cp: this.cp,
@@ -351,8 +351,8 @@ export default {
       }
     },
     handleLink() {
-      if (this.linkingActive) this.$store.commit('NODE_LINK', this.id)
-      if (this.unlinkingActive) this.$store.commit('NODE_UNLINK', this.id)
+      if (this.linkingActive) this.$store.commit('nodes/NODE_LINK', this.id)
+      if (this.unlinkingActive) this.$store.commit('nodes/NODE_UNLINK', this.id)
     },
     getCodexImage(image) {
       return 'https://bdocodex.com/' + image
@@ -372,15 +372,19 @@ export default {
       return marketPrice || codexPrice
     },
     getLocalizedPrice(material) {
-      return this.playerRegion === 'NA' ? material.priceNA : material.priceEU
+      return this.$store.state.playerRegion === 'NA'
+        ? material.priceNA
+        : material.priceEU
     },
     materialFlooded(material) {
-      return this.playerRegion === 'NA'
+      return this.$store.state.playerRegion === 'NA'
         ? material.floodedNA
         : material.floodedEU
     },
     materialMaxed(material) {
-      return this.playerRegion === 'NA' ? material.maxedNA : material.maxedEU
+      return this.$store.state.playerRegion === 'NA'
+        ? material.maxedNA
+        : material.maxedEU
     },
     getDistanceFromLodging() {
       return this.distances[this.home]
@@ -458,7 +462,7 @@ export default {
     },
     updateNode() {
       this.calculate()
-      this.$store.commit('UPDATE_NODE', {
+      this.$store.commit('nodes/UPDATE_NODE', {
         id: this.id,
         data: {
           cp: this.cpInput,

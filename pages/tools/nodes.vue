@@ -114,7 +114,7 @@
                   <img :src="generateRegionImage(region)" class="region-img" />
                 </div>
               </div>
-              <div v-if="!saveState">
+              <div v-if="!this.$store.state.saveState">
                 <p>Unsaved changes! Hit Save before reloading.</p>
               </div>
               <div class="sort-options is-flex align-center">
@@ -122,7 +122,9 @@
                   <button
                     class="button mb-0"
                     :class="
-                      playerRegion === 'NA' ? 'is-selected is-warning' : ''
+                      this.$store.state.playerRegion === 'NA'
+                        ? 'is-selected is-warning'
+                        : ''
                     "
                     @click="setMarketRegion('NA')"
                   >
@@ -131,7 +133,9 @@
                   <button
                     class="button mb-0"
                     :class="
-                      playerRegion === 'EU' ? 'is-selected is-warning' : ''
+                      this.$store.state.playerRegion === 'EU'
+                        ? 'is-selected is-warning'
+                        : ''
                     "
                     @click="setMarketRegion('EU')"
                   >
@@ -233,7 +237,8 @@
   </main>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapGetters } = createNamespacedHelpers('nodes')
 
 export default {
   async fetch() {
@@ -246,7 +251,7 @@ export default {
         })
         .then((res) => res)
       if (nodes) {
-        this.$store.commit('SET_NODES', nodes)
+        this.$store.commit('nodes/SET_NODES', nodes)
       }
       if (localStorage.getItem('usernodes')) {
         this.restoreUsernodes()
@@ -255,7 +260,7 @@ export default {
       // Fetch default node data
       const nodes = await this.$axios.$get('/nodes').then((res) => res)
       if (nodes) {
-        this.$store.commit('SET_NODES', nodes)
+        this.$store.commit('nodes/SET_NODES', nodes)
       }
     }
   },
@@ -301,8 +306,6 @@ export default {
     },
     ...mapGetters(['getNodesByProfit', 'getNodesUnsorted', 'getChangedNodes']),
     ...mapState([
-      'playerRegion',
-      'saveState',
       'workers',
       'nodesError',
       'nodesCalculated',
@@ -315,16 +318,6 @@ export default {
       'linkTarget',
     ]),
   },
-  /* activated() {
-    // Prevent  wrong nodelist in keep-alive after login state change
-    if (!this.$auth.loggedIn && this.nodeUserListLoaded) {
-      this.$store.commit('SET_DEFAULT_NODELIST')
-      this.$fetch()
-    } else if (this.$auth.loggedIn && !this.nodeUserListLoaded) {
-      this.$store.commit('SET_USER_NODELIST')
-      this.$fetch()
-    }
-  }, */
   fetchOnServer: false,
   beforeMount() {},
   methods: {
@@ -332,14 +325,14 @@ export default {
       this.$auth.loginWith('auth0')
     },
     updateList() {
-      this.$store.commit('PROFITS_UPDATED')
+      this.$store.commit('nodes/PROFITS_UPDATED')
     },
     setMarketRegion(r) {
-      this.$store.commit('SET_MARKET_REGION', r)
+      this.$store.commit('nodes/SET_MARKET_REGION', r)
     },
     updateListAuto() {
       if (this.autoUpdate) {
-        this.$store.commit('PROFITS_UPDATED')
+        this.$store.commit('nodes/PROFITS_UPDATED')
       }
     },
     generateRegionImage(region) {
@@ -353,10 +346,10 @@ export default {
       }
     },
     handleLinking() {
-      this.$store.commit('TOGGLE_LINKING', !this.linkingActive)
+      this.$store.commit('nodes/TOGGLE_LINKING', !this.linkingActive)
     },
     handleUnlink() {
-      this.$store.commit('TOGGLE_UNLINKING', !this.unlinkingActive)
+      this.$store.commit('nodes/TOGGLE_UNLINKING', !this.unlinkingActive)
     },
     async saveNodes() {
       this.saving = true
@@ -370,7 +363,7 @@ export default {
         .then(() => {
           if (this.hasBackup) localStorage.removeItem('usernodes')
           this.saving = false
-          this.$store.commit('SET_SAVESTATE', true)
+          this.$store.commit('nodes/SET_SAVESTATE', true)
         })
         .catch(() => {
           this.saving = false
@@ -386,7 +379,7 @@ export default {
     restoreUsernodes() {
       try {
         const nodes = JSON.parse(localStorage.getItem('usernodes'))
-        this.$store.commit('RESTORE_USERNODES', nodes)
+        this.$store.commit('nodes/RESTORE_USERNODES', nodes)
       } catch (e) {
         localStorage.removeItem('usernodes')
       }
