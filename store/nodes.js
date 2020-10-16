@@ -82,6 +82,9 @@ export const mutations = {
   SET_NODES: (state, payload) => {
     state.nodes = new Map(payload.map((node) => [node.id, node]))
   },
+  SET_MATERIAL_PREFERENCES: (state, payload) => {
+    state.disabledItems = new Set(payload)
+  },
   /*
    * If usernodes got saved in localstorage and restored, override node for given
    */

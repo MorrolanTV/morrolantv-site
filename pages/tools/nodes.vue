@@ -243,15 +243,26 @@ const { mapState, mapGetters } = createNamespacedHelpers('nodes')
 export default {
   async fetch() {
     if (this.$auth.loggedIn) {
-      const nodes = await this.$axios
-        .$get('/user/userNodes', {
+      const userData = await Promise.all([
+        this.$axios.$get('/user/userNodes', {
           headers: {
             Authorization: this.$auth.getToken('auth0'),
           },
-        })
-        .then((res) => res)
-      if (nodes) {
-        this.$store.commit('nodes/SET_NODES', nodes)
+        }),
+        this.$axios.$get('/user/materialPreferences', {
+          headers: {
+            Authorization: this.$auth.getToken('auth0'),
+          },
+        }),
+      ]).then((res) => ({ nodes: res[0], materialPRef: res[1] }))
+      if (userData.materialPRef) {
+        this.$store.commit(
+          'nodes/SET_MATERIAL_PREFERENCES',
+          JSON.parse(userData.materialPRef.disabledMaterials)
+        )
+      }
+      if (userData.nodes) {
+        this.$store.commit('nodes/SET_NODES', userData.nodes)
       }
       if (localStorage.getItem('usernodes')) {
         this.restoreUsernodes()
@@ -316,6 +327,7 @@ export default {
       'unlinkingActive',
       'linkOrigin',
       'linkTarget',
+      'disabledItems',
     ]),
   },
   fetchOnServer: false,
@@ -353,13 +365,20 @@ export default {
     },
     async saveNodes() {
       this.saving = true
-      await this.$axios
-        .$post('/user/userNodes', {
+      await Promise.all([
+        this.$axios.$post('/user/userNodes', {
           nodes: [...this.getChangedNodes],
           headers: {
             Authorization: this.$auth.getToken('auth0'),
           },
-        })
+        }),
+        this.$axios.$post('/user/materialPreferences', {
+          materials: JSON.stringify(Array.from(this.disabledItems)),
+          headers: {
+            Authorization: this.$auth.getToken('auth0'),
+          },
+        }),
+      ])
         .then(() => {
           if (this.hasBackup) localStorage.removeItem('usernodes')
           this.saving = false
