@@ -369,6 +369,9 @@ export default {
     toggleMaterial(id) {
       if (!this.linkingActive) {
         this.$store.commit('nodes/TOGGLE_MATERIAL', id)
+      } else {
+        // Trigger node linking, bypass event.stop
+        this.$store.commit('nodes/ADD_LINK', this.id)
       }
     },
     getCodexImage(image) {
