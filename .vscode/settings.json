@@ -16,6 +16,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
+  "prettier.jsxBracketSameLine": true,
 
   "gitlens.currentLine.enabled": false, // in modern version
   "gitlens.codeLens.authors.enabled": false,

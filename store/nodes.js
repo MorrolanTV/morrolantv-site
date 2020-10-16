@@ -23,6 +23,7 @@ export const state = () => ({
   customNodesUpdated: 1, // Refresher for changedNodesMap
   disabledItems: new Set(),
   disabledItemsUpdated: 1,
+  saveState: true,
   workers: [
     {
       id: 0,
@@ -282,6 +283,9 @@ export const mutations = {
       state.disabledItems.add(id)
     }
     state.disabledItemsUpdated += 1
+  },
+  SET_SAVESTATE: (state, payload) => {
+    state.saveState = payload
   },
 }
 

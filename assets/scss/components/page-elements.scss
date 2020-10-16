@@ -137,6 +137,9 @@ button {
     &.enabled {
       background: $yellow;
     }
+    &.action {
+      background: $red;
+    }
     &.functional:hover {
       background: $yellow !important;
     }

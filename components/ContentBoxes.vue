@@ -136,7 +136,7 @@ export default {
 
   &:hover {
     z-index: 2;
-    box-shadow: 0 60px 90px -40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 60px 90px -40px rgba(28, 35, 77, 0.6);
   }
 
   .content {

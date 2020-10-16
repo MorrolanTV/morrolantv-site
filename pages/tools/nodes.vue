@@ -100,93 +100,107 @@
             <div
               class="nodecalc-filter-wrapper is-flex align-center justify-between mb-3"
             >
-              <div
-                class="filter-list"
-                :class="selectedRegion != '' ? 'hasSelected' : ''"
-              >
+              <div class="is-flex">
                 <div
-                  v-for="region in regions"
-                  :key="region"
-                  class="region-filter"
-                  :class="region == selectedRegion ? 'on' : 'off'"
-                  @click="selectRegion(region)"
+                  class="filter-list mr-3"
+                  :class="selectedRegion != '' ? 'hasSelected' : ''"
                 >
-                  <img :src="generateRegionImage(region)" class="region-img" />
+                  <div
+                    v-for="region in regions"
+                    :key="region"
+                    class="region-filter"
+                    :class="region == selectedRegion ? 'on' : 'off'"
+                    @click="selectRegion(region)"
+                  >
+                    <img
+                      :src="generateRegionImage(region)"
+                      class="region-img"
+                    />
+                  </div>
+                </div>
+                <div class="filter-additional">
+                  <div
+                    class="fishing-filter"
+                    :class="{ active: showFishing }"
+                    data-tooltip="Hide/Show fishing nodes"
+                    @click="showFishing = !showFishing"
+                  >
+                    <fa :icon="['fas', 'fish']" />
+                  </div>
                 </div>
               </div>
-              <div v-if="!this.$store.state.saveState">
-                <p>Unsaved changes! Hit Save before reloading.</p>
-              </div>
-              <div class="sort-options is-flex align-center">
-                <div class="buttons has-addons mb-0 mr-2">
+              <div>
+                <div class="sort-options is-flex align-center">
+                  <div class="buttons has-addons mb-0 mr-2">
+                    <button
+                      class="button mb-0"
+                      :class="
+                        this.$store.state.playerRegion === 'NA'
+                          ? 'is-selected is-warning'
+                          : ''
+                      "
+                      @click="setMarketRegion('NA')"
+                    >
+                      NA
+                    </button>
+                    <button
+                      class="button mb-0"
+                      :class="
+                        this.$store.state.playerRegion === 'EU'
+                          ? 'is-selected is-warning'
+                          : ''
+                      "
+                      @click="setMarketRegion('EU')"
+                    >
+                      EU
+                    </button>
+                  </div>
+                  <h4 v-if="linkingActive" class="is-6 mr-3">
+                    <span v-if="!linkOrigin">Select ungrouped node</span>
+                    <span v-if="linkOrigin && !linkTarget"
+                      >Select second node</span
+                    >
+                    <span></span>
+                  </h4>
                   <button
-                    class="button mb-0"
-                    :class="
-                      this.$store.state.playerRegion === 'NA'
-                        ? 'is-selected is-warning'
-                        : ''
-                    "
-                    @click="setMarketRegion('NA')"
+                    v-if="!nodesError"
+                    class="button is-primary functional mr-2"
+                    :class="{ enabled: linkingActive }"
+                    @click="handleLinking()"
                   >
-                    NA
+                    {{ linkingActive ? 'Stop' : 'Add links' }}
                   </button>
                   <button
-                    class="button mb-0"
-                    :class="
-                      this.$store.state.playerRegion === 'EU'
-                        ? 'is-selected is-warning'
-                        : ''
-                    "
-                    @click="setMarketRegion('EU')"
+                    v-else
+                    class="button is-primary functional mr-2"
+                    :data-tooltip="nodesError"
+                    :class="{ enabled: linkingActive }"
+                    @click="handleLinking()"
                   >
-                    EU
+                    {{ linkingActive ? 'Stop' : 'Add links' }}
                   </button>
+                  <button
+                    class="button is-primary functional mr-2"
+                    data-tooltip="Unlink - Click either one of a group node"
+                    :class="{ enabled: unlinkingActive }"
+                    @click="handleUnlink()"
+                  >
+                    {{ unlinkingActive ? 'Abort' : 'Unlink' }}
+                  </button>
+                  <button class="button is-primary mr-2" @click="updateList()">
+                    Re-Sort
+                  </button>
+                  <client-only>
+                    <button
+                      v-if="$auth.loggedIn"
+                      class="button is-primary save functional"
+                      :class="{ enabled: saving, action: !saveState }"
+                      @click="saveNodes()"
+                    >
+                      {{ saving ? 'Saving..' : 'Save' }}
+                    </button>
+                  </client-only>
                 </div>
-                <h4 v-if="linkingActive" class="is-6 mr-3">
-                  <span v-if="!linkOrigin">Select ungrouped node</span>
-                  <span v-if="linkOrigin && !linkTarget"
-                    >Select second node</span
-                  >
-                  <span></span>
-                </h4>
-                <button
-                  v-if="!nodesError"
-                  class="button is-primary functional mr-2"
-                  :class="{ enabled: linkingActive }"
-                  @click="handleLinking()"
-                >
-                  {{ linkingActive ? 'Stop' : 'Add links' }}
-                </button>
-                <button
-                  v-else
-                  class="button is-primary functional mr-2"
-                  :data-tooltip="nodesError"
-                  :class="{ enabled: linkingActive }"
-                  @click="handleLinking()"
-                >
-                  {{ linkingActive ? 'Stop' : 'Add links' }}
-                </button>
-                <button
-                  class="button is-primary functional mr-2"
-                  data-tooltip="Unlink - Click either one of a group node"
-                  :class="{ enabled: unlinkingActive }"
-                  @click="handleUnlink()"
-                >
-                  {{ unlinkingActive ? 'Abort' : 'Unlink' }}
-                </button>
-                <button class="button is-primary mr-2" @click="updateList()">
-                  Re-Sort
-                </button>
-                <client-only>
-                  <button
-                    v-if="$auth.loggedIn"
-                    class="button is-primary save functional"
-                    :class="{ enabled: saving }"
-                    @click="saveNodes()"
-                  >
-                    {{ saving ? 'Saving..' : 'Save' }}
-                  </button>
-                </client-only>
               </div>
             </div>
             <div v-show="nodeGroupsCalculated" class="nodecalc-list columns">
@@ -234,6 +248,7 @@
         </div>
       </div>
     </section>
+    <BackTop />
   </main>
 </template>
 <script>
@@ -284,6 +299,7 @@ export default {
       saving: false,
       linking: false,
       selectedRegion: '',
+      showFishing: false,
       regions: [
         'balenos',
         'calpheon',
@@ -312,6 +328,9 @@ export default {
           nodes = nodes.filter(
             (node) => node.region.toLowerCase() === this.selectedRegion
           )
+        if (!this.showFishing) {
+          nodes = nodes.filter((node) => !node.name.includes('Island'))
+        }
         return nodes
       } else return this.getNodesUnsorted
     },
@@ -328,6 +347,7 @@ export default {
       'linkOrigin',
       'linkTarget',
       'disabledItems',
+      'saveState',
     ]),
   },
   fetchOnServer: false,
@@ -440,6 +460,20 @@ export default {
 }
 .region-filter {
   cursor: pointer;
+}
+.filter-additional {
+  display: flex;
+  align-items: center;
+}
+.fishing-filter {
+  opacity: 0.4;
+  &.active {
+    opacity: 1;
+  }
+  svg {
+    height: 35px;
+    width: 35px;
+  }
 }
 @media (max-width: 1535px) {
   .node-wrapper.column.is-one-third {

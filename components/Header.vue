@@ -7,9 +7,9 @@
   >
     <div class="navbar-brand">
       <div class="logo-wrapper">
-        <div class="logo-banner">
+        <nuxt-link to="/" class="logo-banner">
           <img src="~/assets/img/desktopLogo.png" />
-        </div>
+        </nuxt-link>
       </div>
       <a
         role="button"

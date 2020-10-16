@@ -2,7 +2,6 @@ export const state = () => ({
   isStreamLive: false, // Just that
   playerRegion: 'NA', // Used to determine region for calc
   redirectUrl: '', // If string is set, redirect to there after login, then reset
-  saveState: true,
   tools: [
     {
       name: 'Cooking Calculator',
@@ -58,12 +57,6 @@ export const mutations = {
   SET_MARKET_REGION: (state, payload) => {
     state.nodesRecalculated = 0
     state.playerRegion = payload
-  },
-  /*
-   * Keep track of some state and display 'unsaved' if false
-   */
-  SET_SAVESTATE: (state, payload) => {
-    state.saveState = payload
   },
   SET_RECIPE_TREE: (state, payload) => {
     state.recipes = payload

@@ -21,6 +21,7 @@ module.exports = {
       'error',
       {
         endOfLine: 'auto',
+        jsxBracketSameLine: true,
       },
     ],
   },
