@@ -1,7 +1,10 @@
 <template>
   <div
     class="node-wrapper"
-    :class="group ? `grouped group-${group.id}` : ''"
+    :class="[
+      group ? `grouped group-${group.id}` : '',
+      tempGroup ? `grouped group-${tempLinkGroupId}` : '',
+    ]"
     @click="handleLink"
   >
     <div class="node-header" :style="backgroundStyle" @click="openForm()">
@@ -207,6 +210,9 @@ export default {
     cp() {
       return this.cpLocal + this.cpInput + this.cpGroup
     },
+    tempGroup() {
+      return this.tempLinkGroup.includes(this.id)
+    },
     backgroundStyle() {
       if (this.image) {
         return {
@@ -230,6 +236,8 @@ export default {
       'linkSelected',
       'disabledItemsUpdated',
       'disabledItems',
+      'tempLinkGroupId',
+      'tempLinkGroup',
     ]),
   },
   watch: {
@@ -355,11 +363,13 @@ export default {
       }
     },
     handleLink() {
-      if (this.linkingActive) this.$store.commit('nodes/NODE_LINK', this.id)
-      if (this.unlinkingActive) this.$store.commit('nodes/NODE_UNLINK', this.id)
+      if (this.linkingActive) this.$store.commit('nodes/ADD_LINK', this.id)
+      if (this.unlinkingActive) this.$store.commit('nodes/UNLINK', this.id)
     },
     toggleMaterial(id) {
-      this.$store.commit('nodes/TOGGLE_MATERIAL', id)
+      if (!this.linkingActive) {
+        this.$store.commit('nodes/TOGGLE_MATERIAL', id)
+      }
     },
     getCodexImage(image) {
       return 'https://bdocodex.com/' + image

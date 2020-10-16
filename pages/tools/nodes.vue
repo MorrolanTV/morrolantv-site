@@ -155,20 +155,13 @@
                       EU
                     </button>
                   </div>
-                  <h4 v-if="linkingActive" class="is-6 mr-3">
-                    <span v-if="!linkOrigin">Select ungrouped node</span>
-                    <span v-if="linkOrigin && !linkTarget"
-                      >Select second node</span
-                    >
-                    <span></span>
-                  </h4>
                   <button
                     v-if="!nodesError"
                     class="button is-primary functional mr-2"
                     :class="{ enabled: linkingActive }"
                     @click="handleLinking()"
                   >
-                    {{ linkingActive ? 'Stop' : 'Add links' }}
+                    {{ linkingActive ? 'Done' : 'Group' }}
                   </button>
                   <button
                     v-else
@@ -177,7 +170,7 @@
                     :class="{ enabled: linkingActive }"
                     @click="handleLinking()"
                   >
-                    {{ linkingActive ? 'Stop' : 'Add links' }}
+                    {{ linkingActive ? 'Done' : 'Group' }}
                   </button>
                   <button
                     class="button is-primary functional mr-2"
@@ -185,7 +178,7 @@
                     :class="{ enabled: unlinkingActive }"
                     @click="handleUnlink()"
                   >
-                    {{ unlinkingActive ? 'Abort' : 'Unlink' }}
+                    {{ unlinkingActive ? 'Stop' : 'Unlink' }}
                   </button>
                   <button class="button is-primary mr-2" @click="updateList()">
                     Re-Sort
@@ -378,10 +371,10 @@ export default {
       }
     },
     handleLinking() {
-      this.$store.commit('nodes/TOGGLE_LINKING', !this.linkingActive)
+      this.$store.commit('nodes/HANDLE_LINKING', !this.linkingActive)
     },
     handleUnlink() {
-      this.$store.commit('nodes/TOGGLE_UNLINKING', !this.unlinkingActive)
+      this.$store.commit('nodes/HANDLE_UNLINKING', !this.unlinkingActive)
     },
     async saveNodes() {
       this.saving = true

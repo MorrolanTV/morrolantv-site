@@ -12,8 +12,8 @@ export const state = () => ({
   nodesRecalculated: 0,
   linkingActive: false,
   unlinkingActive: false,
-  linkOrigin: null,
-  linkTarget: null,
+  tempLinkGroup: [],
+  tempLinkGroupId: 0,
   linkLatestID: 0,
   nodesAutosort: true,
   profitsUpdated: 1, // Used to trigger reactivity for maps
@@ -164,79 +164,42 @@ export const mutations = {
       state.groupStatsUpdated += 1
     }
   },
-  TOGGLE_LINKING(state, status) {
+  HANDLE_LINKING(state, status) {
     state.linkingActive = status
-    state.linkOrigin = null
-    state.linkTarget = null
-    if (status) state.unlinkingActive = false
+    if (status) {
+      // Start linking
+      state.unlinkingActive = false // stop unlinking
+      state.tempLinkGroupId = state.linkLatestID + 1 // increase group color id
+    }
+    // If stop linking, form groups
+    if (!status) formGroups(state)
   },
-  TOGGLE_UNLINKING(state, status) {
+  HANDLE_UNLINKING(state, status) {
     state.unlinkingActive = status
-    state.linkOrigin = null
-    state.linkTarget = null
     if (status) state.linkingActive = false
   },
-  NODE_LINK(state, id) {
-    if (!state.linkOrigin) state.linkOrigin = id
-    else if (!state.linkTarget) state.linkTarget = id
-    if (state.linkOrigin && state.linkTarget) {
-      const origNode = state.nodes.get(state.linkOrigin)
-      const targNode = state.nodes.get(state.linkTarget)
-      targNode.changed = true
-      origNode.changed = true
-      if (!origNode.group) {
-        if (!targNode.group) state.linkLatestID += 1
-        // Build groups
-        const origGrp = targNode.group
-          ? JSON.parse(targNode.group)
-          : { id: state.linkLatestID, links: [] }
-        const trgGroup = targNode.group
-          ? JSON.parse(targNode.group)
-          : { id: state.linkLatestID, links: [] }
-        origGrp.links = [state.linkTarget, ...origGrp.links]
-        trgGroup.links = [state.linkOrigin, ...trgGroup.links]
-
-        // Get full list of nodes to recalculate groups for
-        const combined = [state.linkTarget, ...trgGroup.links]
-
-        // Set group in node map
-        origNode.group = JSON.stringify(origGrp)
-        targNode.group = JSON.stringify(trgGroup)
-
-        // Combine cp for all nodes in linked group
-        for (const lid of combined) {
-          let profCP = 0
-          const linkgroup = JSON.parse(state.nodes.get(lid).group)
-
-          if (lid !== state.linkOrigin && linkgroup.links) {
-            // Set newly selected origin node id in all non clicked but in group nodes
-            if (!linkgroup.links.includes(state.linkOrigin)) {
-              linkgroup.links = [state.linkOrigin, ...linkgroup.links]
-            }
-            state.nodes.get(lid).group = JSON.stringify(linkgroup)
-          }
-
-          for (const gid of linkgroup.links) {
-            // New group will contain node itself. Dont add these stats to groupCP
-            profCP += gid !== lid ? state.nodes.get(gid).contribution : 0
-            profCP += gid !== lid ? state.nodes.get(gid).cpAdd : 0
-          }
-          state.nodes.get(lid).groupCP = profCP
-        }
-        state.groupsRecalculated = 0
-        state.groupGotUpdate = combined
-        state.groupsToCalculate = combined
-        state.groupStatsUpdated += 1
-        state.customNodesUpdated += 1
+  ADD_LINK(state, id) {
+    const targNode = state.nodes.get(id)
+    if (!targNode.group) {
+      // 1. Check if clicked node already has group
+      if (!state.tempLinkGroup.includes(id)) {
+        // 1.a If node has no group but is already in tempGroup, remove
+        state.tempLinkGroup.push(id)
       } else {
-        state.nodesError = 'Press first on unlinked nodes'
-        state.linkingActive = false
+        // 1.b If node has no group but is already in tempGroup, remove
+        state.tempLinkGroup = state.tempLinkGroup.filter((x) => x !== id)
       }
-      state.linkOrigin = null
-      state.linkTarget = null
+    } else {
+      // 3 clicked node has group and was not merged, combine groups
+      state.tempLinkGroupId = JSON.parse(targNode.group).id // combining groups does not need new one
+      const mergeGroup = new Set(
+        state.tempLinkGroup.concat(JSON.parse(targNode.group).links)
+      )
+      mergeGroup.add(id)
+      state.tempLinkGroup = Array.from(mergeGroup.values())
     }
   },
-  NODE_UNLINK(state, id) {
+  UNLINK(state, id) {
     if (state.nodes.get(id).group) {
       const group = JSON.parse(state.nodes.get(id).group)
       // Remove id from all linked groups
@@ -311,6 +274,37 @@ export const getters = {
     const n = Array.from([...state.nodes.values()]).filter((x) => x.changed)
     if (state.customNodesUpdated > 0) return n
   },
+}
+
+function formGroups(state) {
+  if (state.tempLinkGroup.length <= 1) {
+    state.tempLinkGroup = []
+    state.tempLinkGroupId = state.linkLatestID
+    return
+  }
+  // Combine cp for all nodes in linked group
+  for (const id of state.tempLinkGroup) {
+    let profCP = 0
+    // Set 'changed' on all nodes in group
+    state.nodes.get(id).changed = true
+    // Remove node id from list to prevent self including in group
+    const links = state.tempLinkGroup.filter((x) => x !== id)
+    const linkgroup = { id: state.tempLinkGroupId, links }
+    state.nodes.get(id).group = JSON.stringify(linkgroup)
+
+    for (const gid of links) {
+      profCP += state.nodes.get(gid).contribution
+      profCP += state.nodes.get(gid).cpAdd
+    }
+    state.nodes.get(id).groupCP = profCP
+  }
+  state.groupsRecalculated = 0
+  state.groupGotUpdate = state.tempLinkGroup
+  state.groupsToCalculate = state.tempLinkGroup
+  state.tempLinkGroup = []
+  state.linkLatestID = state.tempLinkGroupId
+  state.groupStatsUpdated += 1
+  state.customNodesUpdated += 1
 }
 
 function syncProfit(state) {
