@@ -34,7 +34,8 @@ export default {
       if (s < this.lastScroll) d = 1
       else if (s > this.lastScroll) d = 2
       if (this.lastScrollDirection !== d) {
-        this.scrollUp = !this.scrollUp
+        if (d === 1) this.scrollUp = this.scrollUp = true
+        else if (d === 2) this.scrollUp = this.scrollUp = false
         this.lastScrollDirection = d
       }
       this.lastScroll = s
