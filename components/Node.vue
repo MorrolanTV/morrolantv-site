@@ -4,6 +4,7 @@
     :class="[
       group ? `grouped group-${group.id}` : '',
       tempGroup ? `grouped group-${tempLinkGroupId}` : '',
+      worker && worker.id === 6 ? `maxWorker` : '',
     ]"
     @click="handleLink"
   >

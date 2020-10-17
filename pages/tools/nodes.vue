@@ -48,8 +48,9 @@
               <ul>
                 <li class="mb-1">
                   <strong>Worker:</strong> The tool will automatically select
-                  the cheapest worker while maintaining max profit. Switch here
-                  if you don't have said worker available.
+                  the cheapest worker while maintaining max profit. The yellow
+                  triangle shows where super workers with 150 workspeed are
+                  used.
                 </li>
                 <li class="mb-1">
                   <strong>CP Used:</strong> Currently the tool does not
@@ -485,6 +486,17 @@ $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
     &.group-#{$i} {
       border-color: nth($nodelinks-colors, $i);
     }
+  }
+}
+.node-wrapper.maxWorker {
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 10px solid $yellow;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
   }
 }
 </style>
