@@ -75,7 +75,7 @@ export const state = () => ({
     },
     {
       id: 6,
-      name: 'Special Goblin',
+      name: '150 Goblin',
       work: 150,
       movement: 7,
       stamina: 15,

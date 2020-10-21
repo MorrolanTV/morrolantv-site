@@ -303,6 +303,7 @@ export default {
         'serendia',
         'valencia',
         'margoria',
+        'odyllita',
       ],
     }
   },

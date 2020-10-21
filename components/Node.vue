@@ -75,7 +75,7 @@
             </div>
           </div>
           <div class="field field-cp is-narrow">
-            <label class="label">CP Used</label>
+            <label class="label">CP Path</label>
             <div class="control">
               <input
                 v-model.number="cpInput"
@@ -277,6 +277,9 @@ export default {
     disabledItemsUpdated() {
       this.calculate()
     },
+    '$store.state.playerRegion'() {
+      this.calculate()
+    },
   },
   beforeMount() {
     // Assign to edit in v-model
@@ -388,14 +391,12 @@ export default {
       return require(`~/assets/img/tools/general/REGION_${this.region.toLowerCase()}.png`)
     },
     getItemPrice(material) {
-      const marketPrice = this.getLocalizedPrice(material)
+      const marketPrice =
+        this.$store.state.playerRegion === 'NA'
+          ? material.priceNA
+          : material.priceEU
       const codexPrice = material.codexBuyPrice ? material.codexBuyPrice : 0
       return marketPrice || codexPrice
-    },
-    getLocalizedPrice(material) {
-      return this.$store.state.playerRegion === 'NA'
-        ? material.priceNA
-        : material.priceEU
     },
     materialFlooded(material) {
       return this.$store.state.playerRegion === 'NA'
