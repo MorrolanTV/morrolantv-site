@@ -8,8 +8,9 @@ export const state = () => ({
   groupGotUpdate: [],
   groupGotDeleted: [],
   groupsToCalculate: [],
+  mountedNodesAmount: 0,
   groupsRecalculated: 0,
-  nodesRecalculated: 0,
+  nodesRecalculated: 0, // Can be set to 0 to recalculate all nodes, once equal to node size sync profits
   linkingActive: false,
   unlinkingActive: false,
   tempLinkGroup: [],
@@ -103,6 +104,12 @@ export const mutations = {
     })
   },
   /*
+   * Set amount of mounted nodes, used to check calculate amount
+   */
+  SET_MOUNTED_NODES_COUNT: (state, payload) => {
+    state.mountedNodesAmount = payload
+  },
+  /*
    * Set calculated profit in sortList. Calculate group profit
    */
   SET_NODE_PROFIT: (state, { id, data }) => {
@@ -111,7 +118,7 @@ export const mutations = {
 
     if (state.nodesCalculated) {
       state.nodesRecalculated += 1
-      if (state.nodesRecalculated === state.nodes.size) {
+      if (state.nodesRecalculated >= state.mountedNodesAmount) {
         if (state.nodesAutosort) state.profitsUpdated += 1
         syncProfit(state)
         state.nodesRecalculated = 0
@@ -253,6 +260,7 @@ export const mutations = {
     } else {
       state.disabledItems.add(id)
     }
+    state.nodesRecalculated = 0 // Prepeare for complete recalc
     state.disabledItemsUpdated += 1
   },
   SET_SAVESTATE: (state, payload) => {
@@ -330,6 +338,7 @@ function syncProfit(state) {
     const nodeProfit = state.profitList.get(node.id)
     nodeProfit.profitCP = (nodeProfit.profit + profGrp) / nodeProfit.cp
   }
+  state.groupProfitsUpdated += 1
 }
 
 function syncCP(state, grpElementIdList) {

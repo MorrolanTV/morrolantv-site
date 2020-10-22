@@ -107,10 +107,11 @@
                   :class="selectedRegion != '' ? 'hasSelected' : ''"
                 >
                   <div
-                    v-for="region in regions"
+                    v-for="region in filteredRegions"
                     :key="region"
                     class="region-filter"
                     :class="region == selectedRegion ? 'on' : 'off'"
+                    :data-tooltip="region.toUpperCase()"
                     @click="selectRegion(region)"
                   >
                     <img
@@ -316,6 +317,10 @@ export default {
         return ''
       }
     },
+    filteredRegions() {
+      if (this.showFishing) return this.regions
+      return this.regions.filter((r) => r !== 'margoria')
+    },
     nodes() {
       if (this.nodeGroupsCalculated) {
         let nodes = this.getNodesByProfit
@@ -326,8 +331,15 @@ export default {
         if (!this.showFishing) {
           nodes = nodes.filter((node) => !node.name.includes('Island'))
         }
+        this.$store.commit('nodes/SET_MOUNTED_NODES_COUNT', nodes.length)
         return nodes
-      } else return this.getNodesUnsorted
+      } else {
+        this.$store.commit(
+          'nodes/SET_MOUNTED_NODES_COUNT',
+          this.getNodesUnsorted.length
+        )
+        return this.getNodesUnsorted
+      }
     },
     ...mapGetters(['getNodesByProfit', 'getNodesUnsorted', 'getChangedNodes']),
     ...mapState([
