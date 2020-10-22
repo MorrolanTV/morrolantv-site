@@ -23,6 +23,7 @@ export const state = () => ({
   groupDeleteUpdated: 1, // Refresher for component to delete self group
   customNodesUpdated: 1, // Refresher for changedNodesMap
   disabledItems: new Set(),
+  overrideFloodedItems: new Set(),
   disabledItemsUpdated: 1,
   saveState: true,
   workers: [
@@ -94,6 +95,9 @@ export const mutations = {
   },
   SET_MATERIAL_PREFERENCES: (state, payload) => {
     state.disabledItems = new Set(payload)
+  },
+  SET_MATERIAL_OVERRIDES: (state, payload) => {
+    state.overrideFloodedItems = new Set(payload)
   },
   /*
    * If usernodes got saved in localstorage and restored, override node for given
@@ -259,6 +263,15 @@ export const mutations = {
       state.disabledItems.delete(id)
     } else {
       state.disabledItems.add(id)
+    }
+    state.nodesRecalculated = 0 // Prepeare for complete recalc
+    state.disabledItemsUpdated += 1
+  },
+  TOGGLE_FLOODED: (state, id) => {
+    if (state.overrideFloodedItems.has(id)) {
+      state.overrideFloodedItems.delete(id)
+    } else {
+      state.overrideFloodedItems.add(id)
     }
     state.nodesRecalculated = 0 // Prepeare for complete recalc
     state.disabledItemsUpdated += 1

@@ -270,6 +270,10 @@ export default {
           'nodes/SET_MATERIAL_PREFERENCES',
           JSON.parse(userData.materialPRef.disabledMaterials)
         )
+        this.$store.commit(
+          'nodes/SET_MATERIAL_OVERRIDES',
+          JSON.parse(userData.materialPRef.overrideMaterials)
+        )
       }
       if (userData.nodes) {
         this.$store.commit('nodes/SET_NODES', userData.nodes)
@@ -354,6 +358,7 @@ export default {
       'linkOrigin',
       'linkTarget',
       'disabledItems',
+      'overrideFloodedItems',
       'saveState',
     ]),
   },
@@ -400,7 +405,10 @@ export default {
           },
         }),
         this.$axios.$post('/user/materialPreferences', {
-          materials: JSON.stringify(Array.from(this.disabledItems)),
+          materials: {
+            disabled: JSON.stringify(Array.from(this.disabledItems)),
+            override: JSON.stringify(Array.from(this.overrideFloodedItems)),
+          },
           headers: {
             Authorization: this.$auth.getToken('auth0'),
           },

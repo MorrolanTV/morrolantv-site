@@ -18,12 +18,17 @@
             class="materialimg-wrapper"
             :class="materialDisabled(material) ? 'disabled' : ''"
             :data-tooltip="materialTooltip(material)"
-            @click.stop="toggleMaterial(material.id)"
+            @click.stop="handleMaterialClick(material)"
           >
             <img class="materialimg" :src="getCodexImage(material.icon)" />
             <div
               v-if="materialFlooded(material)"
-              class="statusimg flooded"
+              class="statusimg"
+              :class="
+                !materialFloodedOverride(material)
+                  ? 'flooded'
+                  : 'flooded_override'
+              "
             ></div>
             <div v-if="materialMaxed(material)" class="statusimg maxed"></div>
           </div>
@@ -237,6 +242,7 @@ export default {
       'linkSelected',
       'disabledItemsUpdated',
       'disabledItems',
+      'overrideFloodedItems',
       'tempLinkGroupId',
       'tempLinkGroup',
     ]),
@@ -349,7 +355,10 @@ export default {
         .total
       let p = 0
       for (const mat of this.materials) {
-        if (!this.materialFlooded(mat) && !this.materialDisabled(mat)) {
+        if (
+          !this.materialFlooded(mat) ||
+          (this.materialFloodedOverride(mat) && !this.materialDisabled(mat))
+        ) {
           p +=
             cyclesPerDay *
             ((mat.NodeMaterial.yield + (luck / 100) * mat.NodeMaterial.luck) *
@@ -370,9 +379,21 @@ export default {
       if (this.linkingActive) this.$store.commit('nodes/ADD_LINK', this.id)
       if (this.unlinkingActive) this.$store.commit('nodes/UNLINK', this.id)
     },
+    handleMaterialClick(material) {
+      if (!this.materialFlooded(material)) this.toggleMaterial(material.id)
+      else this.overrideFlooded(material.id)
+    },
     toggleMaterial(id) {
       if (!this.linkingActive) {
         this.$store.commit('nodes/TOGGLE_MATERIAL', id)
+      } else {
+        // Trigger node linking, bypass event.stop
+        this.$store.commit('nodes/ADD_LINK', this.id)
+      }
+    },
+    overrideFlooded(id) {
+      if (!this.linkingActive) {
+        this.$store.commit('nodes/TOGGLE_FLOODED', id)
       } else {
         // Trigger node linking, bypass event.stop
         this.$store.commit('nodes/ADD_LINK', this.id)
@@ -410,6 +431,9 @@ export default {
     },
     materialDisabled(material) {
       return this.disabledItems.has(material.id)
+    },
+    materialFloodedOverride(material) {
+      return this.overrideFloodedItems.has(material.id)
     },
     getDistanceFromLodging() {
       return this.distances[this.home]
@@ -543,6 +567,9 @@ export default {
     left: 11px;
     &.flooded {
       background-image: url("data:image/svg+xml,%3Csvg id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cdefs%3E%3Cstyle%3E.cls-1,.cls-3%7Bopacity:0.65;%7D.cls-2,.cls-3%7Bfill:%23c1272d;%7D%3C/style%3E%3C/defs%3E%3Cg class='cls-1'%3E%3Crect class='cls-2' y='40' width='44' height='4'/%3E%3C/g%3E%3Cpolyline class='cls-3' points='31.75 23.38 31.75 0 12.25 0 12.25 23.38 0 23.38 22 40 44 23.38'/%3E%3Cg class='cls-1'%3E%3Cpath d='M20.66,9.68c0,3.15-1.65,4.71-3.58,4.71s-3.48-1.49-3.5-4.51,1.63-4.66,3.61-4.66S20.66,6.83,20.66,9.68Zm-5.47.14c0,1.9.67,3.35,1.93,3.35s1.93-1.42,1.93-3.4c0-1.82-.52-3.33-1.93-3.33S15.19,7.93,15.19,9.82Zm1.75,10.85L25.72,5.22H27L18.23,20.67Zm13.45-4.81c0,3.15-1.65,4.72-3.56,4.72s-3.48-1.5-3.5-4.49S25,11.4,26.94,11.4,30.39,13,30.39,15.86ZM24.92,16c0,1.91.71,3.36,1.95,3.36S28.8,17.93,28.8,16s-.52-3.34-1.93-3.34S24.92,14.12,24.92,16Z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    &.flooded_override {
+      background-image: url("data:image/svg+xml,%3Csvg id='Layer_1' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cdefs%3E%3Cstyle%3E.cls-1,.cls-3%7Bopacity:0.65;%7D.cls-2,.cls-3%7Bfill:%23c16127;%7D%3C/style%3E%3C/defs%3E%3Cg class='cls-1'%3E%3Crect class='cls-2' y='40' width='44' height='4'/%3E%3C/g%3E%3Cpolyline class='cls-3' points='31.75 23.38 31.75 0 12.25 0 12.25 23.38 0 23.38 22 40 44 23.38'/%3E%3Cg class='cls-1'%3E%3Cpath d='M20.66,9.68c0,3.15-1.65,4.71-3.58,4.71s-3.48-1.49-3.5-4.51,1.63-4.66,3.61-4.66S20.66,6.83,20.66,9.68Zm-5.47.14c0,1.9.67,3.35,1.93,3.35s1.93-1.42,1.93-3.4c0-1.82-.52-3.33-1.93-3.33S15.19,7.93,15.19,9.82Zm1.75,10.85L25.72,5.22H27L18.23,20.67Zm13.45-4.81c0,3.15-1.65,4.72-3.56,4.72s-3.48-1.5-3.5-4.49S25,11.4,26.94,11.4,30.39,13,30.39,15.86ZM24.92,16c0,1.91.71,3.36,1.95,3.36S28.8,17.93,28.8,16s-.52-3.34-1.93-3.34S24.92,14.12,24.92,16Z'/%3E%3C/g%3E%3C/svg%3E");
     }
     &.maxed {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Cstyle type='text/css'%3E .st0%7Bopacity:0.65;%7D .st1%7Bfill:%23A0FF4A;%7D .st2%7Bopacity:0.65;fill:%23A0FF4A;enable-background:new ;%7D%0A%3C/style%3E%3Cg class='st0'%3E%3Crect class='st1' width='44' height='4'/%3E%3C/g%3E%3Cpolyline class='st2' points='12.2 20.6 12.2 44 31.8 44 31.8 20.6 44 20.6 22 4 0 20.6 '/%3E%3Cg class='st0'%3E%3Cpath d='M20.7 27c0 3.1-1.6 4.7-3.6 4.7s-3.5-1.5-3.5-4.5 1.6-4.7 3.6-4.7S20.7 24.2 20.7 27zM15.2 27.2c0 1.9 0.7 3.4 1.9 3.4s1.9-1.4 1.9-3.4c0-1.8-0.5-3.3-1.9-3.3S15.2 25.3 15.2 27.2zM16.9 38l8.8-15.5H27L18.2 38H16.9zM30.4 33.2c0 3.1-1.6 4.7-3.6 4.7s-3.5-1.5-3.5-4.5 1.7-4.7 3.6-4.7S30.4 30.4 30.4 33.2zM24.9 33.4c0 1.9 0.7 3.4 2 3.4s1.9-1.4 1.9-3.4S28.3 30 26.9 30 24.9 31.5 24.9 33.4z'/%3E%3C/g%3E%3C/svg%3E");
