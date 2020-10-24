@@ -209,13 +209,7 @@
                 </div>
               </div>
             </div>
-            <transition-group
-              v-show="nodeGroupsCalculated"
-              :key="nodeTransition"
-              :name="nodeTransition"
-              tag="div"
-              class="nodecalc-list columns"
-            >
+            <div v-show="nodeGroupsCalculated" class="nodecalc-list columns">
               <div
                 v-for="node in nodes"
                 :key="node.id"
@@ -241,7 +235,7 @@
                   @recalculated="updateListAuto"
                 />
               </div>
-            </transition-group>
+            </div>
           </div>
         </div>
         <div class="modal" :class="error ? 'is-active' : ''">
@@ -385,13 +379,6 @@ export default {
     ]),
   },
   fetchOnServer: false,
-  watch: {
-    nodeGroupsCalculated() {
-      setTimeout(() => {
-        this.animate = true
-      }, 300)
-    },
-  },
   beforeMount() {},
   methods: {
     loginNodes() {
