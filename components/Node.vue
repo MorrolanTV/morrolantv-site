@@ -367,8 +367,8 @@ export default {
       let p = 0
       for (const mat of this.materials) {
         if (
-          !this.materialFlooded(mat) ||
-          (this.materialFloodedOverride(mat) && !this.materialDisabled(mat))
+          (!this.materialFlooded(mat) || this.materialFloodedOverride(mat)) &&
+          !this.materialDisabled(mat)
         ) {
           p +=
             cyclesPerDay *
