@@ -122,14 +122,13 @@
                 </div>
               </div>
               <div>
-                <div class="sort-options is-flex align-center">
-                  <button
-                    class="button is-primary functional mr-2"
-                    style="position: relative"
-                    @click="optionsOpen = !optionsOpen"
-                  >
-                    <transition name="fade">
-                      <div v-if="optionsOpen" class="node-options-wrapper">
+                <div
+                  class="sort-options is-flex align-center"
+                  style="position: relative"
+                >
+                  <transition name="fade">
+                    <div v-if="optionsOpen" class="node-options-wrapper">
+                      <div class="is-flex">
                         <div class="buttons has-addons mb-0 mr-2">
                           <button
                             class="button mb-0"
@@ -165,7 +164,33 @@
                           </div>
                         </div>
                       </div>
-                    </transition>
+                      <div class="mt-2">
+                        <div class="field is-horizontal is-narrow">
+                          <div class="field-label is-normal">
+                            <label class="label" style="white-space: nowrap"
+                              >Active H</label
+                            >
+                          </div>
+                          <div class="field-body">
+                            <div class="field">
+                              <div class="control">
+                                <input
+                                  v-model.number="activeHours"
+                                  type="number"
+                                  class="input"
+                                  placeholder="24"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </transition>
+                  <button
+                    class="button is-primary functional mr-2"
+                    @click="optionsOpen = !optionsOpen"
+                  >
                     <span>Options</span>
                   </button>
                   <button
@@ -312,6 +337,7 @@ export default {
       showFishing: false,
       optionsOpen: false,
       animate: false,
+      hours: 24,
       regions: [
         'balenos',
         'calpheon',
@@ -357,6 +383,19 @@ export default {
         )
         return this.getNodesUnsorted
       }
+    },
+    activeHours: {
+      // getter
+      get() {
+        return this.$store.state.nodes.activeHours
+      },
+      // setter
+      set(newValue) {
+        let val = newValue
+        if (val > 24) val = 24
+        else if (val < 0) val = 0
+        this.$store.commit('nodes/SET_ACTIVE_HOURS', val)
+      },
     },
     nodeTransition() {
       return this.animate ? 'flip-list' : 'disabled-list'
@@ -509,12 +548,13 @@ export default {
 
 .node-options-wrapper {
   position: absolute;
-  top: -90px;
+  top: -140px;
   background: #162637;
   padding: 20px 10px;
   width: 200px;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 @media (max-width: 1535px) {

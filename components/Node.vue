@@ -228,6 +228,7 @@ export default {
       return {}
     },
     ...mapState([
+      'activeHours',
       'workers',
       'profitList',
       'nodes',
@@ -283,6 +284,10 @@ export default {
     disabledItemsUpdated() {
       this.calculate()
     },
+    activeHours() {
+      this.findBestWorker()
+      this.calculate()
+    },
     '$store.state.playerRegion'() {
       this.calculate()
     },
@@ -305,26 +310,29 @@ export default {
     }
   },
   mounted() {
-    const profits = this.workers.map(
-      (stats) =>
-        this.detailedReport(
-          stats.work,
-          stats.movement,
-          stats.stamina,
-          stats.luck
-        ).profit
-    )
-    const index = profits.indexOf(Math.max(...profits))
-
-    this.worker = this.workers[index]
-    this.workSpeed =
-      this.presetWorkspeed > 0 ? this.presetWorkspeed : this.worker.work
-    this.moveSpeed =
-      this.presetMovespeed > 0 ? this.presetMovespeed : this.worker.movement
+    this.findBestWorker()
     this.calculate()
     this.applyFormWatchers()
   },
   methods: {
+    findBestWorker() {
+      const profits = this.workers.map(
+        (stats) =>
+          this.detailedReport(
+            stats.work,
+            stats.movement,
+            stats.stamina,
+            stats.luck
+          ).profit
+      )
+      const index = profits.indexOf(Math.max(...profits))
+
+      this.worker = this.workers[index]
+      this.workSpeed =
+        this.presetWorkspeed > 0 ? this.presetWorkspeed : this.worker.work
+      this.moveSpeed =
+        this.presetMovespeed > 0 ? this.presetMovespeed : this.worker.movement
+    },
     calculate() {
       const { profit, minutesPerTask } = this.detailedReport(
         this.workSpeed,
@@ -351,8 +359,11 @@ export default {
       )
       const total = timeWorking + timeTravelling
       const minutesPerTask = total / 60
-      const cyclesPerDay = this.calculateCycles(24, minutesPerTask, stamina)
-        .total
+      const cyclesPerDay = this.calculateCycles(
+        this.activeHours,
+        minutesPerTask,
+        stamina
+      ).total
       let p = 0
       for (const mat of this.materials) {
         if (

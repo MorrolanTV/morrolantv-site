@@ -5,6 +5,7 @@ export const state = () => ({
   nodeUserListLoaded: false, // If user node list loaded, switch to default after logout
   nodes: new Map(), // Just that
   profitList: new Map(), // Sort Map for sort functions, hold id and profit
+  activeHours: 24,
   groupGotUpdate: [],
   groupGotDeleted: [],
   groupsToCalculate: [],
@@ -275,6 +276,9 @@ export const mutations = {
     }
     state.nodesRecalculated = 0 // Prepeare for complete recalc
     state.disabledItemsUpdated += 1
+  },
+  SET_ACTIVE_HOURS: (state, hr) => {
+    state.activeHours = hr
   },
   SET_SAVESTATE: (state, payload) => {
     state.saveState = payload
