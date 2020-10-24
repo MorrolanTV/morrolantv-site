@@ -120,43 +120,54 @@
                     />
                   </div>
                 </div>
-                <div class="filter-additional">
-                  <div
-                    class="fishing-filter"
-                    :class="{ active: showFishing }"
-                    data-tooltip="Hide/Show fishing nodes"
-                    @click="showFishing = !showFishing"
-                  >
-                    <fa :icon="['fas', 'fish']" />
-                  </div>
-                </div>
               </div>
               <div>
                 <div class="sort-options is-flex align-center">
-                  <div class="buttons has-addons mb-0 mr-2">
-                    <button
-                      class="button mb-0"
-                      :class="
-                        this.$store.state.playerRegion === 'NA'
-                          ? 'is-selected is-warning'
-                          : ''
-                      "
-                      @click="setMarketRegion('NA')"
-                    >
-                      NA
-                    </button>
-                    <button
-                      class="button mb-0"
-                      :class="
-                        this.$store.state.playerRegion === 'EU'
-                          ? 'is-selected is-warning'
-                          : ''
-                      "
-                      @click="setMarketRegion('EU')"
-                    >
-                      EU
-                    </button>
-                  </div>
+                  <button
+                    class="button is-primary functional mr-2"
+                    style="position: relative"
+                    @click="optionsOpen = !optionsOpen"
+                  >
+                    <transition name="fade">
+                      <div v-if="optionsOpen" class="node-options-wrapper">
+                        <div class="buttons has-addons mb-0 mr-2">
+                          <button
+                            class="button mb-0"
+                            :class="
+                              this.$store.state.playerRegion === 'NA'
+                                ? 'is-selected is-warning'
+                                : ''
+                            "
+                            @click="setMarketRegion('NA')"
+                          >
+                            NA
+                          </button>
+                          <button
+                            class="button mb-0"
+                            :class="
+                              this.$store.state.playerRegion === 'EU'
+                                ? 'is-selected is-warning'
+                                : ''
+                            "
+                            @click="setMarketRegion('EU')"
+                          >
+                            EU
+                          </button>
+                        </div>
+                        <div class="filter-additional">
+                          <div
+                            class="fishing-filter"
+                            :class="{ active: showFishing }"
+                            data-tooltip="Hide/Show fishing nodes"
+                            @click="showFishing = !showFishing"
+                          >
+                            <fa :icon="['fas', 'fish']" />
+                          </div>
+                        </div>
+                      </div>
+                    </transition>
+                    <span>Options</span>
+                  </button>
                   <button
                     v-if="!nodesError"
                     class="button is-primary functional mr-2"
@@ -198,7 +209,13 @@
                 </div>
               </div>
             </div>
-            <div v-show="nodeGroupsCalculated" class="nodecalc-list columns">
+            <transition-group
+              v-show="nodeGroupsCalculated"
+              :key="nodeTransition"
+              :name="nodeTransition"
+              tag="div"
+              class="nodecalc-list columns"
+            >
               <div
                 v-for="node in nodes"
                 :key="node.id"
@@ -224,7 +241,7 @@
                   @recalculated="updateListAuto"
                 />
               </div>
-            </div>
+            </transition-group>
           </div>
         </div>
         <div class="modal" :class="error ? 'is-active' : ''">
@@ -299,6 +316,8 @@ export default {
       linking: false,
       selectedRegion: '',
       showFishing: false,
+      optionsOpen: false,
+      animate: false,
       regions: [
         'balenos',
         'calpheon',
@@ -345,6 +364,9 @@ export default {
         return this.getNodesUnsorted
       }
     },
+    nodeTransition() {
+      return this.animate ? 'flip-list' : 'disabled-list'
+    },
     ...mapGetters(['getNodesByProfit', 'getNodesUnsorted', 'getChangedNodes']),
     ...mapState([
       'workers',
@@ -363,6 +385,13 @@ export default {
     ]),
   },
   fetchOnServer: false,
+  watch: {
+    nodeGroupsCalculated() {
+      setTimeout(() => {
+        this.animate = true
+      }, 300)
+    },
+  },
   beforeMount() {},
   methods: {
     loginNodes() {
@@ -490,6 +519,17 @@ export default {
     width: 35px;
   }
 }
+
+.node-options-wrapper {
+  position: absolute;
+  top: -90px;
+  background: #162637;
+  padding: 20px 10px;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+}
+
 @media (max-width: 1535px) {
   .node-wrapper.column.is-one-third {
     width: 50%;
