@@ -312,6 +312,9 @@ export default {
         )
       }
       if (userData.nodes) {
+        this.materialUpdateTime = userData.nodes[0].Materials
+          ? userData.nodes[0].Materials.updatedAt
+          : ''
         this.$store.commit('nodes/SET_NODES', userData.nodes)
       }
       if (localStorage.getItem('usernodes')) {
@@ -321,6 +324,9 @@ export default {
       // Fetch default node data
       const nodes = await this.$axios.$get('/nodes').then((res) => res)
       if (nodes) {
+        this.materialUpdateTime = nodes[0].Materials
+          ? nodes[0].Materials[0].updatedAt
+          : ''
         this.$store.commit('nodes/SET_NODES', nodes)
       }
     }
@@ -337,6 +343,7 @@ export default {
       showFishing: false,
       optionsOpen: false,
       animate: false,
+      materialUpdateTime: '',
       hours: 24,
       regions: [
         'balenos',
@@ -353,9 +360,9 @@ export default {
   },
   computed: {
     timeUpdated() {
-      if (this.nodes && this.nodes.length > 0 && this.nodes[0].Materials[0]) {
-        const [date, time] = this.nodes[0].Materials[0].updatedAt.split('T')
-        return `Last Updated at ${date} ${time} UTC+0`
+      if (this.materialUpdateTime) {
+        const [date, time] = this.materialUpdateTime.split('T')
+        return `Materials Updated: ${date} ${time.split('.')[0]} UTC+0`
       } else {
         return ''
       }
