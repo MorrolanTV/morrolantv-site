@@ -572,7 +572,7 @@ export default {
 </style>
 <style lang="scss">
 $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
-  #c5be59, #a31a5f #4fce99, #5081af, #b93daf, #e0925d, #2d9299 #9b3535, white,
+  #c5be59, #a31a5f, #4fce99, #5081af, #b93daf, #e0925d, #2d9299 #9b3535, white,
   $blue, $red, $yellow, $purple, #57889b, #a14a64, #c5be59, #a31a5f #4fce99,
   #5081af, #b93daf, #e0925d, #2d9299 #9b3535;
 .node-wrapper.grouped {
