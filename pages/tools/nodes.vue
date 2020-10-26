@@ -344,7 +344,6 @@ export default {
       optionsOpen: false,
       animate: false,
       materialUpdateTime: '',
-      hours: 24,
       regions: [
         'balenos',
         'calpheon',
@@ -425,7 +424,9 @@ export default {
     ]),
   },
   fetchOnServer: false,
-  beforeMount() {},
+  beforeMount() {
+    this.showFishing = this.$store.state.showFishing
+  },
   methods: {
     loginNodes() {
       this.$auth.loginWith('auth0')

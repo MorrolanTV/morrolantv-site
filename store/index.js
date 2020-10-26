@@ -1,6 +1,8 @@
 export const state = () => ({
   isStreamLive: false, // Just that
   playerRegion: 'NA', // Used to determine region for calc
+  showFishing: false,
+  activeHours: 18,
   redirectUrl: '', // If string is set, redirect to there after login, then reset
   tools: [
     {
@@ -53,6 +55,10 @@ export const mutations = {
   },
   CLEAR_REDIRECT_URL: (state) => {
     state.redirectUrl = ''
+  },
+  SET_USER_SETTINGS: (state, payload) => {
+    state.playerRegion = payload.region
+    state.showFishing = payload.showFishing
   },
   SET_MARKET_REGION: (state, payload) => {
     state.nodesRecalculated = 0
