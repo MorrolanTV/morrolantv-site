@@ -427,7 +427,7 @@ export default {
         this.$store.state.playerRegion === 'NA'
           ? material.priceNA
           : material.priceEU
-      const codexPrice = material.codexBuyPrice ? material.codexBuyPrice : 0
+      const codexPrice = material.codexSellPrice ? material.codexSellPrice : 0
       return marketPrice || codexPrice
     },
     materialFlooded(material) {
