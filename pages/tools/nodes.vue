@@ -252,6 +252,7 @@
                   :workload="node.workload"
                   :preset-workspeed="node.workspeed"
                   :preset-movespeed="node.movespeed"
+                  :preset-luck="node.luck"
                   :distances="JSON.parse(node.distances)"
                   :lodging="node.lodging"
                   :group="JSON.parse(node.group)"

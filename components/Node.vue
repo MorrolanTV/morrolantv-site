@@ -94,6 +94,17 @@
       </div>
       <div class="field-body">
         <div class="field">
+          <label class="label">Luck</label>
+          <div class="control">
+            <input
+              v-model.number="luck"
+              class="input"
+              type="number"
+              placeholder="Luck"
+            />
+          </div>
+        </div>
+        <div class="field">
           <label class="label">Workspeed</label>
           <div class="control">
             <input
@@ -166,6 +177,10 @@ export default {
       type: Number,
       default: 0,
     },
+    presetLuck: {
+      type: Number,
+      default: 0,
+    },
     distances: {
       type: Object,
       required: true,
@@ -200,6 +215,7 @@ export default {
       minutesPerTask: 0,
       workSpeed: 0,
       moveSpeed: 0,
+      luck: 0,
       home: null,
       worker: null,
       cpInput: 0,
@@ -332,13 +348,14 @@ export default {
         this.presetWorkspeed > 0 ? this.presetWorkspeed : this.worker.work
       this.moveSpeed =
         this.presetMovespeed > 0 ? this.presetMovespeed : this.worker.movement
+      this.luck = this.presetLuck > 0 ? this.presetLuck : this.worker.luck
     },
     calculate() {
       const { profit, minutesPerTask } = this.detailedReport(
         this.workSpeed,
         this.moveSpeed,
         this.worker.stamina,
-        this.worker.luck
+        this.luck
       )
       this.profit = profit
       this.minutesPerTask = minutesPerTask
@@ -504,6 +521,7 @@ export default {
       this.$watch('worker', function (newVal, oldVal) {
         this.workSpeed = this.worker.work
         this.moveSpeed = this.worker.movement
+        this.luck = this.worker.luck
         this.calculate()
         this.$emit('recalculated')
       })
@@ -514,6 +532,9 @@ export default {
         this.updateNode()
       })
       this.$watch('moveSpeed', function (newVal, oldVal) {
+        this.updateNode()
+      })
+      this.$watch('luck', function (newVal, oldVal) {
         this.updateNode()
       })
       this.$watch('home', function (newVal, oldVal) {
@@ -528,6 +549,7 @@ export default {
           cp: this.cpInput,
           workspeed: this.workSpeed,
           movespeed: this.moveSpeed,
+          luck: this.luck,
           lodging: this.home,
           group: this.group,
           groupCP: this.cpGroup,

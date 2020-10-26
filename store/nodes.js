@@ -170,6 +170,7 @@ export const mutations = {
     node.cpAdd = data.cp
     node.workspeed = data.workspeed
     node.movespeed = data.movespeed
+    node.luck = data.luck
     node.lodging = data.lodging
     node.changed = true
     state.saveState = false
