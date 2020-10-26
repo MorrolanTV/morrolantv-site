@@ -143,6 +143,7 @@ nav {
   text-transform: uppercase;
   text-decoration: none;
   color: #f5f5f5;
+  outline: none;
 }
 
 .logo-wrapper {
