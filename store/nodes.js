@@ -23,7 +23,7 @@ export const state = () => ({
   groupProfitsUpdated: 1, // Refresher for sortlist
   groupDeleteUpdated: 1, // Refresher for component to delete self group
   customNodesUpdated: 1, // Refresher for changedNodesMap
-  disabledItems: new Set(),
+  disabledItems: new Set([752023]),
   overrideFloodedItems: new Set(),
   disabledItemsUpdated: 1,
   saveState: true,
