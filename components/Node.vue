@@ -56,8 +56,12 @@
             <div class="control is-expanded">
               <div class="select is-fullwidth">
                 <select v-model="worker">
-                  <option v-for="w in workers" :key="w.name" :value="w">
-                    {{ w.name }}
+                  <option v-for="w in allowedWorkers" :key="w.name" :value="w">
+                    {{
+                      !w.lodgingAlternative.includes(home)
+                        ? w.name
+                        : w.alternativeName
+                    }}
                   </option>
                 </select>
               </div>
@@ -259,6 +263,11 @@ export default {
     tempGroup() {
       return this.tempLinkGroup.includes(this.id)
     },
+    allowedWorkers() {
+      return this.workers.filter(
+        (x) => !x.lodgingRestricted.includes(this.home)
+      )
+    },
     backgroundStyle() {
       if (this.image) {
         return {
@@ -357,18 +366,17 @@ export default {
   },
   methods: {
     findBestWorker() {
-      const profits = this.workers.map(
-        (stats) =>
-          this.detailedReport(
-            stats.work,
-            stats.movement,
-            stats.stamina,
-            stats.luck
-          ).profit
+      const workerProfits = new Map()
+      this.allowedWorkers.forEach((e) => {
+        workerProfits.set(
+          this.detailedReport(e.work, e.movement, e.stamina, e.luck).profit,
+          e.id
+        )
+      })
+      const maxProfit = Math.max(...Array.from(workerProfits.keys()))
+      this.worker = this.workers.find(
+        (w) => w.id === workerProfits.get(maxProfit)
       )
-      const index = profits.indexOf(Math.max(...profits))
-
-      this.worker = this.workers[index]
       this.workSpeed =
         this.presetWorkspeed > 0 ? this.presetWorkspeed : this.worker.work
       this.moveSpeed =
@@ -563,6 +571,7 @@ export default {
         this.updateNode()
       })
       this.$watch('home', function (newVal, oldVal) {
+        this.findBestWorker()
         this.updateNode()
       })
     },
