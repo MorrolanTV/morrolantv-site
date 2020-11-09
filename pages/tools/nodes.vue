@@ -185,6 +185,28 @@
                           </div>
                         </div>
                       </div>
+                      <div class="buttons has-addons mb-0 mt-2">
+                        <button
+                          class="button mb-0"
+                          :class="
+                            editMode === 'basic' ? 'is-selected is-warning' : ''
+                          "
+                          @click="setEditMode('basic')"
+                        >
+                          Basic
+                        </button>
+                        <button
+                          class="button mb-0"
+                          :class="
+                            editMode === 'advanced'
+                              ? 'is-selected is-warning'
+                              : ''
+                          "
+                          @click="setEditMode('advanced')"
+                        >
+                          Advanced
+                        </button>
+                      </div>
                     </div>
                   </transition>
                   <button
@@ -421,6 +443,7 @@ export default {
       'linkTarget',
       'disabledItems',
       'overrideFloodedItems',
+      'editMode',
       'saveState',
     ]),
   },
@@ -437,6 +460,9 @@ export default {
     },
     setMarketRegion(r) {
       this.$store.commit('SET_MARKET_REGION', r)
+    },
+    setEditMode(m) {
+      this.$store.commit('nodes/SET_EDIT_MODE', m)
     },
     updateListAuto() {
       if (this.autoUpdate) {
@@ -557,10 +583,10 @@ export default {
 
 .node-options-wrapper {
   position: absolute;
-  top: -140px;
+  top: -185px;
   background: #162637;
   padding: 20px 10px;
-  width: 200px;
+  width: 250px;
   display: flex;
   align-items: center;
   flex-direction: column;

@@ -127,6 +127,30 @@
           </div>
         </div>
       </div>
+      <div
+        class="field advanced-info"
+        :class="editMode === 'advanced' ? 'edit' : ''"
+      >
+        <div class="field mt-2">
+          <label class="label">Workload</label>
+          <div class="control">
+            <input
+              v-model.number="workload"
+              class="input"
+              type="number"
+              disabled
+              placeholder="Workload"
+            />
+          </div>
+        </div>
+        <div
+          v-for="material in materials"
+          :key="material.id"
+          class="material-price-wrapper"
+        >
+          {{ `${material.name}: ${parseValue(getItemPrice(material))} Silver` }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -262,6 +286,7 @@ export default {
       'overrideFloodedItems',
       'tempLinkGroupId',
       'tempLinkGroup',
+      'editMode',
     ]),
   },
   watch: {
@@ -577,6 +602,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  margin-bottom: 10px;
   .region-image {
     height: 40px;
   }
@@ -621,10 +647,21 @@ export default {
   transition: max-height 0.2s;
   overflow: hidden;
   &.edit {
-    max-height: 300px;
+    max-height: 400px;
   }
   .field-cp {
     flex-basis: 100px;
+  }
+}
+
+.advanced-info {
+  margin-top: 10px;
+  border-top: 1px solid;
+  max-height: 0;
+  transition: max-height 0.2s;
+  overflow: hidden;
+  &.edit {
+    max-height: 300px;
   }
 }
 </style>

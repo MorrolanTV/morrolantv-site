@@ -27,6 +27,7 @@ export const state = () => ({
   overrideFloodedItems: new Set(),
   disabledItemsUpdated: 1,
   saveState: true,
+  editMode: 'basic',
   workers: [
     {
       id: 0,
@@ -280,6 +281,9 @@ export const mutations = {
   },
   SET_ACTIVE_HOURS: (state, hr) => {
     state.activeHours = hr
+  },
+  SET_EDIT_MODE: (state, payload) => {
+    state.editMode = payload
   },
   SET_SAVESTATE: (state, payload) => {
     state.saveState = payload
