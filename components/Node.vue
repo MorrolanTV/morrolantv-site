@@ -250,6 +250,9 @@ export default {
       cpLocal: 0,
       initial: true,
       edit: false,
+      wsLocked: true,
+      msLocked: true,
+      luckLocked: true,
     }
   },
   computed: {
@@ -335,6 +338,9 @@ export default {
       this.calculate()
     },
     activeHours() {
+      this.wsLocked = true
+      this.msLocked = true
+      this.luckLocked = true
       this.findBestWorker()
       this.calculate()
     },
@@ -562,13 +568,25 @@ export default {
         this.updateNode()
       })
       this.$watch('workSpeed', function (newVal, oldVal) {
-        this.updateNode()
+        if (!this.wsLocked) {
+          this.updateNode()
+        } else {
+          this.wsLocked = false
+        }
       })
       this.$watch('moveSpeed', function (newVal, oldVal) {
-        this.updateNode()
+        if (!this.msLocked) {
+          this.updateNode()
+        } else {
+          this.msLocked = false
+        }
       })
       this.$watch('luck', function (newVal, oldVal) {
-        this.updateNode()
+        if (!this.luckLocked) {
+          this.updateNode()
+        } else {
+          this.luckLocked = false
+        }
       })
       this.$watch('home', function (newVal, oldVal) {
         this.findBestWorker()

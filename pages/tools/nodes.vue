@@ -175,7 +175,7 @@
                             <div class="field">
                               <div class="control">
                                 <input
-                                  v-model.number="activeHours"
+                                  v-model.number.lazy="activeHours"
                                   type="number"
                                   class="input"
                                   placeholder="24"
