@@ -366,17 +366,17 @@ export default {
   },
   methods: {
     findBestWorker() {
-      const workerProfits = new Map()
+      let max = 0
+      let id = 0
       this.allowedWorkers.forEach((e) => {
-        workerProfits.set(
-          this.detailedReport(e.work, e.movement, e.stamina, e.luck).profit,
-          e.id
-        )
+        const p = this.detailedReport(e.work, e.movement, e.stamina, e.luck)
+          .profit
+        if (p > max) {
+          max = p
+          id = e.id
+        }
       })
-      const maxProfit = Math.max(...Array.from(workerProfits.keys()))
-      this.worker = this.workers.find(
-        (w) => w.id === workerProfits.get(maxProfit)
-      )
+      this.worker = this.workers.find((w) => w.id === id)
       this.workSpeed =
         this.presetWorkspeed > 0 ? this.presetWorkspeed : this.worker.work
       this.moveSpeed =
