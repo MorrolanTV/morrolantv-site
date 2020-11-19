@@ -41,7 +41,11 @@
           >About</nuxt-link
         >
         <client-only>
-          <nuxt-link to="/profile" class="nav-item" @click.native="closeMenu()"
+          <nuxt-link
+            v-if="$auth.loggedIn"
+            to="/profile"
+            class="nav-item"
+            @click.native="closeMenu()"
             >Profile</nuxt-link
           >
         </client-only>
