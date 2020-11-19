@@ -25,9 +25,6 @@
     </div>
     <div class="navbar-menu">
       <div class="nav-items navbar-brand">
-        <nuxt-link to="/beta" class="nav-item" @click.native="closeMenu()"
-          >BETA / README</nuxt-link
-        >
         <nuxt-link to="/" class="nav-item" @click.native="closeMenu()"
           >Home</nuxt-link
         >
@@ -43,6 +40,11 @@
         <nuxt-link to="/about" class="nav-item" @click.native="closeMenu()"
           >About</nuxt-link
         >
+        <client-only>
+          <nuxt-link to="/profile" class="nav-item" @click.native="closeMenu()"
+            >Profile</nuxt-link
+          >
+        </client-only>
         <client-only
           ><a v-if="$auth.loggedIn" class="nav-item" @click="logout()"
             >LOGOUT</a

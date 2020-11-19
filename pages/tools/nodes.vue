@@ -67,16 +67,18 @@
                   with this value.
                 </li>
                 <li class="mb-3">
-                  <strong>Linking:</strong> You can combine two nodes in a group
+                  <strong>Group:</strong> You can combine two nodes in a group
                   via "Add links". That way you can get more accurate profit/cp
                   for node chains.
                 </li>
                 <li class="mb-1">
                   <strong>Materials:</strong> If you hover over materials the
                   tool will inform you if the material is considered "<strong
+                    style="color: #2e599b"
                     data-tooltip="n>10000 are listed at minprice. Not inclued in profit"
                     >flooded</strong
                   >" or "<strong
+                    style="color: #2e599b"
                     data-tooltip="only orders at max price are present"
                     >maxed</strong
                   >" on the market.
@@ -91,8 +93,7 @@
             </div>
             <div class="is-flex justify-between">
               <h5 class="mb-3">
-                Use the region icons to filter nodes. Nodes are sorted by
-                profit/cp
+                Presets for options can be saved in your profile!
               </h5>
               <h5 class="mb-3">
                 {{ timeUpdated }}

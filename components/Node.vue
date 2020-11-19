@@ -135,24 +135,55 @@
         class="field advanced-info"
         :class="editMode === 'advanced' ? 'edit' : ''"
       >
-        <div class="field mt-2">
-          <label class="label">Workload</label>
-          <div class="control">
-            <input
-              v-model.number="workload"
-              class="input"
-              type="number"
-              disabled
-              placeholder="Workload"
-            />
+        <div class="field-body mt-2">
+          <div class="field">
+            <label class="label">Workload</label>
+            <div class="control">
+              <input
+                v-model.number="workload"
+                class="input"
+                type="number"
+                disabled
+                placeholder="Workload"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Inactive Cycles</label>
+            <div class="control">
+              <input
+                :value="getCyclesPerDayOut.inactiveCycles"
+                class="input"
+                type="number"
+                disabled
+                placeholder="Cycles"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Active Cylces</label>
+            <div class="control">
+              <input
+                :value="getCyclesPerDayOut.activeCycles"
+                class="input"
+                type="number"
+                disabled
+                placeholder="Cycles"
+              />
+            </div>
           </div>
         </div>
+
         <div
           v-for="material in materials"
           :key="material.id"
           class="material-price-wrapper"
         >
-          {{ `${material.name}: ${parseValue(getItemPrice(material))} Silver` }}
+          {{
+            `${material.name}: ${parseValue(
+              getItemPrice(material)
+            )} Silver, Yield: ${material.NodeMaterial.yield}`
+          }}
         </div>
       </div>
     </div>
@@ -278,6 +309,24 @@ export default {
         }
       }
       return {}
+    },
+    getCyclesPerDayOut() {
+      if (!this.worker) return { activeCycles: 0, inactiveCycles: 0 }
+      const timeWorking = this.calculateTimeWorking(
+        this.workload,
+        this.workSpeed
+      )
+      const timeTravelling = this.calculateTravelTime(
+        this.moveSpeed,
+        this.getDistanceFromLodging()
+      )
+      const total = timeWorking + timeTravelling
+      const minutesPerTask = total / 60
+      return this.calculateCycles(
+        this.activeHours,
+        minutesPerTask,
+        this.worker.stamina
+      )
     },
     ...mapState([
       'activeHours',
@@ -518,7 +567,6 @@ export default {
       if (number / 1e6 < 1) return Math.round((number / 1e4) * 100) / 10 + 'K'
       return Math.round((number / 1e6) * 100) / 100 + 'M'
     },
-
     /**
      * Calculate the tamount of time a worker is working on a node.
      * @param {*} workload - The workload of the node the worker is working on.
