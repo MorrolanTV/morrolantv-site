@@ -90,14 +90,14 @@
                   MOST LIKELY BE RESET AFTER BETA.
                 </p>
               </client-only>
-            </div>
-            <div class="is-flex justify-between">
-              <h5 class="mb-3">
-                Presets for options can be saved in your profile!
-              </h5>
-              <h5 class="mb-3">
-                {{ timeUpdated }}
-              </h5>
+              <div class="is-flex justify-between">
+                <h5 class="mb-3">
+                  Presets for options can be saved in your profile!
+                </h5>
+                <h5 class="mb-3">
+                  {{ timeUpdated }}
+                </h5>
+              </div>
             </div>
             <div
               class="nodecalc-filter-wrapper is-flex align-center justify-between mb-3"
@@ -119,6 +119,18 @@
                       :src="generateRegionImage(region)"
                       class="region-img"
                     />
+                  </div>
+                  <div class="materialfilter-wrapper">
+                    <div class="field">
+                      <div class="control">
+                        <input
+                          v-model.number.lazy="materialFilter"
+                          type="text"
+                          class="input"
+                          placeholder="Filter materials"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -365,6 +377,7 @@ export default {
       linking: false,
       selectedRegion: '',
       showFishing: false,
+      materialFilter: '',
       optionsOpen: false,
       animate: false,
       materialUpdateTime: '',
@@ -403,6 +416,17 @@ export default {
           )
         if (!this.showFishing) {
           nodes = nodes.filter((node) => !node.name.includes('Island'))
+        }
+        if (this.materialFilter) {
+          nodes = nodes.filter((node) => {
+            for (const m of node.Materials) {
+              if (
+                m.name.toUpperCase().includes(this.materialFilter.toUpperCase())
+              ) {
+                return true
+              }
+            }
+          })
         }
         this.$store.commit('nodes/SET_MOUNTED_NODES_COUNT', nodes.length)
         return nodes
@@ -539,6 +563,7 @@ export default {
 <style lang="scss" scoped>
 .nodecalc-header {
   margin-bottom: 50px;
+  border-bottom: 1px solid;
 }
 .nodecalc-filter-wrapper {
   position: sticky;
@@ -547,6 +572,13 @@ export default {
   z-index: 2;
   padding-top: 15px;
 }
+
+.materialfilter-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
 .nodecalc-list {
   flex-wrap: wrap;
 }

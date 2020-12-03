@@ -152,7 +152,7 @@
             <label class="label">Inactive Cycles</label>
             <div class="control">
               <input
-                :value="getCyclesPerDayOut.inactiveCycles"
+                :value="Math.round(getCyclesPerDayOut.inactiveCycles)"
                 class="input"
                 type="number"
                 disabled
@@ -164,7 +164,7 @@
             <label class="label">Active Cylces</label>
             <div class="control">
               <input
-                :value="getCyclesPerDayOut.activeCycles"
+                :value="Math.round(getCyclesPerDayOut.activeCycles)"
                 class="input"
                 type="number"
                 disabled
@@ -719,7 +719,6 @@ export default {
 }
 .node-form {
   max-height: 0;
-  transition: max-height 0.2s;
   overflow: hidden;
   &.edit {
     max-height: 400px;
@@ -733,7 +732,6 @@ export default {
   margin-top: 10px;
   border-top: 1px solid;
   max-height: 0;
-  transition: max-height 0.2s;
   overflow: hidden;
   &.edit {
     max-height: 300px;
