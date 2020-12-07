@@ -5,8 +5,8 @@
         <h1 class="title is-1">Privacy Policy of MorrolanTv</h1>
 
         <p>
-          MorrolanTv operates the https://morrolan.tv website, which provides
-          the SERVICE.
+          MorrolanTv operates the https://www.morrolan.tv website, which
+          provides the SERVICE.
         </p>
 
         <p>

@@ -6,7 +6,7 @@
         <div class="stream-embed-wrapper">
           <div class="stream-embed">
             <iframe
-              src="https://embed.twitch.tv?channel=morrolantv&amp;height=100%25&amp;migration=true&amp;parent=localhost&amp;parent=sirfilior-dev.com&amp;parent=morrolan.tv&amp;referrer=http%3A%2F%2Flocalhost%3A3000%2Fstream&amp;theme=dark&amp;width=100%25"
+              src="https://embed.twitch.tv?channel=morrolantv&amp;height=100%25&amp;migration=true&amp;parent=localhost&amp;parent=sirfilior-dev.com&amp;parent=www.morrolan.tv&amp;referrer=http%3A%2F%2Flocalhost%3A3000%2Fstream&amp;theme=dark&amp;width=100%25"
               allowfullscreen=""
               scrolling="no"
               allow="autoplay; fullscreen"
