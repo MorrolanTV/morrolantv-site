@@ -43,8 +43,13 @@
                   <p>Stacks: {{ getItemInfo('Helmet').stacks }}</p>
                   <p>Attempts: {{ getItemInfo('Helmet').attempts }}</p>
                 </div>
-                <div class="itemimg-wrapper">
+                <div class="itemimg-wrapper mb-2">
                   <img :src="baseImgUrl + '/images/gear/Armor.PNG'" />
+                  <p>Starting Distorted Stack: 107</p>
+                  <p>Ending Distorted Stack: 152 (16th attempt)</p>
+                </div>
+                <div class="itemimg-wrapper">
+                  <img :src="baseImgUrl + '/images/gear/ArmorAlt.PNG'" />
                   <p>Stacks: {{ getItemInfo('Armor').stacks }}</p>
                   <p>Attempts: {{ getItemInfo('Armor').attempts }}</p>
                 </div>
