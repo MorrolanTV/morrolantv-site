@@ -353,7 +353,7 @@ export default {
           : ''
         this.$store.commit('nodes/SET_NODES', userData.nodes)
       }
-      if (localStorage.getItem('usernodes')) {
+      if (sessionStorage.getItem('usernodes')) {
         this.restoreUsernodes()
       }
     } else {
@@ -530,7 +530,7 @@ export default {
         }),
       ])
         .then(() => {
-          if (this.hasBackup) localStorage.removeItem('usernodes')
+          if (this.hasBackup) sessionStorage.removeItem('usernodes')
           this.saving = false
           this.$store.commit('nodes/SET_SAVESTATE', true)
         })
@@ -543,16 +543,16 @@ export default {
         })
     },
     persistUsernodes() {
-      localStorage.setItem('usernodes', JSON.stringify(this.getChangedNodes))
+      sessionStorage.setItem('usernodes', JSON.stringify(this.getChangedNodes))
     },
     restoreUsernodes() {
       try {
-        const nodes = JSON.parse(localStorage.getItem('usernodes'))
+        const nodes = JSON.parse(sessionStorage.getItem('usernodes'))
         this.$store.commit('nodes/RESTORE_USERNODES', nodes)
       } catch (e) {
-        localStorage.removeItem('usernodes')
+        sessionStorage.removeItem('usernodes')
       }
-      localStorage.removeItem('usernodes')
+      sessionStorage.removeItem('usernodes')
     },
     reloadPage() {
       window.location.reload()
