@@ -67,7 +67,7 @@
                   with this value.
                 </li>
                 <li class="mb-3">
-                  <strong>Group:</strong> You can combine two nodes in a group
+                  <strong>Link:</strong> You can combine two nodes in a group
                   via "Add links". That way you can get more accurate profit/cp
                   for node chains.
                 </li>
@@ -243,7 +243,7 @@
                     :class="{ enabled: linkingActive }"
                     @click="handleLinking()"
                   >
-                    {{ linkingActive ? 'Done' : 'Group' }}
+                    {{ linkingActive ? 'Done' : 'Link' }}
                   </button>
                   <button
                     class="button is-primary functional mr-2"
