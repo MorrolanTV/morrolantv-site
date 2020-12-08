@@ -84,7 +84,7 @@
             </div>
           </div>
           <div class="field field-cp is-narrow">
-            <label class="label">CP Path</label>
+            <label class="label">Path CP</label>
             <div class="control">
               <input
                 v-model.number="cpInput"
