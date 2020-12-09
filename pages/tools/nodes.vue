@@ -90,12 +90,6 @@
                   on or off. Flooded items are toggled off by default.
                 </li>
               </ul>
-              <client-only>
-                <p v-if="!$auth.loggedIn" class="mt-3" @click="loginNodes()">
-                  <a class="link-light">Login</a> to save your edits. SAVES WILL
-                  MOST LIKELY BE RESET AFTER BETA.
-                </p>
-              </client-only>
               <div class="is-flex justify-between">
                 <h5 class="mb-3">
                   Presets for options can be saved in your profile!
