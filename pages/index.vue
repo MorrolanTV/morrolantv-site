@@ -46,11 +46,24 @@
       <div class="showcase-wrapper section soc">
         <div class="showcase-element">
           <div class="social-wrapper">
-            <div><h3 class="title is-3 mb-3">Social Media</h3></div>
             <div>
               <h5 class="subtitle is-5 mb-2">
-                Stay connected, check out MorrolanTV on his channels
+                Join our superb Discord community to discuss BDO, other games,
+                real life, cute pets, memes, etc:
               </h5>
+              <div class="social">
+                <a
+                  id="discord"
+                  href="https://discord.gg/morrolantv"
+                  target="_blank"
+                  class="social"
+                >
+                  <fa :icon="['fab', 'discord']" />
+                </a>
+              </div>
+            </div>
+            <div class="mt-4">
+              <h5 class="subtitle is-5">Other Social Media:</h5>
             </div>
             <div class="social">
               <a
@@ -60,14 +73,6 @@
                 class="social"
               >
                 <fa :icon="['fab', 'youtube']" />
-              </a>
-              <a
-                id="discord"
-                href="https://discord.gg/morrolantv"
-                target="_blank"
-                class="social"
-              >
-                <fa :icon="['fab', 'discord']" />
               </a>
               <a
                 id="twitter"
