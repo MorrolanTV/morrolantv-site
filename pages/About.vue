@@ -20,17 +20,17 @@
             <p class="mt-5">
               Focus by Advanced is 0 calorie, sugar free energy drink that I use
               every day. There are three main reasons why I use Focus instead of
-              the dozens of other energy drink options:<br />
+              the dozens of other energy drink options:<br /><br />
               1) Drinking a ton of caffeine often made me jittery or anxious.
               Focus contains L-Theanine, an amino acid found in tea, which
               combines with caffeine to give you the same energy and alertness
               but without any jitters. HUGE difference, I will never drink an
-              energy drink without L-Theanine ever again.<br />
+              energy drink without L-Theanine ever again.<br /><br />
               2) Most energy drinks are a combination of caffeine & vitamins,
               which is fine. Focus takes it a step further with a blend of
               nootropics which have been clinically proven to do things like
               boost memory, improve reaction speed, and help your eyes recover
-              from long periods of staring at a screen.<br />
+              from long periods of staring at a screen.<br /><br />
               3) Lots of these drinks have chalky textures, especially once you
               get to the bottom of the shaker. Focus is less bulky and blends
               nicely into water without that chalkiness.

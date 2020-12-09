@@ -38,7 +38,7 @@
           >Stream</nuxt-link
         >
         <nuxt-link to="/about" class="nav-item" @click.native="closeMenu()"
-          >About</nuxt-link
+          >Support This Site</nuxt-link
         >
         <client-only>
           <nuxt-link
