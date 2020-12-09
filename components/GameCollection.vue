@@ -21,13 +21,13 @@ export default {
             'https://www.twitch.tv/collections/VCa69D8d_hTkzw?filter=collections',
         },
         {
-          name: 'Sekiro: Shadows Die Twice',
-          type: 'YouTube',
+          name: 'Subnautica',
+          type: 'VOD',
           desc: '',
-          image: 'sekiro',
+          image: 'subnautica',
           external: true,
           path:
-            'https://www.twitch.tv/collections/7zke3Si9kRU6Lg?filter=collections',
+            'https://www.twitch.tv/collections/gfyT_w3tqhVH8Q?filter=collections',
         },
         {
           name: 'Final Fantasy VII Remake',

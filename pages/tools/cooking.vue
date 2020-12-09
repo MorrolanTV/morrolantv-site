@@ -37,7 +37,7 @@
               <p class="mb-3">
                 This tool provides a general comparison of node profitability.
                 Many factors influence your net gain, and these numbers serve as
-                an estimate to help you find the better nodes quicker.
+                an estimate to help you find the better nodes more quickly.
               </p>
               <p class="mb-2">
                 <strong class="has-text-info"

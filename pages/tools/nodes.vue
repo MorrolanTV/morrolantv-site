@@ -37,7 +37,7 @@
               <p class="mb-3">
                 This tool provides a general comparison of node profitability.
                 Many factors influence your net gain, and these numbers serve as
-                an estimate to help you find the better nodes quicker.
+                an estimate to help you find the better nodes more quickly.
               </p>
               <p class="mb-2">
                 <strong class="has-text-info"
@@ -48,40 +48,46 @@
               <ul>
                 <li class="mb-1">
                   <strong>Worker:</strong> The tool will automatically select
-                  the cheapest worker while maintaining max profit. The yellow
-                  triangle shows where super workers with 150 workspeed are
-                  used.
+                  the best worker based on your Active Hours (set in Options).
+                  Active Hours should be based on what portion of the day you
+                  can keep your workers fed. You don't have to be fully active
+                  during this time - generally you only need to feed workers
+                  every 3 to 4 hours.
                 </li>
                 <li class="mb-1">
-                  <strong>CP Used:</strong> Currently the tool does not
-                  automatically take the CP cost of previous nodes you have to
-                  get into account. Adjust this value depending on how many
-                  nodes in the path you chose.
+                  <strong>Path CP:</strong> Default pathing is determined
+                  incrementally based on whether a previous node along the way
+                  is likely to be taken. Edit this if you are using a different
+                  path. This is for the path ONLY, the value for the material
+                  node itself cannot be changed.
                 </li>
                 <li class="mb-1">
-                  <strong>Workspeed:</strong> Fine tune your workers workspeed
-                  with this value.
+                  <strong>Work Speed:</strong> Fine tune your worker's work
+                  speed with this value.
                 </li>
                 <li class="mb-1">
-                  <strong>Movespeed:</strong> Fine tune your workers movespeed
-                  with this value.
+                  <strong>Move Speed:</strong> Fine tune your worker's move
+                  speed with this value.
                 </li>
                 <li class="mb-3">
-                  <strong>Link:</strong> You can combine two nodes in a group
-                  via "Add links". That way you can get more accurate profit/cp
-                  for node chains.
+                  <strong>Link:</strong> You can combine two or more nodes in a
+                  group via "Add Links". This will combine the profit and CP
+                  cost across the group, and average them together. This is
+                  useful for when the path CP is split between multiple nodes,
+                  or when backtracking, or other various special cases.
                 </li>
                 <li class="mb-1">
-                  <strong>Materials:</strong> If you hover over materials the
-                  tool will inform you if the material is considered "<strong
+                  <strong>Materials:</strong> The green arrow indicates an item
+                  is "<strong
+                    style="color: #2e599b"
+                    data-tooltip="item is sold out with orders at max price"
+                    >maxed</strong
+                  >" and a red symbol indicates an item is "<strong
                     style="color: #2e599b"
                     data-tooltip="n>10000 are listed at minprice. Not inclued in profit"
                     >flooded</strong
-                  >" or "<strong
-                    style="color: #2e599b"
-                    data-tooltip="only orders at max price are present"
-                    >maxed</strong
-                  >" on the market.
+                  >". You can manually click any material to toggle the profit
+                  on or off. Flooded items are toggled off by default.
                 </li>
               </ul>
               <client-only>
@@ -234,7 +240,7 @@
                     :class="{ enabled: linkingActive }"
                     @click="handleLinking()"
                   >
-                    {{ linkingActive ? 'Done' : 'Group' }}
+                    {{ linkingActive ? 'Done' : 'Add Links' }}
                   </button>
                   <button
                     v-else
@@ -243,7 +249,7 @@
                     :class="{ enabled: linkingActive }"
                     @click="handleLinking()"
                   >
-                    {{ linkingActive ? 'Done' : 'Link' }}
+                    {{ linkingActive ? 'Done' : 'Add Links' }}
                   </button>
                   <button
                     class="button is-primary functional mr-2"
