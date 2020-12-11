@@ -90,7 +90,7 @@
                   on or off. Flooded items are toggled off by default.
                 </li>
               </ul>
-              <div class="is-flex justify-between">
+              <div class="is-flex justify-between materialUpdate">
                 <h5 class="mb-3">
                   Presets for options can be saved in your profile!
                 </h5>
@@ -630,12 +630,31 @@ export default {
     width: 50%;
   }
 }
+
+@media (max-width: 768px) {
+  .node-wrapper.column.is-one-third {
+    width: 100%;
+  }
+  .sort-options {
+    padding-bottom: 10px;
+  }
+  .materialUpdate,
+  .nodecalc-filter-wrapper {
+    display: block !important;
+  }
+  .node-options-wrapper {
+    bottom: -207px;
+    top: auto;
+  }
+}
 </style>
 <style lang="scss">
 $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
   #c5be59, #a31a5f, #4fce99, #5081af, #b93daf, #e0925d, #2d9299 #9b3535, white,
   $blue, $red, $yellow, $purple, #57889b, #a14a64, #c5be59, #a31a5f #4fce99,
-  #5081af, #b93daf, #e0925d, #2d9299 #9b3535;
+  #5081af, #b93daf, #e0925d, #2d9299 #9b3535, green, purple, #4fec98 orange,
+  cyan, aquamarine, brown, darkGoldenRod, crimson, darkOrchid, lightseagreen,
+  moccasin, olivedrab;
 .node-wrapper.grouped {
   border: 2px solid;
   @for $i from 1 through length($nodelinks-colors) {

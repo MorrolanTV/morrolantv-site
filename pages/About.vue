@@ -11,6 +11,22 @@
           help us create more tools, please consider checking out a sponsor or
           donating directly.
         </p>
+        <div class="mb-5">
+          <a target="_blank" href="https://streamelements.com/morrolantv/tip"
+            ><img :src="require('~/assets/img/donate.png')"
+          /></a>
+          <p class="mt-5">
+            This is the
+            <a href="https://streamelements.com/morrolantv/tip">Donate link</a>
+            from my Twitch page. If I'm live, any donations above 2 dollars will
+            show up on stream with your username and a text-to-speech
+            notification of your message. Top supporters are also listed on the
+            Donation leaderboard found here:
+            <a class="mb-5" href="https://www.morrolan.tv/stream"
+              >https://www.morrolan.tv/stream</a
+            >
+          </p>
+        </div>
         <h3 class="title is-3">Sponsors</h3>
         <div class="sponsors-wrapper is-flex align-center flex-wrap">
           <div class="mb-5">
@@ -49,20 +65,6 @@
               help me de-stress and relax at the end of a long day. Don't just
               take my word for it - ask in Twitch chat or Discord, and you will
               find lots of people with great things to say about this product.
-            </p>
-          </div>
-          <div class="mb-5">
-            <a target="_blank" href="https://streamelements.com/morrolantv/tip"
-              ><img :src="require('~/assets/img/donate.png')"
-            /></a>
-            <p class="mt-5">
-              This is the Donate link from my Twitch page. If I'm live, any
-              donations above 2 dollars will show up on stream with your
-              username and a text-to-speech notification of your message. Top
-              supporters are also listed on the Donation leaderboard found here:
-              <a class="mb-5" href="https://www.morrolan.tv/stream"
-                >https://www.morrolan.tv/stream</a
-              >
             </p>
           </div>
         </div>

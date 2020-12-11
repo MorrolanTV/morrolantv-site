@@ -13,3 +13,8 @@
 .flex-wrap {
   flex-wrap: wrap;
 }
+@media (max-width: 768px) {
+  .block-mobile {
+    display: block !important;
+  }
+}
