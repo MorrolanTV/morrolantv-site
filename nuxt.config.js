@@ -123,5 +123,6 @@ export default {
       process.env.NODE_ENV !== 'production'
         ? 'http%3A%2F%2Flocalhost:3000'
         : 'https%3A%2F%2Fwww.morrolan.tv',
+    maint: process.env.MAINTAIN,
   },
 }

@@ -31,6 +31,16 @@
               <p>Our API is having trouble at the moment, check back later.</p>
             </div>
           </div>
+          <div v-else-if="inactive" class="error-wrapper">
+            <div class="error">
+              <h3 class="title">Maintenance</h3>
+              <h5 class="subtitle">We are working on the tool</h5>
+              <p>
+                We are working on improving or fixing the node tool.Check back
+                later.
+              </p>
+            </div>
+          </div>
           <div v-else>
             <div class="nodecalc-header">
               <h3 class="title is-4">Guide</h3>
@@ -395,6 +405,9 @@ export default {
     }
   },
   computed: {
+    inactive() {
+      return process.env.maint
+    },
     timeUpdated() {
       if (this.materialUpdateTime) {
         const [date, time] = this.materialUpdateTime.split('T')
