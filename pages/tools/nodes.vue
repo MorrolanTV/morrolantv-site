@@ -24,13 +24,6 @@
         <h1 class="title is-1">Worker Empire Tool</h1>
         <div class="node-calculator">
           <div v-if="$fetchState.pending" class="loader"></div>
-          <div v-else-if="$fetchState.error" class="error-wrapper">
-            <div class="error">
-              <h3 class="title">API ERROR</h3>
-              <h5 class="subtitle">COULD NOT FETCH DATA</h5>
-              <p>Our API is having trouble at the moment, check back later.</p>
-            </div>
-          </div>
           <div v-else-if="inactive" class="error-wrapper">
             <div class="error">
               <h3 class="title">Maintenance</h3>
@@ -39,6 +32,13 @@
                 We are working on improving or fixing the node tool.Check back
                 later.
               </p>
+            </div>
+          </div>
+          <div v-else-if="$fetchState.error" class="error-wrapper">
+            <div class="error">
+              <h3 class="title">API ERROR</h3>
+              <h5 class="subtitle">COULD NOT FETCH DATA</h5>
+              <p>Our API is having trouble at the moment, check back later.</p>
             </div>
           </div>
           <div v-else>
