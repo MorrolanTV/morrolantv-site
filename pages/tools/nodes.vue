@@ -663,11 +663,9 @@ export default {
 </style>
 <style lang="scss">
 $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
-  #c5be59, #a31a5f, #4fce99, #5081af, #b93daf, #e0925d, #2d9299 #9b3535, white,
-  $blue, $red, $yellow, $purple, #57889b, #a14a64, #c5be59, #a31a5f #4fce99,
-  #5081af, #b93daf, #e0925d, #2d9299 #9b3535, green, purple, #4fec98 orange,
-  cyan, aquamarine, brown, darkGoldenRod, crimson, darkOrchid, lightseagreen,
-  moccasin, olivedrab;
+  #c5be59, #a31a5f, #4fce99, #5081af, #b93daf, #e0925d, #2d9299 #9b3535, green,
+  purple, #4fec98 orange, cyan, aquamarine, brown, darkGoldenRod, crimson,
+  darkOrchid, lightseagreen, moccasin, olivedrab;
 .node-wrapper.grouped {
   border: 2px solid;
   @for $i from 1 through length($nodelinks-colors) {
