@@ -5,7 +5,7 @@ export const state = () => ({
   nodeUserListLoaded: false, // If user node list loaded, switch to default after logout
   nodes: new Map(), // Just that
   profitList: new Map(), // Sort Map for sort functions, hold id and profit
-  activeHours: 24,
+  activeHours: 16,
   groupGotUpdate: [],
   groupGotDeleted: [],
   groupsToCalculate: [],
