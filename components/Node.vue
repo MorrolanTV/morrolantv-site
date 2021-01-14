@@ -4,6 +4,7 @@
     :class="[
       group ? `grouped group-${group.id}` : '',
       tempGroup ? `grouped group-${tempLinkGroupId}` : '',
+      taken ? 'taken' : '',
       worker && worker.id === 6 ? `maxWorker` : '',
     ]"
     @click="handleLink"
@@ -191,6 +192,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import Parser from '../helper/parsers'
 const { mapState } = createNamespacedHelpers('nodes')
 export default {
   props: {
@@ -202,6 +204,11 @@ export default {
       type: String,
       required: true,
       default: null,
+    },
+    taken: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
     contribution: {
       type: Number,
@@ -279,6 +286,7 @@ export default {
       worker: null,
       cpInput: 0,
       cpLocal: 0,
+      takenLocal: false,
       initial: true,
       edit: false,
       wsLocked: true,
@@ -341,6 +349,7 @@ export default {
       'nodeGroupsCalculated',
       'linkingActive',
       'unlinkingActive',
+      'takingActive',
       'linkSelected',
       'disabledItemsUpdated',
       'disabledItems',
@@ -402,6 +411,7 @@ export default {
     this.cpInput = this.cpAdd
     this.cpLocal = this.contribution
     this.home = this.lodging
+    this.takenLocal = this.taken
     if (this.group) {
       if (this.groupCp) this.cpGroup = this.groupCp
       else {
@@ -494,13 +504,14 @@ export default {
     handleLink() {
       if (this.linkingActive) this.$store.commit('nodes/ADD_LINK', this.id)
       if (this.unlinkingActive) this.$store.commit('nodes/UNLINK', this.id)
+      if (this.takingActive) this.takenLocal = !this.takenLocal
     },
     handleMaterialClick(material) {
       if (!this.materialFlooded(material)) this.toggleMaterial(material.id)
       else this.overrideFlooded(material.id)
     },
     toggleMaterial(id) {
-      if (!this.linkingActive) {
+      if (!this.linkingActive || !this.unlinkingActive || !this.takingActive) {
         this.$store.commit('nodes/TOGGLE_MATERIAL', id)
       } else {
         // Trigger node linking, bypass event.stop
@@ -508,7 +519,7 @@ export default {
       }
     },
     overrideFlooded(id) {
-      if (!this.linkingActive) {
+      if (!this.linkingActive || !this.unlinkingActive || !this.takingActive) {
         this.$store.commit('nodes/TOGGLE_FLOODED', id)
       } else {
         // Trigger node linking, bypass event.stop
@@ -523,6 +534,9 @@ export default {
       if (this.materialFlooded(m)) add += ' - flooded'
       if (this.materialMaxed(m)) add += ' - maxed'
       return m.name + add
+    },
+    parseValue(v) {
+      return Parser.parseValue(v)
     },
     generateRegionImage() {
       return require(`~/assets/img/tools/general/REGION_${this.region.toLowerCase()}.png`)
@@ -553,20 +567,6 @@ export default {
     },
     getDistanceFromLodging() {
       return this.distances[this.home]
-    },
-    parseTime(minutes) {
-      const displayHours = Math.floor(minutes / 60)
-      const displayMinutes = minutes - displayHours * 60
-      return displayHours
-        ? `${Math.round(displayHours)}H ${Math.round(displayMinutes)}MIN`
-        : `${Math.round(displayMinutes)}MIN`
-    },
-
-    parseValue(number) {
-      if (!number) return '0'
-      if (number / 1e3 < 1) return Math.round(number)
-      if (number / 1e6 < 1) return Math.round((number / 1e4) * 100) / 10 + 'K'
-      return Math.round((number / 1e6) * 100) / 100 + 'M'
     },
     /**
      * Calculate the tamount of time a worker is working on a node.
@@ -613,6 +613,9 @@ export default {
         this.calculate()
         this.$emit('recalculated')
       })
+      this.$watch('takenLocal', function () {
+        this.updateNode()
+      })
       this.$watch('cpInput', function () {
         this.updateNode()
       })
@@ -654,13 +657,14 @@ export default {
           lodging: this.home,
           group: this.group,
           groupCP: this.cpGroup,
+          taken: this.takenLocal,
           updateLinks: !!this.group,
         },
       })
       this.$emit('recalculated')
     },
     openForm() {
-      if (!this.linkingActive && !this.unlinkingActive) {
+      if (!this.linkingActive && !this.unlinkingActive && !this.takingActive) {
         this.edit = !this.edit
       }
     },

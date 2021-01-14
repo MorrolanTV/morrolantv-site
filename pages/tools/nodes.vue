@@ -86,6 +86,13 @@
                   useful for when the path CP is split between multiple nodes,
                   or when backtracking, or other various special cases.
                 </li>
+                <li class="mb-3">
+                  <strong>Claim:</strong> This option allows you to
+                  <span style="color: #7bce28">claim</span> nodes. This will be
+                  saved tou your account once logged in. The total cp and
+                  profit/day of claimed nodes is listed at the bottom of the
+                  page.
+                </li>
                 <li class="mb-1">
                   <strong>Materials:</strong> The green arrow indicates an item
                   is "<strong
@@ -238,30 +245,46 @@
                   >
                     <span>Options</span>
                   </button>
+                  <div class="linkingbuttons">
+                    <button
+                      v-if="!nodesError"
+                      class="button is-primary functional mr-2"
+                      :class="{ enabled: linkingActive }"
+                      @click="handleLinking()"
+                    >
+                      {{ linkingActive ? 'Done' : 'Add Links' }}
+                    </button>
+                    <button
+                      v-else
+                      class="button is-primary functional mr-2"
+                      :data-tooltip="nodesError"
+                      :class="{ enabled: linkingActive }"
+                      @click="handleLinking()"
+                    >
+                      {{
+                        unlinkingActive
+                          ? 'Stop'
+                          : linkingActive
+                          ? 'Done'
+                          : 'Add Links'
+                      }}
+                    </button>
+                    <button
+                      v-if="!unlinkingActive"
+                      class="button is-primary functional mr-2"
+                      data-tooltip="Unlink - Click either one of a group node"
+                      :class="{ enabled: unlinkingActive }"
+                      @click="startUnlink()"
+                    >
+                      Unlink
+                    </button>
+                  </div>
                   <button
-                    v-if="!nodesError"
-                    class="button is-primary functional mr-2"
-                    :class="{ enabled: linkingActive }"
-                    @click="handleLinking()"
+                    class="button is-primary mr-2"
+                    :class="{ enabled: takingActive }"
+                    @click="handleTaking()"
                   >
-                    {{ linkingActive ? 'Done' : 'Add Links' }}
-                  </button>
-                  <button
-                    v-else
-                    class="button is-primary functional mr-2"
-                    :data-tooltip="nodesError"
-                    :class="{ enabled: linkingActive }"
-                    @click="handleLinking()"
-                  >
-                    {{ linkingActive ? 'Done' : 'Add Links' }}
-                  </button>
-                  <button
-                    class="button is-primary functional mr-2"
-                    data-tooltip="Unlink - Click either one of a group node"
-                    :class="{ enabled: unlinkingActive }"
-                    @click="handleUnlink()"
-                  >
-                    {{ unlinkingActive ? 'Stop' : 'Unlink' }}
+                    {{ takingActive ? 'Done' : 'Claim' }}
                   </button>
                   <button class="button is-primary mr-2" @click="updateList()">
                     Re-Sort
@@ -291,6 +314,7 @@
                   :name="node.name"
                   :contribution="node.contribution"
                   :cp-add="node.cpAdd"
+                  :taken="node.taken"
                   :image="node.image"
                   :materials="node.Materials"
                   :region="node.region"
@@ -305,6 +329,17 @@
                   :group-profit="node.groupProfit ? node.groupProfit : null"
                   @recalculated="updateListAuto"
                 />
+              </div>
+            </div>
+            <div v-if="summaryCp > 0" class="summary-fixed">
+              <div class="summary-inner">
+                <span
+                  >Total CP: <strong>{{ summaryCp }}</strong></span
+                >
+                <span
+                  >Silver/Day:
+                  <strong>{{ parseValue(summaryProfit) }}</strong></span
+                >
               </div>
             </div>
           </div>
@@ -330,6 +365,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import Parser from '../../helper/parsers'
 const { mapState, mapGetters } = createNamespacedHelpers('nodes')
 
 export default {
@@ -451,6 +487,19 @@ export default {
         return this.getNodesUnsorted
       }
     },
+    summaryCp() {
+      return this.getTakenNodes.reduce((a, b) => ({ cp: a.cp + b.cp }), {
+        cp: 0,
+      }).cp
+    },
+    summaryProfit() {
+      return this.getTakenNodes.reduce(
+        (a, b) => ({
+          profit: a.profit + b.profit,
+        }),
+        { profit: 0 }
+      ).profit
+    },
     activeHours: {
       // getter
       get() {
@@ -467,7 +516,12 @@ export default {
     nodeTransition() {
       return this.animate ? 'flip-list' : 'disabled-list'
     },
-    ...mapGetters(['getNodesByProfit', 'getNodesUnsorted', 'getChangedNodes']),
+    ...mapGetters([
+      'getNodesByProfit',
+      'getNodesUnsorted',
+      'getChangedNodes',
+      'getTakenNodes',
+    ]),
     ...mapState([
       'workers',
       'nodesError',
@@ -476,6 +530,7 @@ export default {
       'profitsUpdated',
       'nodeUserListLoaded',
       'linkingActive',
+      'takingActive',
       'unlinkingActive',
       'linkOrigin',
       'linkTarget',
@@ -518,10 +573,22 @@ export default {
       }
     },
     handleLinking() {
-      this.$store.commit('nodes/HANDLE_LINKING', !this.linkingActive)
+      if (this.unlinkingActive) {
+        // Stop unlinking on same stop button
+        this.$store.commit('nodes/HANDLE_UNLINKING', false)
+      } else {
+        // Toggle linking on link button
+        this.$store.commit('nodes/HANDLE_LINKING', !this.linkingActive)
+      }
     },
-    handleUnlink() {
-      this.$store.commit('nodes/HANDLE_UNLINKING', !this.unlinkingActive)
+    startUnlink() {
+      this.$store.commit('nodes/HANDLE_UNLINKING', true)
+    },
+    handleTaking() {
+      this.$store.commit('nodes/HANDLE_TAKING', !this.takingActive)
+    },
+    parseValue(v) {
+      return Parser.parseValue(v)
     },
     async saveNodes() {
       this.saving = true
@@ -627,6 +694,22 @@ export default {
   }
 }
 
+.linkingbuttons {
+  position: relative;
+  button:last-child {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    width: 93%;
+    display: none;
+  }
+  &:hover {
+    button:last-child {
+      display: block;
+    }
+  }
+}
+
 .node-options-wrapper {
   position: absolute;
   top: -185px;
@@ -660,6 +743,16 @@ export default {
     top: auto;
   }
 }
+
+.summary-fixed {
+  background: $grey-blue;
+  border: 1px solid white;
+  position: fixed;
+  bottom: 12px;
+  right: 77px;
+  padding: 20px;
+  z-index: 10000;
+}
 </style>
 <style lang="scss">
 $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
@@ -672,6 +765,11 @@ $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
     &.group-#{$i} {
       border-color: nth($nodelinks-colors, $i);
     }
+  }
+}
+.node-wrapper.taken {
+  .node-name {
+    color: #7bce28;
   }
 }
 .node-wrapper.maxWorker {

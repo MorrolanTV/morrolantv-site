@@ -5,6 +5,7 @@ export const state = () => ({
   nodeUserListLoaded: false, // If user node list loaded, switch to default after logout
   nodes: new Map(), // Just that
   profitList: new Map(), // Sort Map for sort functions, hold id and profit
+  takenNodes: new Map(), // Hold cp and profit from taken nodes, by id
   activeHours: 16,
   groupGotUpdate: [],
   groupGotDeleted: [],
@@ -14,6 +15,7 @@ export const state = () => ({
   nodesRecalculated: 0, // Can be set to 0 to recalculate all nodes, once equal to node size sync profits
   linkingActive: false,
   unlinkingActive: false,
+  takingActive: false,
   tempLinkGroup: [],
   tempLinkGroupId: 0,
   linkLatestID: 0,
@@ -243,6 +245,7 @@ export const mutations = {
    */
   UPDATE_NODE(state, { id, data }) {
     const node = state.nodes.get(id)
+    node.taken = data.taken
     node.cpAdd = data.cp
     node.workspeed = data.workspeed
     node.movespeed = data.movespeed
@@ -274,6 +277,11 @@ export const mutations = {
   HANDLE_UNLINKING(state, status) {
     state.unlinkingActive = status
     if (status) state.linkingActive = false
+  },
+  HANDLE_TAKING(state, status) {
+    if (!state.linkingActive && !state.unlinkingActive) {
+      state.takingActive = status
+    }
   },
   ADD_LINK(state, id) {
     const targNode = state.nodes.get(id)
@@ -382,6 +390,23 @@ export const getters = {
     if (state.profitsUpdated > 0) {
       return n
     }
+  },
+  getTakenNodes: (state) => {
+    if (
+      state.customNodesUpdated < 0 ||
+      state.profitsUpdated < 0 ||
+      !state.nodeGroupsCalculated
+    )
+      return []
+    const n = Array.from([...state.nodes.values()])
+      .filter((x) => x.taken)
+      .map((n) => {
+        return {
+          cp: n.contribution + n.cpAdd,
+          profit: state.profitList.get(n.id).profit,
+        }
+      })
+    return n
   },
   getChangedNodes: (state) => {
     const n = Array.from([...state.nodes.values()]).filter((x) => x.changed)
