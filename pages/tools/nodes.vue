@@ -88,8 +88,8 @@
                 </li>
                 <li class="mb-3">
                   <strong>Claim:</strong> This option allows you to
-                  <span style="color: #7bce28">claim</span> nodes. This will be
-                  saved tou your account once logged in. The total cp and
+                  <span style="color: #aeff5c">claim</span> nodes. This will be
+                  saved to your account once logged in. The total cp and
                   profit/day of claimed nodes is listed at the bottom of the
                   page.
                 </li>
@@ -769,7 +769,7 @@ $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
 }
 .node-wrapper.taken {
   .node-name {
-    color: #7bce28;
+    color: #aeff5c;
   }
 }
 .node-wrapper.maxWorker {
