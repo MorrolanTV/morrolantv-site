@@ -767,6 +767,11 @@ $nodelinks-colors: white, $blue, $red, $yellow, $purple, #57889b, #a14a64,
     }
   }
 }
+
+.node-name {
+  color: #ffffff;
+}
+
 .node-wrapper.taken {
   .node-name {
     color: #aeff5c;
