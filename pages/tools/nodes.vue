@@ -252,7 +252,13 @@
                       :class="{ enabled: linkingActive }"
                       @click="handleLinking()"
                     >
-                      {{ linkingActive ? 'Done' : 'Add Links' }}
+                      {{
+                        unlinkingActive
+                          ? 'Stop'
+                          : linkingActive
+                          ? 'Done'
+                          : 'Add Links'
+                      }}
                     </button>
                     <button
                       v-else
@@ -271,7 +277,7 @@
                     </button>
                     <button
                       v-if="!unlinkingActive"
-                      class="button is-primary functional mr-2"
+                      class="button is-primary functional mr-2 unlinkbtn"
                       data-tooltip="Unlink - Click either one of a group node"
                       :class="{ enabled: unlinkingActive }"
                       @click="startUnlink()"
@@ -696,7 +702,7 @@ export default {
 
 .linkingbuttons {
   position: relative;
-  button:last-child {
+  .unlinkbtn {
     position: absolute;
     top: -40px;
     left: 0;
@@ -704,7 +710,7 @@ export default {
     display: none;
   }
   &:hover {
-    button:last-child {
+    .unlinkbtn {
       display: block;
     }
   }
