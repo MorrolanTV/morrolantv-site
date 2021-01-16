@@ -337,14 +337,14 @@
                 />
               </div>
             </div>
-            <div v-if="summaryCp > 0" class="summary-fixed">
+            <div v-if="takenCp > 0" class="summary-fixed">
               <div class="summary-inner">
                 <span
-                  >Total CP: <strong>{{ summaryCp }}</strong></span
+                  >Total CP: <strong>{{ takenCp }}</strong></span
                 >
                 <span
                   >Silver/Day:
-                  <strong>{{ parseValue(summaryProfit) }}</strong></span
+                  <strong>{{ parseValue(takenProfit) }}</strong></span
                 >
               </div>
             </div>
@@ -493,19 +493,6 @@ export default {
         return this.getNodesUnsorted
       }
     },
-    summaryCp() {
-      return this.getTakenNodes.reduce((a, b) => ({ cp: a.cp + b.cp }), {
-        cp: 0,
-      }).cp
-    },
-    summaryProfit() {
-      return this.getTakenNodes.reduce(
-        (a, b) => ({
-          profit: a.profit + b.profit,
-        }),
-        { profit: 0 }
-      ).profit
-    },
     activeHours: {
       // getter
       get() {
@@ -522,12 +509,7 @@ export default {
     nodeTransition() {
       return this.animate ? 'flip-list' : 'disabled-list'
     },
-    ...mapGetters([
-      'getNodesByProfit',
-      'getNodesUnsorted',
-      'getChangedNodes',
-      'getTakenNodes',
-    ]),
+    ...mapGetters(['getNodesByProfit', 'getNodesUnsorted', 'getChangedNodes']),
     ...mapState([
       'workers',
       'nodesError',
@@ -544,6 +526,8 @@ export default {
       'overrideFloodedItems',
       'editMode',
       'saveState',
+      'takenCp',
+      'takenProfit',
     ]),
   },
   fetchOnServer: false,

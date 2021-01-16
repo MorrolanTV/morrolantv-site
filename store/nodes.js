@@ -5,7 +5,9 @@ export const state = () => ({
   nodeUserListLoaded: false, // If user node list loaded, switch to default after logout
   nodes: new Map(), // Just that
   profitList: new Map(), // Sort Map for sort functions, hold id and profit
-  takenNodes: new Map(), // Hold cp and profit from taken nodes, by id
+  takenNodes: new Set(), // Hold cp and profit from taken nodes, by id
+  takenCp: 0,
+  takenProfit: 0,
   activeHours: 16,
   groupGotUpdate: [],
   groupGotDeleted: [],
@@ -198,6 +200,7 @@ export const mutations = {
   SET_NODE_PROFIT: (state, { id, data }) => {
     state.profitList.set(id, data)
     state.nodesCalculated = state.profitList.size === state.nodes.size
+    if (state.takenNodes.has(id)) recalculateTaken(state)
 
     if (state.nodesCalculated) {
       state.nodesRecalculated += 1
@@ -254,6 +257,7 @@ export const mutations = {
     node.changed = true
     state.saveState = false
     state.customNodesUpdated += 1
+    updateTaken(state, id)
     if (data.updateLinks) {
       // Update cp acress all groups
       // Find all groups of updated node
@@ -391,23 +395,6 @@ export const getters = {
       return n
     }
   },
-  getTakenNodes: (state) => {
-    if (
-      state.customNodesUpdated < 0 ||
-      state.profitsUpdated < 0 ||
-      !state.nodeGroupsCalculated
-    )
-      return []
-    const n = Array.from([...state.nodes.values()])
-      .filter((x) => x.taken)
-      .map((n) => {
-        return {
-          cp: n.contribution + n.cpAdd,
-          profit: state.profitList.get(n.id).profit,
-        }
-      })
-    return n
-  },
   getChangedNodes: (state) => {
     const n = Array.from([...state.nodes.values()]).filter((x) => x.changed)
     if (state.customNodesUpdated > 0) return n
@@ -477,5 +464,28 @@ function syncCP(state, grpElementIdList) {
       }
       linknode.groupCP = cpGrp
     }
+  }
+}
+
+function recalculateTaken(state) {
+  let c = 0
+  let p = 0
+  state.takenNodes.forEach((x) => {
+    c += state.profitList.get(x).cp
+    p += state.profitList.get(x).profit
+  })
+  state.takenCp = c
+  state.takenProfit = p
+}
+
+function updateTaken(state, id) {
+  if (state.takenNodes.has(id)) {
+    state.takenCp -= state.profitList.get(id).cp
+    state.takenProfit -= state.profitList.get(id).profit
+    state.takenNodes.delete(id)
+  } else {
+    state.takenNodes.add(id)
+    state.takenCp += state.profitList.get(id).cp
+    state.takenProfit += state.profitList.get(id).profit
   }
 }
