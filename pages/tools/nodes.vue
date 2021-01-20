@@ -448,7 +448,7 @@ export default {
   },
   computed: {
     inactive() {
-      return process.env.maint
+      return false
     },
     timeUpdated() {
       if (this.materialUpdateTime) {
