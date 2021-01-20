@@ -172,7 +172,10 @@ export const mutations = {
    * Initially convert nodes from API to map and store
    */
   SET_NODES: (state, payload) => {
-    state.nodes = new Map(payload.map((node) => [node.id, node]))
+    payload.forEach((n) => {
+      state.nodes.set(n.id, n)
+      if (n.taken) state.takenNodes.add(n.id)
+    })
   },
   SET_MATERIAL_PREFERENCES: (state, payload) => {
     state.disabledItems = new Set(payload)
